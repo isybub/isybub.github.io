@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300|Roboto+Mono:100&display=swap');
+:root {
+	--white: #F7F7F7;
+	--error: #A71D31;
+	--background: #2E3138;
+	--light: #00A7E1;
+	--dark: #0C0F0A;
+	--good: #9BE564;
+	--lobbying: #822E81;
+}
+
+
+
+* { margin: 0; padding: 0; outline: 0; }
+body{
+	background-color: var(--background);
+	color: var(--white);
+	font-family: 'Open Sans', sans-serif;
+}
+h1,h2,h3{
+	font-family: 'Roboto Mono', monospace;
+}
+a{
+	text-decoration: none;
+	background-color:var(--dark);
+	border-color: var(--error);
+	color: var(--white);
+	border-style: solid;
+	border-width: 3px;
+	border-radius: 12px;
+	width:279px;
+	display: inline-block;
+	text-align: center;
+	padding: 5px;
+	text-shadow: 0 0 5px rgba(255,255,255,0.5);
+	transition:all 0.3s;
+	vertical-align: middle;
+}
+#story4{
+	border-color: var(--light);
+	box-shadow: 0 0 20px inset var(--light);
+}
+
+a:hover{
+	background-color: var(--white);
+	color: var(--dark);
+	text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#story1, #story2, #story3, #story4, #story20, #story25, #u1x, #u1Alg, #u2Alg, #auto1, #lobbyreveal, #sacrifice, #parentsAutobuyer{
+	position: relative;
+	opacity: 0;
+	z-index: -1;
+}
+#story1, #story2, #story3, #story4, #story20, #story25{
+
+	transition: all 0.25s,opacity 1s;
+}
+#story3, #story4, #parentsAutobuyer{
+	width:279px;
+}
+
+#auto1{
+	width: 260px;
+}
+#mainContainer{
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+#bigLobbyingContainer{
+	width:100%;
+	top:-100%;
+	z-index: 10;
+	position: fixed;
+	background-color: rgba(46,49,56,0.9);
+	box-shadow: 0 0 20px rgba(0,0,0,0.4);
+	transition: all 1s;
+	text-align: center;
+}
+#LobbyingContainer{
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	width: 100%;
+}
+#parentsLobbying, #mathLobbying, #childrenLobbying{
+	padding-top:50px;
+	padding-bottom: 50px;
+}
+
+#lobm1, #lobp1, #lobc1{
+	width:500px;
+}
+#lobbyclose{
+	border-color: var(--good);
+	box-shadow: none;
+}
+
+
+#ParentsContainer,#mathematicacontainer{
+	align-content: center;
+	align-items: center;
+	text-align: center;
+	padding-top:100px;
+	width: 500px;
+}
+
+#childrenContainer{
+	width:500px;
+	padding-top:100px;
+	align-content: center;
+	align-items: center;
+	text-align: center;
+	opacity: 0;
+	z-index: -1;
+}
+table{
+	height:400px;
+	text-align: center;
+	table-layout: fixed;
+	width: 100%;
+
+}
+th,td,tr{
+	border-style: dashed;
+	border-width: 0px 0px 1px 0px;
+	border-color: rgba(255,255,255,0.2);
+	border-radius: 10px;
+}
+
+td a{
+	width:94.5%;
+	line-height: 30px;
+
+}
+#child1name{
+	width:125px;
+}
+#child1IQ{
+	width:75px;
+}
+#child1up{
+	width:225px;
+	padding: 0;
+}
+#child1year{
+	width:75px;
+}
+#child2,#child3,#child4,#tabletotals{
+	position: relative;
+	opacity: 0;
+	z-index: -1;
+	transition: all 1s;
+}
+span{
+	padding:10px;
+}
+#parentsAutobuyer{
+	transition: all 0s;
+}
