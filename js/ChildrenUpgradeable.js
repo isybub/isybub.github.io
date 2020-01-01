@@ -10,6 +10,8 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.startProd = new Decimal(startProd);
 
+	this.nextProd = new Decimal(0);
+
 	this.currentProd = new Decimal(currentProd);
 
 	this.upgradeCount = new Decimal(upgradeCount);
@@ -34,6 +36,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 
 	this.upgrade = function (){
+
 		if(this.iCanBuy(this.currentCost)&&!this.progressBar){
 
 			parents.realDollars = parents.realDollars.subtract(this.currentCost);
@@ -90,6 +93,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		var examCostPredictor = this.completedExams;
 		if(this.timeToExam==1) examCostPredictor++;
 		this.currentCost = upgradeChildCost(this.startCost,this.upgradeCount,examCostPredictor);
+		this.nextProd = upgradeChildProduction(this.startProd,this.upgradeCount.add(1),examCostPredictor).subtract(this.currentProd);
 
 		this.displayExamOrTerm();
 		iq.updateTotal();
@@ -118,24 +122,14 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 		if(this.timeToExam==1){
 
-			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>End of year exam <br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</span></a>";
+			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>End of year exam <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</span></a>";
 
 		}else if(this.timeToExam==5){
 
 			this.currentYear++;
 
-			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>Complete a term <br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</span></a>";
+			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>Complete a term <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</span></a>";
 
-			var year = "child"+num+"year";
-			if(this.currentYear==1){
-				document.getElementById(year).innerHTML = "1st Year";
-			}else if(this.currentYear==2){
-				document.getElementById(year).innerHTML = "2nd Year";
-			}else if(this.currentYear==3){
-				document.getElementById(year).innerHTML = "3rd Year";				
-			}else{
-				document.getElementById(year).innerHTML = this.currentYear+"th Year";
-			}
 
 		}
 
@@ -147,6 +141,27 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		document.getElementById("child"+this.childNum+"IQ").innerHTML = this.currentProd.toPrecision(3)+" IQ";
 		document.getElementById("child"+this.childNum+"cost").innerHTML = this.currentCost.toPrecision(3);
 		document.getElementById("iqps").innerHTML = iq.ps.toPrecision(3);
+		if(this.purchased){
+
+			document.getElementById("child"+this.childNum+"iqnext").innerHTML = this.nextProd.toPrecision(3);
+
+			var year = "child"+this.childNum+"year";
+			if(this.currentYear==1){
+				document.getElementById(year).innerHTML = "1st Year";
+			}else if(this.currentYear==2){
+				document.getElementById(year).innerHTML = "2nd Year";
+			}else if(this.currentYear==3){
+				document.getElementById(year).innerHTML = "3rd Year";				
+			}else{
+				document.getElementById(year).innerHTML = this.currentYear+"th Year";
+			}
+			if(this.timeToExam == 1){
+				document.getElementById(year).innerHTML += "<br /> Exam Time";
+			}else{
+				document.getElementById(year).innerHTML += "<br /> Term "+(6-this.timeToExam);
+			}
+
+		}
 
 	}
 
@@ -155,6 +170,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 	this.newChild = function(){
 		if(parents.realDollars.gte(this.currentCost)){
 			parents.realDollars = parents.realDollars.subtract(this.currentCost);
+			this.nextProd = upgradeChildProduction(this.startProd,this.upgradeCount.add(1),this.completedExams).subtract(this.currentProd);
 			var num = this.childNum;
 			var tr = "child"+num;
 			var name = "child"+num+"name";
@@ -166,7 +182,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 			document.getElementById(name).innerHTML = "Random";
 			document.getElementById(IQ).innerHTML = "0 IQ";
-			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>Complete a term <br />$<span id=\"child"+num+"cost\">10.0</span> Real Dollars</span></a>";
+			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>Complete a term <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">10.0</span> Real Dollars</span></a>";
 			document.getElementById(year).innerHTML = "1st Year";
 
 			this.purchased = true;
@@ -206,12 +222,12 @@ var Child4 = new ChildUpgradeable(new Decimal(5000),new Decimal(5000),new Decima
 
 function upgradeChildCost(startCost,upgradeCount,completedExams){
 	
-	return startCost.multiply(upgradeCount.minus(1)).multiply(completedExams * 4).add(startCost.multiply(upgradeCount));
+	return startCost.multiply(upgradeCount.minus(1)).multiply(completedExams * 2).add(startCost.multiply(upgradeCount));
 
 }
 function upgradeChildProduction(startProd,upgradeCount,completedExams){
 	
-	return startProd.plus(1).multiply(upgradeCount.minus(1)).multiply(examLobbyingUpgradeable.current.multiply(completedExams * 4)).add(startProd.plus(1).multiply(upgradeCount.minus(1)));
+	return startProd.plus(1).multiply(upgradeCount.minus(1)).multiply(examLobbyingUpgradeable.current.multiply(completedExams * 2)).add(startProd.plus(1).multiply(upgradeCount.minus(1)));
 
 }
 

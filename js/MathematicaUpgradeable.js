@@ -137,12 +137,12 @@ var MathematicaUpgradeable = function(costDiv, mpsMult, upgradeCount){
 	this.visuallyUpdate = function(){
 
 
-		document.getElementById("mpsAlg").innerHTML = this.mpsMult.acc.toPrecision(3)+"("+this.upgradeCount.divide(10).toPrecision(3)+")^2";
+		document.getElementById("mpsAlg").innerHTML = this.mpsMult.acc.toPrecision(3)+"x<sup>2</sup>";
 
 		document.getElementById("u1Algc").innerHTML = this.mpsMult.accCost.toPrecision(3);
 
 
-		document.getElementById("costAlg").innerHTML = "2^"+"("+this.upgradeCount.divide(10).toPrecision(3)+")/"+this.costDiv.acc.toPrecision(3);
+		document.getElementById("costAlg").innerHTML = "2<sup>x</sup>/"+this.costDiv.acc.toPrecision(3);
 
 		document.getElementById("u1xc").innerHTML = this.currentCost.toPrecision(3);
 
@@ -150,6 +150,8 @@ var MathematicaUpgradeable = function(costDiv, mpsMult, upgradeCount){
 
 
 		document.getElementById("u1xc").innerHTML = this.currentCost.toPrecision(3);
+
+		document.getElementById("xval").innerHTML = this.upgradeCount.divide(10).toPrecision(3);
 
 	}
 }
