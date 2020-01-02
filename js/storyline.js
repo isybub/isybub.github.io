@@ -122,14 +122,15 @@ function updateBasedOnProgress(){
 var schoolstoryprogress = 0;
 function childschoolingstory(){
 
-	if(parents.highestRealDollars.gte(10+(schoolstoryprogress)*3)){
+	if(parents.highestRealDollars.gte(10+(schoolstoryprogress)*4)){
 		if(schoolstoryprogress){
 			document.getElementById("prechild"+schoolstoryprogress).style.opacity = "0";
 			document.getElementById("prechild"+schoolstoryprogress).style.fontSize = "0";
 		}
-		if(schoolstoryprogress<8) document.getElementById("prechild"+ ++schoolstoryprogress).style.opacity = "1";
+		if(++schoolstoryprogress<5) document.getElementById("prechild"+ schoolstoryprogress).style.opacity = "1";
 	}
-	if(schoolstoryprogress===9){
+	if(schoolstoryprogress===6){
+		document.getElementById("child1buy").style.opacity = "1";
 		return 1;
 	} 
 	return 0;

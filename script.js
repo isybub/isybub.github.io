@@ -102,9 +102,32 @@ function updatemathematicas(tickRate){
 
 
 function unlockFirstChild(){
-	document.getElementById("tabletotals").style.opacity = 1;
-	document.getElementById("tabletotals").style.zIndex = 1;
-	child.one.newChild(); 
+	document.getElementById("child1buy").style.opacity = "0";
+	document.getElementById("child1buy").style.height = "0";
+	window.setTimeout(function(){
+
+		document.getElementById("postchild1").style.opacity = "1";
+
+	},3000);
+	window.setTimeout(function(){
+
+		document.getElementById("postchild1").style.opacity = "0";
+		document.getElementById("postchild1").style.fontSize = "0";
+		document.getElementById("postchild2").style.opacity = "1";
+		
+	},6000);
+	window.setTimeout(function(){
+
+		document.getElementById("postchild2").style.opacity = "0";
+		document.getElementById("postchild2").style.fontSize = "0";
+		document.getElementById("schoolingheading").style.opacity = "1";
+		document.getElementById("child1").style.opacity = "1";
+		child.one.newChild();
+		document.getElementById("tabletotals").style.opacity = 1;
+		document.getElementById("tabletotals").style.zIndex = 1;
+		document.getElementById("childstory").innerHTML = "";
+		
+	},9000);
 }
 
 

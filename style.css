@@ -123,8 +123,9 @@ a:hover{
 	align-content: center;
 	text-align: center;
 	width: 600px;
+	z-index: 2;
 }
-#childstory p{
+#childstory p, #childstory a{
 
 	opacity: 0;
 

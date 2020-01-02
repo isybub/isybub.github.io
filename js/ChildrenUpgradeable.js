@@ -2,7 +2,7 @@
 
 
 
-var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, upgradeCount, childNum, childNumAsString){
+var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, upgradeCount, childNum, childNumAsString,firstTimeRound){
 
 	this.startCost = new Decimal(startCost);
 
@@ -41,6 +41,8 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 	this.upgradingRepresentation = false;
 
 	this.startLeft = "100%";
+
+	this.firstTimeRound = firstTimeRound;
 
 	this.upgrade = function (){
 
@@ -87,6 +89,8 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 			}
 
 		}
+
+		this.visuallyUpdateChild();
 
 		if(this.purchased){
 			this.updateRepresentation();
@@ -177,6 +181,11 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 			this.currentYear++;
 
+			if(this.firstTimeRound){
+				this.firstTimeRound = false;
+				this.breadcrumbnewchild();
+			}
+
 			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>Complete a term <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</span></a>";
 
 
@@ -201,6 +210,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 				document.getElementById(year).innerHTML = "1st Year";
 			}else if(this.currentYear==2){
 				document.getElementById(year).innerHTML = "2nd Year";
+
 			}else if(this.currentYear==3){
 				document.getElementById(year).innerHTML = "3rd Year";				
 			}else{
@@ -238,19 +248,25 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 			this.purchased = true;
 
-			if(++num<5){
-				tr = "child"+num;
-				document.getElementById(tr).style.opacity = 1;
-				document.getElementById(tr).style.zIndex = 1;
-				Object.keys(child).forEach(function(c){
-					if(child[c].childNum==num){
-						child[c].visuallyUpdateChild();
-					}
-				});
+			if(++num<5&&!this.firstTimeRound){
+				this.breadcrumbnewchild();
 			}
 			this.visuallyUpdateChild();
 		}
 		
+
+	}
+
+	this.breadcrumbnewchild = function(){
+
+		tr = "child"+(this.childNum+1);
+		document.getElementById(tr).style.opacity = 1;
+		document.getElementById(tr).style.zIndex = 1;
+		Object.keys(child).forEach(function(c){
+
+				child[c].visuallyUpdateChild();
+			
+		});
 
 	}
 
@@ -263,13 +279,13 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 }
 
-var Child1 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(0.5),new Decimal(0),1,1,"one");
+var Child1 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(0.5),new Decimal(0),1,1,"one",true);
 
-var Child2 = new ChildUpgradeable(new Decimal(50),new Decimal(50),new Decimal(5),new Decimal(0),1,2,"two");
+var Child2 = new ChildUpgradeable(new Decimal(50),new Decimal(50),new Decimal(5),new Decimal(0),1,2,"two",false);
 
-var Child3 = new ChildUpgradeable(new Decimal(500),new Decimal(500),new Decimal(50),new Decimal(0),1,3,"three");
+var Child3 = new ChildUpgradeable(new Decimal(500),new Decimal(500),new Decimal(50),new Decimal(0),1,3,"three",false);
 
-var Child4 = new ChildUpgradeable(new Decimal(5000),new Decimal(5000),new Decimal(500),new Decimal(0),1,4,"four");
+var Child4 = new ChildUpgradeable(new Decimal(5000),new Decimal(5000),new Decimal(500),new Decimal(0),1,4,"four",false);
 
 function upgradeChildCost(startCost,upgradeCount,completedExams){
 	
