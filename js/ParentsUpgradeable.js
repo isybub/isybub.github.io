@@ -24,7 +24,7 @@ var ParentsUpgradeable = function(){
 			this.convert(Date.now() - this.timeOfLastBuy);
 			this.timeOfLastBuy = Date.now();
 		}
-		this.updateParentsAutobuyerProgressBar(Date.now() - this.timeOfLastBuy);
+		if(!this.autobuyingSpeed.equals(10001))this.updateParentsAutobuyerProgressBar(Date.now() - this.timeOfLastBuy);
 
 		if(this.realDollars.gt(this.highestRealDollars)) this.highestRealDollars = this.realDollars;
 
@@ -33,8 +33,6 @@ var ParentsUpgradeable = function(){
 	}
 
 	this.convert = function(num){
-		//this is where it's all goin fuckin wrong aye
-		//when I manually click to get money, you get WAY MORE Than the autobuyer
 
 		this.realDollars = this.realDollars.add(mathematica.mathematica.root(2).multiply(one1.divide(this.autobuyingSpeed.divide(num))));
 		mathematica.mathematica = mathematica.mathematica.subtract(mathematica.mathematica);

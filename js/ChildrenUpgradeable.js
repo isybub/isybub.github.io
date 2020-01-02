@@ -12,6 +12,8 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.nextProd = new Decimal(0);
 
+	this.randSeed = Math.random()*0.1+0.05;
+
 	this.currentProd = new Decimal(currentProd);
 
 	this.upgradeCount = new Decimal(upgradeCount);
@@ -34,6 +36,9 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.purchased = false;
 
+	this.upgradeTime = 0;
+
+	this.upgradingRepresentation = false;
 
 	this.upgrade = function (){
 
@@ -81,8 +86,52 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 		}
 
+		if(this.purchased){
+			this.updateRepresentation();
+		}
+
 	}
 
+	this.updateRepresentation = function(){
+
+		document.getElementById("child"+this.childNum+"rep").style.left = (47.3*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
+		
+		document.getElementById("child"+this.childNum+"glow").style.left = (47.3*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
+		
+		document.getElementById("child"+this.childNum+"glow").style.boxShadow = "0px -"+5*this.currentYear+"px "+20*this.currentYear+"px "+getComputedStyle(document.documentElement).getPropertyValue('--yoga'+this.currentYear);
+
+		document.getElementById("child"+this.childNum+"rep").style.transform = "rotate("+(900*(Math.sin(this.randSeed*Date.now()/500.0)))+"deg)";
+		
+		if(this.upgradingRepresentation)this.upgradeRepresentation();
+	}
+
+	this.upgradeRepresentation = function(){
+		var circ = document.getElementById("childupgradecircle");
+		var startLeft = 0;
+		if(!this.upgradingRepresentation){
+			startLeft = document.getElementById("child"+this.childNum+"rep").style.left;
+			this.upgradingRepresentation = true;
+			circ.style.left = startLeft;
+			this.upgradeTime = Date.now();
+		}
+		if(this.upgradingRepresentation){
+			circ.style.width = (Date.now() - this.upgradeTime)/100;
+			circ.style.height = (Date.now() - this.upgradeTime)/100;
+			circ.style.left = document.getElementById("childrendisplay").style.width*parseFloat(startLeft) - circ.style.height/2+"px";
+			
+
+			if(circ.width>10000){
+				circ.width = 1;
+				circ.height = 1;
+				circ.style.left = "-100%";
+				this.upgradingRepresentation = false;
+				console.log("yo");
+			}
+
+
+		}
+
+	}
 
 	this.finalize = function(){
 
@@ -110,6 +159,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		if(this.timeToExam == 0){
 			this.timeToExam = 5;
 			this.completedExams++;
+			this.upgradeRepresentation();
 		}
 
 	}
@@ -146,6 +196,8 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 			document.getElementById("child"+this.childNum+"iqnext").innerHTML = this.nextProd.toPrecision(3);
 
 			var year = "child"+this.childNum+"year";
+			var pic = "child"+this.childNum+"rep";
+			document.getElementById(pic).src = "icons/svg/Year "+this.currentYear+".svg";
 			if(this.currentYear==1){
 				document.getElementById(year).innerHTML = "1st Year";
 			}else if(this.currentYear==2){

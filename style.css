@@ -7,6 +7,14 @@
 	--dark: #0C0F0A;
 	--good: #9BE564;
 	--lobbying: #822E81;
+
+	--yoga1:#948ff2;
+	--yoga2:#ef6c6c;
+	--yoga3:#f49314;
+	--yoga4:#f4d240;
+	--yoga5:#80e87e;
+	--yoga6:#79caf7;
+	--yoga7:#ef7bef;
 }
 
 
@@ -16,7 +24,9 @@ body{
 	background-color: var(--background);
 	color: var(--white);
 	font-family: 'Open Sans', sans-serif;
-	font-size:1.5em;
+	font-size:1.25em;
+	overflow-y: hidden;
+	max-width: 100%;
 }
 h1,h2,h3{
 	font-family: 'Roboto Mono', monospace;
@@ -71,13 +81,15 @@ a:hover{
 }
 #bigLobbyingContainer{
 	width:100%;
-	top:-100%;
+	height:100%;
+	top:-200%;
 	z-index: 10;
 	position: fixed;
 	background-color: rgba(46,49,56,0.9);
 	box-shadow: 0 0 20px rgba(0,0,0,0.4);
 	transition: all 1s;
 	text-align: center;
+    overflow-y:scroll;
 }
 #LobbyingContainer{
 	display: flex;
@@ -103,19 +115,56 @@ a:hover{
 	align-content: center;
 	align-items: center;
 	text-align: center;
-	padding-top:100px;
+	padding-top:50px;
 	width: 500px;
 }
 
 #childrenContainer{
 	width:500px;
-	padding-top:100px;
+	padding-top:50px;
 	align-content: center;
 	align-items: center;
 	text-align: center;
 	opacity: 0;
 	z-index: -1;
 }
+
+table a{
+	font-size: 1.25em;
+}
+#childrendisplay{
+	position: absolute;
+	bottom:0;
+	width:100%;
+	background-color: var(--white);
+	height:100px;
+}
+#childrendisplay img{
+	position: absolute;
+	left:-100%;
+}
+#childrendisplay div{
+	position: absolute;
+	left: -100%;
+	border-radius: 100px;
+	height:100px;
+	width:100px;
+	z-index: -1;
+
+}
+#childupgradecircle{
+	position: absolute;
+	left:100%;
+	top:50px;
+	height:1px;
+	width:1px;
+	border-radius: 100000px;
+	border-width:100px;
+	border-color:var(--background);
+	background-color: var(--background);
+	z-index: 1!important;
+}
+
 table{
 	height:400px;
 	text-align: center;

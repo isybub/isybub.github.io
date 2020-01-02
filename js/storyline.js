@@ -59,7 +59,7 @@ function updateBasedOnProgress(){
 			if(iq.highestPoints.gte(60)){
 				document.getElementById("u2Alg").style.opacity = "1";
 				document.getElementById("u2Alg").style.zIndex = "1";
-				if(iq.highestiqps.gte(37.5)){
+				if(iq.highestiqps.gte(22.5)){
 					lobbying.openable = true;
 					var lob = document.getElementById("lobbyreveal");
 					lob.innerHTML = "Lobby the government.";
@@ -85,7 +85,7 @@ function updateBasedOnProgress(){
 			}
 			break;
 		case 8:
-			if(iq.highestiqps.gte(43.5)){
+			if(iq.highestiqps.gte(28.5)){
 				document.getElementById("sacrifice").innerHTML = "Sacrifice the children. <br /> <span id=lobbyinggain>0</span> Lobbying Dollars Earned";
 				lobbying.purchasable = true;
 				lobbying.updateTotals();

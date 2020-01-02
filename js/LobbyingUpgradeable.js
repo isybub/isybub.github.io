@@ -49,13 +49,13 @@ var LobbyingUpgradeable = function(){
 
 	this.show = function(){
 
-		if(this.openable)document.getElementById("bigLobbyingContainer").style.top = "200px";
+		if(this.openable)document.getElementById("bigLobbyingContainer").style.top = "0px";
 
 	}
 
 	this.close = function(){
 
-		document.getElementById("bigLobbyingContainer").style.top = "-100%";
+		document.getElementById("bigLobbyingContainer").style.top = "-200%";
 
 	}
 
