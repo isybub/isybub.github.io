@@ -23,13 +23,12 @@ function updateBasedOnProgress(){
 				document.getElementById("story3").style.zIndex = -1;
 				discoverProgress++;
 			}
-			break;z
+			break;
 		case 1:
 			if(parents.highestRealDollars.gte(10)){
-				document.getElementById("childrenContainer").style.opacity = 1;
-				document.getElementById("childrenContainer").style.zIndex = 1;
 
-				discoverProgress++;
+				discoverProgress+=childschoolingstory();
+
 			}
 			break;
 		case 2:
@@ -119,4 +118,19 @@ function updateBasedOnProgress(){
 			}
 		break;*/ //this needs to be IQ not mathematica.
 	}
+}
+var schoolstoryprogress = 0;
+function childschoolingstory(){
+
+	if(parents.highestRealDollars.gte(10+(schoolstoryprogress)*3)){
+		if(schoolstoryprogress){
+			document.getElementById("prechild"+schoolstoryprogress).style.opacity = "0";
+			document.getElementById("prechild"+schoolstoryprogress).style.fontSize = "0";
+		}
+		if(schoolstoryprogress<8) document.getElementById("prechild"+ ++schoolstoryprogress).style.opacity = "1";
+	}
+	if(schoolstoryprogress===9){
+		return 1;
+	} 
+	return 0;
 }

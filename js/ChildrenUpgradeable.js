@@ -40,6 +40,8 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.upgradingRepresentation = false;
 
+	this.startLeft = "100%";
+
 	this.upgrade = function (){
 
 		if(this.iCanBuy(this.currentCost)&&!this.progressBar){
@@ -107,25 +109,22 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.upgradeRepresentation = function(){
 		var circ = document.getElementById("childupgradecircle");
-		var startLeft = 0;
+		var leftamount = document.getElementById("child"+this.childNum+"rep").style.left;
 		if(!this.upgradingRepresentation){
-			startLeft = document.getElementById("child"+this.childNum+"rep").style.left;
 			this.upgradingRepresentation = true;
-			circ.style.left = startLeft;
 			this.upgradeTime = Date.now();
 		}
 		if(this.upgradingRepresentation){
-			circ.style.width = (Date.now() - this.upgradeTime)/100;
-			circ.style.height = (Date.now() - this.upgradeTime)/100;
-			circ.style.left = document.getElementById("childrendisplay").style.width*parseFloat(startLeft) - circ.style.height/2+"px";
-			
-
-			if(circ.width>10000){
-				circ.width = 1;
-				circ.height = 1;
+			circ.style.width = Math.pow((Date.now() - this.upgradeTime)/20,2);
+			circ.style.height = Math.pow((Date.now() - this.upgradeTime)/20,2);
+			circ.style.left = document.body.offsetWidth*parseFloat(leftamount)/100 - parseFloat(circ.style.height)/2+"px";
+			circ.style.bottom = -1*parseFloat(circ.style.height)/2+"px";
+			circ.style.borderColor = "rgb("+(Math.sin(Date.now()/200+1.57)*127+126)+","+(Math.sin(Date.now()/200+3.141)*127+126)+","+(Math.sin(Date.now()/200+4.71)*127+126)+")";
+			if(parseFloat(circ.style.width)>2 * Math.sqrt(Math.pow(document.body.offsetWidth,2)+Math.pow(document.body.offsetHeight,2))){
+				circ.style.width = 1;
+				circ.style.height = 1;
 				circ.style.left = "-100%";
 				this.upgradingRepresentation = false;
-				console.log("yo");
 			}
 
 

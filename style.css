@@ -25,11 +25,15 @@ body{
 	color: var(--white);
 	font-family: 'Open Sans', sans-serif;
 	font-size:1.25em;
-	overflow-y: hidden;
+
+	overflow-x: hidden;
+	overflow-y: scroll;
 	max-width: 100%;
+	margin-bottom: 200px;
 }
 h1,h2,h3{
 	font-family: 'Roboto Mono', monospace;
+	text-align: center;
 }
 a{
 	text-decoration: none;
@@ -46,6 +50,7 @@ a{
 	text-shadow: 0 0 5px rgba(255,255,255,0.5);
 	transition:all 0.3s;
 	vertical-align: middle;
+	flex:100%;
 }
 #story4{
 	border-color: var(--light);
@@ -102,67 +107,83 @@ a:hover{
 	padding-bottom: 50px;
 }
 
-#lobm1, #lobp1, #lobc1{
-	width:500px;
+#lobm1, #lobc1{
+	width:600px;
+}
+#lobp1{
+	width:279px;
 }
 #lobbyclose{
 	border-color: var(--good);
 	box-shadow: none;
 }
-
-
-#ParentsContainer,#mathematicacontainer{
+#childstory{
+	position: absolute;
+	justify-content: center;
 	align-content: center;
-	align-items: center;
 	text-align: center;
-	padding-top:50px;
-	width: 500px;
+	width: 600px;
+}
+#childstory p{
+
+	opacity: 0;
+
+	transition: all 0.3s;
 }
 
-#childrenContainer{
-	width:500px;
-	padding-top:50px;
-	align-content: center;
+#ParentsContainer,#mathematicacontainer,#childrenContainer{
 	align-items: center;
+	align-content: center;
 	text-align: center;
+	padding-top:50px;
+	width: 600px;
+}
+
+#ParentsContainer{
+	width:279px;
+}
+
+#childrenContainer h1{
 	opacity: 0;
-	z-index: -1;
 }
 
 table a{
 	font-size: 1.25em;
 }
 #childrendisplay{
-	position: absolute;
+	position: fixed;
 	bottom:0;
 	width:100%;
 	background-color: var(--white);
 	height:100px;
+	overflow-y: hidden;
+	z-index: 1;
 }
 #childrendisplay img{
 	position: absolute;
 	left:-100%;
 }
-#childrendisplay div{
-	position: absolute;
+#child1glow,#child2glow,#child3glow,#child4glow{
+	position: fixed;
 	left: -100%;
 	border-radius: 100px;
 	height:100px;
 	width:100px;
-	z-index: -1;
+	bottom: 0;
+	z-index: -1!important;
 
 }
 #childupgradecircle{
-	position: absolute;
-	left:100%;
-	top:50px;
+	position: fixed;
+	left:-100%;
+	bottom:50px;
 	height:1px;
 	width:1px;
 	border-radius: 100000px;
 	border-width:100px;
+	border-style: solid;
 	border-color:var(--background);
-	background-color: var(--background);
-	z-index: 1!important;
+	z-index: -1!important;
 }
 
 table{
@@ -197,7 +218,7 @@ td a{
 #child1year{
 	width:75px;
 }
-#child2,#child3,#child4,#tabletotals{
+#child1,#child2,#child3,#child4,#tabletotals{
 	position: relative;
 	opacity: 0;
 	z-index: -1;
