@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300|Roboto+Mono:100&display=swap');
 :root {
-	--white: #F7F7F7;
+	--white: #E6EEEE;
 	--error: #A71D31;
 	--background: #2E3138;
 	--light: #00A7E1;
@@ -145,12 +145,18 @@ a:hover{
 	align-items: center;
 	align-content: center;
 	text-align: center;
-	padding-top:50px;
+	margin-top:50px;
 	width: 600px;
+	border-radius: 8px;
+	border-style: solid;
+	border-width:2px;
+	border-color: rgba(92,98,112,0.2);
+	box-shadow: -6px -6px 16px rgba(92,98,112,0.35),
+	 6px 6px 16px rgba(23,24,28,0.7);
 }
 
 #ParentsContainer{
-	width:279px;
+	width:300px;
 }
 
 #childrenContainer h1{
@@ -161,21 +167,30 @@ table a{
 	font-size: 1.25em;
 }
 #childrendisplay{
-	position: fixed;
-	bottom:0;
-	width:100%;
-	background-color: var(--white);
+	position: relative;
+	margin:50px;
+	width:80%;
+	background-color: rgba(200,200,200,1);
 	height:100px;
-	overflow-y: hidden;
+	overflow:hidden;
+
 	z-index: 1;
+	border-radius: 16px;
+	border-style: solid;
+	border-width:2px;
+	border-color: rgba(92,98,112,0.2);
+	box-shadow: inset -6px -6px 16px rgba(255,255,255,1),
+	inset 6px 6px 16px rgba(23,24,28,0.5);
+
 }
 #childrendisplay img{
 	position: absolute;
 	left:-100%;
 }
 #child1glow,#child2glow,#child3glow,#child4glow{
-	position: fixed;
+	position: absolute;
 	left: -100%;
+	top:100%;
 	border-radius: 100px;
 	height:100px;
 	width:100px;

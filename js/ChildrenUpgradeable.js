@@ -100,9 +100,11 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.updateRepresentation = function(){
 
-		document.getElementById("child"+this.childNum+"rep").style.left = (47.3*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
+		document.getElementById("child"+this.childNum+"rep").style.left = (46.5*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
 		
-		document.getElementById("child"+this.childNum+"glow").style.left = (47.3*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
+		document.getElementById("child"+this.childNum+"glow").style.left = (46.5*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
+
+
 		
 		document.getElementById("child"+this.childNum+"glow").style.boxShadow = "0px -"+5*this.currentYear+"px "+20*this.currentYear+"px "+getComputedStyle(document.documentElement).getPropertyValue('--yoga'+this.currentYear);
 
