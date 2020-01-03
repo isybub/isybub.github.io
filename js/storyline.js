@@ -62,8 +62,7 @@ function updateBasedOnProgress(){
 					lobbying.openable = true;
 					var lob = document.getElementById("lobbyreveal");
 					lob.innerHTML = "Lobby the government.";
-					lob.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--good'); 
-					lob.style.boxShadow = "none";
+					lob.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--good');
 					discoverProgress++;
 				}
 			//}

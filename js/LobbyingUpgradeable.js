@@ -55,13 +55,19 @@ var LobbyingUpgradeable = function(){
 
 	this.show = function(){
 
-		if(this.openable)document.getElementById("bigLobbyingContainer").style.top = "0px";
+		if(this.openable){
+			document.getElementById("bigLobbyingContainer").style.left = "0px";
+			document.getElementById("mainContainer").style.marginLeft = "-100%";
+			document.getElementById("mainContainer").style.marginRight = "100%";
+		}
 
 	}
 
 	this.close = function(){
 
-		document.getElementById("bigLobbyingContainer").style.top = "-200%";
+		document.getElementById("bigLobbyingContainer").style.left = "100%";
+		document.getElementById("mainContainer").style.marginLeft = "0px";
+		document.getElementById("mainContainer").style.marginRight = "0px";
 
 	}
 
@@ -147,13 +153,9 @@ var LobbyingUpgradeable = function(){
 			if(parentsAutobuyerUpgradeable.upgradeCount==25){
 
 				document.getElementById("parentsAutobuyer").innerHTML = "You are now liquidating mathematica to Real Dollars Instantly.";
-				document.getElementById("parentsAutobuyer").style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--good'); 
-				document.getElementById("parentsAutobuyer").style.boxShadow = "none";
 
 
 				document.getElementById("lobp1").innerHTML = "You are now liquidating mathematica to Real Dollars Instantly.";
-				document.getElementById("lobp1").style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--good'); 
-				document.getElementById("lobp1").style.boxShadow = "none";
 
 				document.getElementById("story4").style.display = "none";
 			}

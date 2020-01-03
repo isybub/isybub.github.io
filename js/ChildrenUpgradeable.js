@@ -123,8 +123,8 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		if(this.upgradingRepresentation){
 			circ.style.width = Math.pow((Date.now() - this.upgradeTime)/20,2);
 			circ.style.height = Math.pow((Date.now() - this.upgradeTime)/20,2);
-			circ.style.left = document.body.offsetWidth*parseFloat(leftamount)/100 - parseFloat(circ.style.height)/2+"px";
-			circ.style.bottom = -1*parseFloat(circ.style.height)/2+"px";
+			circ.style.left = document.body.offsetWidth*parseFloat(leftamount)/80 - parseFloat(circ.style.height)/2+"px";
+			circ.style.top = 50 - parseFloat(circ.style.height)/2+"px";
 			circ.style.borderColor = "rgb("+(Math.sin(Date.now()/200+1.57)*127+126)+","+(Math.sin(Date.now()/200+3.141)*127+126)+","+(Math.sin(Date.now()/200+4.71)*127+126)+")";
 			if(parseFloat(circ.style.width)>2 * Math.sqrt(Math.pow(document.body.offsetWidth,2)+Math.pow(document.body.offsetHeight,2))){
 				circ.style.width = 1;
