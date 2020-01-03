@@ -1,12 +1,14 @@
 
 
-var MathematicaAccessory = function(accBase, accBaseCost, upgradeCount, type){
+var MathematicaAccessory = function(accBase, accBaseCost, accbasemult, upgradeCount, type){
 
 	this.accBase = new Decimal(accBase);
 
 	this.accBaseCost = new Decimal(accBaseCost);
 
 	this.upgradeCount = new Decimal(upgradeCount);
+
+	this.accbasemult = accbasemult;
 
 	this.accCost = this.accBaseCost;
 
@@ -18,7 +20,7 @@ var MathematicaAccessory = function(accBase, accBaseCost, upgradeCount, type){
 
 		this.upgradeCount = this.upgradeCount.add(1);
 
-		this.acc = upgradeAccx(this.accBase,this.upgradeCount);
+		this.acc = upgradeAccx(this.accBase,this.upgradeCount,this.accbasemult);
 
 		this.updateCost();
 
@@ -156,9 +158,9 @@ var MathematicaUpgradeable = function(costDiv, mpsMult, upgradeCount){
 	}
 }
 
-var costDiv = new MathematicaAccessory(1.0,new Decimal(100),0,"Cost");
+var costDiv = new MathematicaAccessory(1.0,new Decimal(100),new Decimal(1.2),0,"Cost");
 
-var mpsMult = new MathematicaAccessory(0.5,new Decimal(10),0,"MPS");
+var mpsMult = new MathematicaAccessory(0.5,new Decimal(10),new Decimal(1.2),0,"MPS");
 
 var mathematica = new MathematicaUpgradeable(costDiv,mpsMult,10);
 
@@ -176,8 +178,8 @@ function upgradeMathematicaCost(startCost,upgradeCount,costDivAcc){
 
 }
 
-function upgradeAccx(mpsMult, mpsMultUpgradeCount){
+function upgradeAccx(mpsMult, mpsMultUpgradeCount, mpsmultmult){
 
-	return mpsMult.multiply(new Decimal(1.2).pow(mpsMultUpgradeCount));
+	return mpsMult.multiply(mpsmultmult.pow(mpsMultUpgradeCount));
 
 }

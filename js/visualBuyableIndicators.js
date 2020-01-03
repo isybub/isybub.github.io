@@ -97,7 +97,7 @@ function updateBuyables(){
 
 	}
 	var lobm1 = document.getElementById("lobm1");
-	if(lobbying.lobbyingDollars.gte(increaseXUpgradeable.currentCost)){
+	if(lobbying.lobbyingDollars.gte(unlockMPSMultiplier.currentCost)){
 		lobm1.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--light'); 
 		lobm1.style.boxShadow = "inset 0 0 20px "+getComputedStyle(document.documentElement).getPropertyValue('--light');
 
@@ -105,6 +105,17 @@ function updateBuyables(){
 
 		lobm1.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--error'); 		
 		lobm1.style.boxShadow = "none";
+
+	}
+	var lobm2 = document.getElementById("lobm2");
+	if(lobbying.lobbyingDollars.gte(unlockCostDivider.currentCost)){
+		lobm2.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--light'); 
+		lobm2.style.boxShadow = "inset 0 0 20px "+getComputedStyle(document.documentElement).getPropertyValue('--light');
+
+	}else{
+
+		lobm2.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--error'); 		
+		lobm2.style.boxShadow = "none";
 
 	}
 	

@@ -32,7 +32,7 @@ function updateBasedOnProgress(){
 			}
 			break;
 		case 2:
-			if(iq.highestPoints.gte(5)){
+			if(iq.highestiqps.gte(6)){
 				document.getElementById("u1x").style.opacity = 1;
 				document.getElementById("u1x").style.zIndex = 1;
 
@@ -40,24 +40,24 @@ function updateBasedOnProgress(){
 			}
 			break;
 		case 3:
-			if(iq.highestiqps.gte(4.5)){ 
+			/*if(iq.highestiqps.gte(4.5)){
 				document.getElementById("u1Alg").style.opacity = 1;
 				document.getElementById("u1Alg").style.zIndex = 1;
-				document.getElementById("u1Alg").innerHTML = "MPS * 1.2 <br />Cost:<span id=u1Algc>10.0</span>IQ Points";
+				document.getElementById("u1Alg").innerHTML = "MPS * 1.2 <br />Cost:<span id=u1Algc>10.0</span>IQ Points";*/
 				discoverProgress++;
-			}
+			//}
 			break;
 		case 4:
-			if(iq.highestiqps.gte(6)){ 
+			if(iq.highestiqps.gte(6)){
 				document.getElementById("lobbyreveal").style.opacity = 1;
 				document.getElementById("lobbyreveal").style.zIndex = 1;
 				discoverProgress++;
 			}
 			break;
 		case 5:
-			if(iq.highestPoints.gte(60)){
+			/*if(iq.highestPoints.gte(60)){
 				document.getElementById("u2Alg").style.opacity = "1";
-				document.getElementById("u2Alg").style.zIndex = "1";
+				document.getElementById("u2Alg").style.zIndex = "1";*/
 				if(iq.highestiqps.gte(22.5)){
 					lobbying.openable = true;
 					var lob = document.getElementById("lobbyreveal");
@@ -66,11 +66,11 @@ function updateBasedOnProgress(){
 					lob.style.boxShadow = "none";
 					discoverProgress++;
 				}
-			}
+			//}
 			break;
 		case 6:
 			if(iq.highestPoints.gte(100)){
-				document.getElementById("u2Alg").innerHTML = "IQ Point Cost / 1.2 <br />Cost:<span id=u2Algc>100</span>IQ Points";
+				//document.getElementById("u2Alg").innerHTML = "IQ Point Cost / 1.2 <br />Cost:<span id=u2Algc>100</span>IQ Points";
 				document.getElementById("story20").style.opacity = 1;
 				document.getElementById("story20").style.zIndex = 1;
 				discoverProgress++;

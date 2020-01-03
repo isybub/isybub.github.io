@@ -35,6 +35,10 @@ var parentsAutobuyerUpgradeable = new lobbyingAcc(new Decimal(1), new Decimal(1.
 
 var increaseXUpgradeable = new lobbyingAcc(new Decimal(1), new Decimal(1.3), new Decimal(2), new Decimal(2));
 
+var unlockMPSMultiplier = new lobbyingAcc(new Decimal(1.2), new Decimal(1.3), new Decimal(1.02), new Decimal(1.1));
+
+var unlockCostDivider = new lobbyingAcc(new Decimal(1.2),new Decimal(13), new Decimal(1.02), new Decimal(1.1));
+
 var LobbyingUpgradeable = function(){
 
 	this.lobbyingDollars = new Decimal(0);
@@ -46,6 +50,8 @@ var LobbyingUpgradeable = function(){
 	this.openable = false;
 
 	this.purchasable = false;
+
+	this.levelOfMathematicaUpgrades = 0;
 
 	this.show = function(){
 
@@ -163,13 +169,70 @@ var LobbyingUpgradeable = function(){
 
 			increaseXUpgradeable.upgrade();
 
-			document.getElementById("lobm1c").innerHTML = increaseXUpgradeable.currentCost.toPrecision(3);
+			document.getElementById("whatever the cost amount  element is").innerHTML = increaseXUpgradeable.currentCost.toPrecision(3);
 
 			document.getElementById("xamount").innerHTML = increaseXUpgradeable.current.divide(10).toPrecision(3);
 
 		}
 
 	}
+
+	this.unlockMPSMultiplier = function(){
+		if(this.levelOfMathematicaUpgrades==0){
+
+			document.getElementById("u1Alg").style.opacity = 1;
+			document.getElementById("u1Alg").style.zIndex = 1;
+			document.getElementById("u1Alg").innerHTML= "MPS *<span id=u1Algp>"+mathematica.mpsMult.accbasemult.toPrecision(3)+"</span> <br />Cost:<span id=u1Algc>10.0</span>IQ Points";
+			document.getElementById("lobm1").innerHTML = "Encourage the Government to increase carbon offset tax. <br /> Multiply the MPS Multiplier by 1.02 <br />Cost:<span id=lobm1c>1.30</span>Lobbying Dollars";
+			
+			document.getElementById("lobm2").style.marginTop = 0;
+			this.levelOfMathematicaUpgrades += 1;
+			return;
+
+		}
+		if(this.lobbyingDollars.gte(unlockMPSMultiplier.currentCost)){
+			this.lobbyingDollars.subtract(unlockMPSMultiplier.currentCost);
+
+			unlockMPSMultiplier.upgrade();
+
+			document.getElementById("lobm1c").innerHTML = unlockMPSMultiplier.currentCost.toPrecision(3);
+
+			mathematica.mpsMult.accbasemult = unlockMPSMultiplier.current;
+
+			document.getElementById("u1Algp").innerHTML = mathematica.mpsMult.accbasemult.toPrecision(3);
+
+
+		}
+	}
+	this.unlockCostDivider = function(){
+		console.log(this.levelOfMathematicaUpgrades);
+		if(this.levelOfMathematicaUpgrades==1){
+
+			document.getElementById("u2Alg").style.opacity = 1;
+			document.getElementById("u2Alg").style.zIndex = 1;
+			document.getElementById("u2Alg").innerHTML= "Cost /<span id=u2Algp>"+mathematica.costDiv.accbasemult.toPrecision(3)+"</span> <br />Cost:<span id=u2Algc>100.0</span>IQ Points";
+			document.getElementById("lobm2").innerHTML = "Encourage the Government to hand out solar panel incentives. <br /> Multiply the Cost Divider by 1.02 <br />Cost:<span id=lobm2c>13.0</span>Lobbying Dollars";
+			
+			this.levelOfMathematicaUpgrades += 1;
+			return;
+
+		}
+		if(this.lobbyingDollars.gte(unlockCostDivider.currentCost)){
+
+			this.lobbyingDollars.subtract(unlockCostDivider.currentCost);
+
+			unlockCostDivider.upgrade();
+
+			document.getElementById("lobm2c").innerHTML = unlockCostDivider.currentCost.toPrecision(3);
+
+			mathematica.costDiv.accbasemult = unlockCostDivider.current;
+
+			document.getElementById("u2Algp").innerHTML = mathematica.costDiv.accbasemult.toPrecision(3);
+
+
+		}
+	}
+
 
 
 }

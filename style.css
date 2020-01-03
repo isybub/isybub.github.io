@@ -102,17 +102,26 @@ a:hover{
 	flex-wrap: wrap;
 	width: 100%;
 }
-#parentsLobbying, #mathLobbying, #childrenLobbying{
+#mathLobbying, #childrenLobbying{
 	padding-top:50px;
 	padding-bottom: 50px;
-}
-
-#lobm1, #lobc1{
 	width:600px;
 }
-#lobp1{
+#parentsLobbying{
+	padding-top:50px;
+	padding-bottom: 50px;
 	width:279px;
+
 }
+#mathLobbying a, #childrenLobbying a,#parentsLobbying a{
+	width:100%;
+}
+#lobm2{
+	margin-top:-100%;
+	transition: all 0.3s;
+}
+
+
 #lobbyclose{
 	border-color: var(--good);
 	box-shadow: none;
