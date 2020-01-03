@@ -121,6 +121,7 @@ function unlockFirstChild(){
 		document.getElementById("postchild2").style.opacity = "0";
 		document.getElementById("postchild2").style.fontSize = "0";
 		document.getElementById("schoolingheading").style.opacity = "1";
+		document.getElementById("iqPoints").style.opacity = "1";
 		document.getElementById("child1").style.opacity = "1";
 		child.one.newChild();
 		document.getElementById("tabletotals").style.opacity = 1;

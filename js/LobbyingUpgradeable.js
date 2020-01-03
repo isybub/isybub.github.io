@@ -57,15 +57,15 @@ var LobbyingUpgradeable = function(){
 
 		if(this.openable){
 			document.getElementById("bigLobbyingContainer").style.left = "0px";
-			document.getElementById("mainContainer").style.marginLeft = "-100%";
-			document.getElementById("mainContainer").style.marginRight = "100%";
+			document.getElementById("mainContainer").style.marginLeft = "-120%";
+			document.getElementById("mainContainer").style.marginRight = "120%";
 		}
 
 	}
 
 	this.close = function(){
 
-		document.getElementById("bigLobbyingContainer").style.left = "100%";
+		document.getElementById("bigLobbyingContainer").style.left = "120%";
 		document.getElementById("mainContainer").style.marginLeft = "0px";
 		document.getElementById("mainContainer").style.marginRight = "0px";
 
@@ -153,7 +153,6 @@ var LobbyingUpgradeable = function(){
 			if(parentsAutobuyerUpgradeable.upgradeCount==25){
 
 				document.getElementById("parentsAutobuyer").innerHTML = "You are now liquidating mathematica to Real Dollars Instantly.";
-
 
 				document.getElementById("lobp1").innerHTML = "You are now liquidating mathematica to Real Dollars Instantly.";
 

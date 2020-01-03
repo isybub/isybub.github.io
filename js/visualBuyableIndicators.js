@@ -24,12 +24,12 @@ function updateBuyables(){
 	}else{
 		i3.style.borderColor = buttonOff;
 	}
-	var i4 = document.getElementById("auto1");
+	/*var i4 = document.getElementById("auto1");
 	if(parents.realDollars.gte(parents.autobuyerUpgradeCost)){
 		i4.style.borderColor = buttonOn;
 	}else{
 		i4.style.borderColor = buttonOff;
-	}
+	}*/
 	var bar1 = document.getElementById("child1buy");
 	var bar2 = document.getElementById("child2buy");
 	var bar3 = document.getElementById("child3buy");

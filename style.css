@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300|Roboto+Mono:100&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300|Muli&display=swap');
 :root {
 	--white: #E6EEEE;
 	--error: #A71D31;
@@ -15,6 +15,7 @@
 	--yoga5:#80e87e;
 	--yoga6:#79caf7;
 	--yoga7:#ef7bef;
+
 }
 
 
@@ -29,9 +30,11 @@ body{
 	overflow-x: hidden;
 	overflow-y: scroll;
 	max-width: 100%;
+	text-shadow: 2px 2px 4px rgba(23,24,28,0.5);
+	padding-bottom: 200px;
 }
 h1,h2,h3{
-	font-family: 'Roboto Mono', monospace;
+	font-family: 'Muli', sans-serif;
 	text-align: center;
 }
 a{
@@ -57,6 +60,7 @@ a{
 	flex:100%;
 	box-shadow: inset 0 0 0px white,inset 0 0 0px rgba(23,24,28,0.5),-6px -6px 16px rgba(92,98,112,0.4),
 	 6px 6px 16px rgba(23,24,28,0.7);
+
 }
 a:active{
 	background-color: rgba(180,180,180,1);
@@ -76,7 +80,6 @@ a:hover{
 }
 
 #story1, #story2, #story3, #story4, #story20, #story25, #u1x, #u1Alg, #u2Alg, #auto1, #lobbyreveal, #sacrifice, #parentsAutobuyer{
-	position: relative;
 	opacity: 0;
 	z-index: -1;
 }
@@ -84,7 +87,7 @@ a:hover{
 
 	transition: all 0.25s,opacity 1s;
 }
-#story3, #story4, #parentsAutobuyer{
+#story4, #parentsAutobuyer{
 	width:279px;
 }
 
@@ -102,7 +105,7 @@ a:hover{
 #bigLobbyingContainer{
 	width:100%;
 	height:100%;
-	left:100%;
+	left:120%;
 	top:0;
 	position: fixed;
 	transition: all 1s;
@@ -118,7 +121,7 @@ a:hover{
 #mathLobbying, #childrenLobbying,#parentsLobbying{
 	padding-top:50px;
 	padding-bottom: 50px;
-	width:600px;
+	width:550px;
 
 	border-radius: 8px;
 	border-style: solid;
@@ -136,7 +139,9 @@ a:hover{
 	margin-top:-100%;
 	transition: all 0.3s;
 }
-
+#mps{
+	align-self: right;
+}
 
 #lobbyclose{
 	border-color: var(--good);
@@ -146,7 +151,7 @@ a:hover{
 	justify-content: center;
 	align-content: center;
 	text-align: center;
-	width: 600px;
+	width: 550px;
 	z-index: 2;
 }
 #childstory p, #childstory a{
@@ -156,25 +161,27 @@ a:hover{
 	transition: all 0.3s;
 }
 
-#ParentsContainer,#mathematicacontainer,#childrenContainer{
+#ParentsContainer,#MathematicaContainer,#childrenContainer{
 	align-items: center;
 	align-content: center;
 	text-align: center;
 	margin-top:50px;
-	width: 600px;
+	width: 550px;
 	border-radius: 8px;
 	border-style: solid;
 	border-width:2px;
 	border-color: rgba(92,98,112,0.2);
 	box-shadow: -6px -6px 16px rgba(92,98,112,0.35),
-	 6px 6px 16px rgba(23,24,28,0.7);
+	 6px 6px 16px rgba(23,24,28,0.7),
+	 -12px -12px 32px rgba(92,98,112,0.35),
+	 12px 12px 32px rgba(23,24,28,0.7);
 }
 
 #ParentsContainer{
 	width:350px;
 }
 
-#childrenContainer h1{
+#schoolingheading,#iqPoints{
 	opacity: 0;
 }
 #childrenContainer a{
@@ -186,8 +193,8 @@ table a{
 	font-size: 1.25em;
 }
 #childrendisplay{
-	position: relative;
-	margin:50px;
+	position: fixed;
+	bottom:50px;
 	width:80%;
 	background-color: rgba(180,180,180,1);
 	height:100px;
@@ -199,7 +206,7 @@ table a{
 	border-width:2px;
 	border-color: rgba(92,98,112,0.2);
 	box-shadow: inset -6px -6px 16px rgba(255,255,255,1),
-	inset 6px 6px 16px rgba(23,24,28,0.5);
+	inset 6px 6px 16px rgba(23,24,28,0.9);
 
 }
 #childrendisplay img{
@@ -269,7 +276,6 @@ td a{
 	transition: all 1s;
 }
 span{
-	padding:10px;
 }
 #parentsAutobuyer{
 	transition: all 0s;

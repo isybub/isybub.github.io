@@ -18,27 +18,24 @@
 		<div id=bigmaincontainer>
 			<div id="mainContainer"> 
 				<div id="MathematicaContainer">
-					<h1>Mathematica: <span id="mathematica">0 </span></h1>
-					<h3> Mathematica per second: <span id=mps> 0.500 </span></h3>
-					<h4> x  =<span id=xval>1.00</span></h4>
-					<p id=story1> Current MPS Algorithm: <span id=mpsAlg> 0.500x<sup>2</sup> </span></p>
-					<p id=story20> Current Cost Algorithm: <span id=costAlg> 2<sup>x</sup>/1.00</span></p>
-					<p id=story25> Current Value of x: <span id=x></span></p>
+					Mathematica: <h1><span id="mathematica">0 </span></h1>
+					<h3><span id=mps>0.500</span>/s</h3>
+					<h4>&Xscr; = <span id=xval>1.00</span></h4>
+					<p id=story1> Current MPS Algorithm: <span id=mpsAlg> 0.500&Xscr;<sup>2</sup> </span></p>
+					<p id=story20> Current Cost Algorithm: <span id=costAlg> 2<sup>&Xscr;</sup>/1.00</span></p>
+					<p id=story25> Current Value of &#120013;: <span id=x></span></p>
 
 					<div id="upgradexContainer">
-						<a href="javascript:mathematica.upgradeX()" id=u1x>Increase x by <span id=xamount>0.1 </span><br />Cost:<span id=u1xc>2.00</span> IQ Points</a>
+						<a href="javascript:mathematica.upgradeX()" id=u1x>Increase x by <span id=xamount>0.1 </span><br />Cost: <span id=u1xc>2.00</span> IQ Points</a>
 					</div>
 					<div id="upgradeAlgContainer">
 						<a href="javascript:mathematica.upgradeMPSMult()" id=u1Alg>? <br />Cost:<span id=u1Algc>10.0</span>IQ Points</a>
 						<a href="javascript:mathematica.upgradeCostDiv()" id=u2Alg>? <br />Cost:<span id=u2Algc>100</span>IQ Points</a>
 					</div>
-					<div id="autobuyerContainer">
-						<a href="javascript:upgradeAutobuyer()" id=auto1> ? <br /> Cost: <span id=auto1c>1000</span></a>
-					</div>
 				</div>
 				<div id="ParentsContainer">
-					<h1>Real Dollars: $<span id="RealDollars">0</span></h1>
-					<h3 id=story3> It seems, you have discovered how to convert Global Base Mathematica, into Real Dollars..</h3>
+					Real Dollars: <h1>$<span id="RealDollars">0</span></h1>
+					<p id=story3> It seems, you have discovered how to convert Global Base Mathematica, into Real Dollars..</p>
 					<a id=story4 href="javascript:parents.convert(parents.autobuyingSpeed)" >Convert Mathematica into <br/> $<span id=M2RDC>0</span> Real Dollars</a>
 					<a id=parentsAutobuyer>Converting <br/><span id=parentsAutobuyerSpeed>1</span> times per second</a>
 				</div>
@@ -50,17 +47,17 @@
 						<p id=prechild3>Where can you find family?</p>
 						<p id=prechild4>You have a chat with your partner.</p>
 						<p id=prechild5>You decide to adopt..</p>
-						<a id=child1buy href="javascript:unlockFirstChild()"><span id=centertext>Adopt a child</span></a>
+						<a id=child1buy href="javascript:unlockFirstChild()" style="margin-top:20px;"><span id=centertext>Adopt a child</span></a>
 						<p id=postchild1>God, this kid is dumb.</p>
 						<p id=postchild2>Take it to school.</p>
 					</div>
-					<h1 id=schoolingheading>Schooling:<br /> <span id="iqPoints">0</span> IQ Points</h1><br />
+					<span id=schoolingheading>IQ Points:<h1><span id="iqPoints">0</span></h1></span>
 					<table>
 						<tbody>
 							<tr id=child1>
 								<td id=child1name>Child</td>
 								<td id=child1IQ></td>
-								<td id=child1up><a id=child1buy href="javascript:unlockFirstChild()"><span id=centertext>Find a Child on the side of the road<span id="child1cost"></span></span></a></td>
+								<td id=child1up><a id=child1buy ><span id=centertext>Find a Child on the side of the road<span id="child1cost"></span></span></a></td>
 								<td id=child1year></td>
 							</tr>
 							<tr id=child2>
@@ -90,6 +87,7 @@
 					<a href="javascript:lobbying.sacrifice(lobbying)" id=sacrifice> <span id=lobbyinggain></span> ? </a>
 					<a href="javascript:lobbying.show()" id=lobbyreveal> Finish an exam to view. </a>
 				</div>
+				
 				<div id=childrendisplay>
 					<img id=child1rep src="icons/svg/Year 1.svg" height=100px width=100px></img>
 					<img id=child2rep src="icons/svg/Year 1.svg" height=100px width=100px></img>
@@ -102,10 +100,11 @@
 				</div>
 				<div id=childupgradecircle></div>
 			</div>
+
 				<a href="javascript:devHack()" style="margin-top:-50px"></a>
 			<div id="bigLobbyingContainer">
 
-				<h1>Lobbying Dollars: $<span id="LobbyingDollars">0</span></h1>
+				Lobbying Dollars: <h1>$<span id="LobbyingDollars">0</span></h1>
 				<div id="LobbyingContainer">
 					<div id="mathLobbying"> 
 						<p>Mathematica Upgrades</p>

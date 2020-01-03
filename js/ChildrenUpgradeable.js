@@ -12,7 +12,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.nextProd = new Decimal(0);
 
-	this.randSeed = Math.random()*0.1+0.05;
+	this.randSeed = Math.random()*0.1+0.1;
 
 	this.currentProd = new Decimal(currentProd);
 
@@ -100,15 +100,15 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.updateRepresentation = function(){
 
-		document.getElementById("child"+this.childNum+"rep").style.left = (46.5*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
+		document.getElementById("child"+this.childNum+"rep").style.left = ((50*(1-(125/document.body.offsetWidth)))*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
 		
-		document.getElementById("child"+this.childNum+"glow").style.left = (46.5*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
+		document.getElementById("child"+this.childNum+"glow").style.left = ((50*(1-(125/document.body.offsetWidth)))*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
 
 
 		
 		document.getElementById("child"+this.childNum+"glow").style.boxShadow = "0px -"+5*this.currentYear+"px "+20*this.currentYear+"px "+getComputedStyle(document.documentElement).getPropertyValue('--yoga'+this.currentYear);
 
-		document.getElementById("child"+this.childNum+"rep").style.transform = "rotate("+(900*(Math.sin(this.randSeed*Date.now()/500.0)))+"deg)";
+		document.getElementById("child"+this.childNum+"rep").style.transform = "rotate("+((document.getElementById("childrendisplay").offsetWidth/2)*(Math.sin(this.randSeed*Date.now()/500.0)))+"deg)";
 		
 		if(this.upgradingRepresentation)this.upgradeRepresentation();
 	}
@@ -123,8 +123,8 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		if(this.upgradingRepresentation){
 			circ.style.width = Math.pow((Date.now() - this.upgradeTime)/20,2);
 			circ.style.height = Math.pow((Date.now() - this.upgradeTime)/20,2);
-			circ.style.left = document.body.offsetWidth*parseFloat(leftamount)/80 - parseFloat(circ.style.height)/2+"px";
-			circ.style.top = 50 - parseFloat(circ.style.height)/2+"px";
+			circ.style.left = 0.8*document.body.offsetWidth*(parseFloat(leftamount)/100.0) + 0.1*document.body.offsetWidth- parseFloat(circ.style.height)/2+"px";
+			circ.style.top = document.body.offsetHeight - 200 - parseFloat(circ.style.height)/2+"px";
 			circ.style.borderColor = "rgb("+(Math.sin(Date.now()/200+1.57)*127+126)+","+(Math.sin(Date.now()/200+3.141)*127+126)+","+(Math.sin(Date.now()/200+4.71)*127+126)+")";
 			if(parseFloat(circ.style.width)>2 * Math.sqrt(Math.pow(document.body.offsetWidth,2)+Math.pow(document.body.offsetHeight,2))){
 				circ.style.width = 1;
