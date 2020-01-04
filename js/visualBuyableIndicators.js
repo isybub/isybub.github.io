@@ -45,12 +45,14 @@ function updateBuyables(){
 		}
 		bari += 1;	
 	});
-	var pab = document.getElementById("parentsAutobuyer");
+
+	//Parents autobuyer legacy code
+	/*var pab = document.getElementById("parentsAutobuyer");
 	if(parents.autobuyingSpeed.equals(10001)){
 	}else{
 		pab.style.borderColor = buttonGood;
 		pab.style.boxShadow = neuomorphicButtonShadows;
-	}
+	}*/
 	var lob = document.getElementById("sacrifice");
 	if(lobbying.lobbyingDollarsLive>2&&lobbying.purchasable){
 

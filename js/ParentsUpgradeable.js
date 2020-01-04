@@ -57,8 +57,8 @@ var ParentsUpgradeable = function(){
 	}
 
 	this.updateParentsAutobuyerProgressBar = function(prog){
-		var pbar = document.getElementById("parentsAutobuyer");
-		pbar.style.boxShadow = "inset "+ 279*(one1.divide(this.autobuyingSpeed).multiply(prog))+"px 0 0 0 var(--background)";
+		//var pbar = document.getElementById("parentsAutobuyer");
+		//pbar.style.boxShadow = "inset "+ 279*(one1.divide(this.autobuyingSpeed).multiply(prog))+"px 0 0 0 var(--background)";
 	}
 
 }

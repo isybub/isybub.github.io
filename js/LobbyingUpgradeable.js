@@ -132,9 +132,7 @@ var LobbyingUpgradeable = function(){
 			if(parentsAutobuyerUpgradeable.upgradeCount<25){
 
 				if(parentsAutobuyerUpgradeable.currentCost.equals(1.30)) {
-					document.getElementById("parentsAutobuyer").style.opacity = 1;
-					document.getElementById("parentsAutobuyer").style.zIndex = 1;
-					document.getElementById("lobp1").innerHTML = "Encourage the Government to give you a tax break.<br />Your Company can convert Mathematica 1.15x faster <br />Cost:<span id=lobp1c>1.30</span>Lobbying Dollars";
+					document.getElementById("lobp1d").innerHTML = "Encourage the Government to give you a tax break.<br />Your Company can convert Mathematica 1.15x faster <br /><a href=\"javascript:lobbying.upgradeParentsAutobuyer()\" id=lobp1><span id=lobp1c> 1.30 </span>Lobbying Dollars</a>";
 				}
 
 				this.lobbyingDollars = this.lobbyingDollars.minus(parentsAutobuyerUpgradeable.currentCost);
@@ -147,12 +145,12 @@ var LobbyingUpgradeable = function(){
 
 				parents.autobuyingSpeed = parentsAutobuyerUpgradeable.current.multiply(1000);
 
-				document.getElementById("parentsAutobuyerSpeed").innerHTML = new Decimal(1).divide(parentsAutobuyerUpgradeable.current).toPrecision(3);
+				//document.getElementById("parentsAutobuyerSpeed").innerHTML = new Decimal(1).divide(parentsAutobuyerUpgradeable.current).toPrecision(3);
 
 			}
 			if(parentsAutobuyerUpgradeable.upgradeCount==25){
 
-				document.getElementById("parentsAutobuyer").innerHTML = "You are now liquidating mathematica to Real Dollars Instantly.";
+				document.getElementById("ParentsContainer").innerHTML = "Real Dollars: <h1>$<span id=\"RealDollars\">0</span></h1>";
 
 				document.getElementById("lobp1").innerHTML = "You are now liquidating mathematica to Real Dollars Instantly.";
 
@@ -193,7 +191,8 @@ var LobbyingUpgradeable = function(){
 
 		}
 		if(this.lobbyingDollars.gte(unlockMPSMultiplier.currentCost)){
-			this.lobbyingDollars.subtract(unlockMPSMultiplier.currentCost);
+
+			this.lobbyingDollars = this.lobbyingDollars.subtract(unlockMPSMultiplier.currentCost);
 
 			unlockMPSMultiplier.upgrade();
 
@@ -223,7 +222,7 @@ var LobbyingUpgradeable = function(){
 		}
 		if(this.lobbyingDollars.gte(unlockCostDivider.currentCost)){
 
-			this.lobbyingDollars.subtract(unlockCostDivider.currentCost);
+			this.lobbyingDollars = this.lobbyingDollars.subtract(unlockCostDivider.currentCost);
 
 			unlockCostDivider.upgrade();
 

@@ -39,6 +39,22 @@ function devHack(){
 	});
 }
 
+
+function initLocalStorage(){
+
+}
+
+function loadGame(){
+	override = true;
+	discoverProgress = parseInt(localStorage.getItem(discoverProgress));
+}
+
+window.onload = function(){
+	if(localStorage.getItem(localStorage.exists)===null){
+		initLocalStorage();
+	}
+}
+
 function step(timestamp) {
 	t = Date.now();
 	dt = t - lt;

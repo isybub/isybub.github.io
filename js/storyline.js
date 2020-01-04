@@ -1,8 +1,8 @@
-
+var override = false;
 function updateBasedOnProgress(){
 	switch(discoverProgress){
 		case -2:
-			if(mathematica.highestMathematica.gte(2)){
+			if(mathematica.highestMathematica.gte(2)||override){
 				document.getElementById("story1").style.opacity = 1;
 				document.getElementById("story1").style.zIndex = 1;
 				discoverProgress++;
