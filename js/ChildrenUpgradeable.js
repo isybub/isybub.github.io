@@ -12,7 +12,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.nextProd = new Decimal(0);
 
-	this.randSeed = Math.random()*0.1+0.1;
+	this.randSeed = new Decimal(Math.random()*0.1+0.1);
 
 	this.currentProd = new Decimal(currentProd);
 
@@ -22,38 +22,36 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.childNumAsString = childNumAsString;
 
-	this.timeToExam = 5;
+	this.timeToExam = new Decimal(5);
 
-	this.currentYear = 1;
+	this.currentYear = new Decimal(1);
 
-	this.progressBar = 0; 
+	this.progressBar = new Decimal(0); 
 
-	this.termspeed = 6;
+	this.termspeed = new Decimal(6);
 
-	this.progressbarsStartTime = 0;
+	this.progressbarsStartTime = new Decimal(0);
 
-	this.completedExams = 0;
+	this.completedExams = new Decimal(0);
 
 	this.purchased = false;
 
-	this.upgradeTime = 0;
+	this.upgradeTime = new Decimal(0);
 
 	this.upgradingRepresentation = false;
-
-	this.startLeft = "100%";
 
 	this.firstTimeRound = firstTimeRound;
 
 	this.upgrade = function (){
 
-		if(this.iCanBuy(this.currentCost)&&!this.progressBar){
+		if(this.iCanBuy(this.currentCost)&&!this.progressBar.gt(0)){
 
 			parents.realDollars = parents.realDollars.subtract(this.currentCost);
 			this.upgradeCount = this.upgradeCount.add(1);
 
 
-			this.progressbarsStartTime = Date.now();
-			this.progressBar = 0.01;
+			this.progressbarsStartTime = new Decimal(Date.now());
+			this.progressBar = this.progressBar.add(0.01);
 			this.update();
 
 		}
@@ -64,10 +62,10 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		if(this.purchased){
 			this.upgradeCount = new Decimal(1);
 			this.currentCost = new Decimal(0);
-			this.completedExams = 0;
-			this.progressBar = 0;
-			this.timeToExam = 6;
-			this.currentYear = 0;
+			this.completedExams = new Decimal(0);
+			this.progressBar = new Decimal(0);
+			this.timeToExam = new Decimal(6);
+			this.currentYear = new Decimal(0);
 			this.finalize();
 		}
 	}
@@ -75,22 +73,20 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.update = function(){
 
-		if(this.progressBar){
+		if(this.progressBar.gt(0)){
 
-			this.progressBar = 0.01+(Date.now() - this.progressbarsStartTime)/(1000 * (this.termspeed));
+			this.progressBar = new Decimal(0.01+(Date.now() - this.progressbarsStartTime)/(this.termspeed.multiply(1000)));
 
-			var bar = document.getElementById("child"+this.childNum+"buy");
-			bar.style.boxShadow = "inset "+225*this.progressBar+"px 0 0 0 var(--background)";
+			var bar = document.getElementById("child"+this.childNum.valueOf()+"buy");
+			bar.style.boxShadow = "inset "+225*this.progressBar.valueOf()+"px 0 0 0 var(--background)";
 
-			if(this.progressBar>=1){
+			if(this.progressBar.gte(1)){
 
 				this.finalize();
 
 			}
 
 		}
-
-		this.visuallyUpdateChild();
 
 		if(this.purchased){
 			this.updateRepresentation();
@@ -100,25 +96,25 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.updateRepresentation = function(){
 
-		document.getElementById("child"+this.childNum+"rep").style.left = ((50*(1-(125/document.body.offsetWidth)))*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
+		document.getElementById("child"+this.childNum.valueOf()+"rep").style.left = ((50*(1-(125/document.body.offsetWidth)))*(Math.sin(this.randSeed.multiply(Date.now()/500.0))+1))+"%";
 		
-		document.getElementById("child"+this.childNum+"glow").style.left = ((50*(1-(125/document.body.offsetWidth)))*(Math.sin(this.randSeed*Date.now()/500.0)+1))+"%";
+		document.getElementById("child"+this.childNum.valueOf()+"glow").style.left = ((50*(1-(125/document.body.offsetWidth)))*(Math.sin(this.randSeed.multiply(Date.now()/500.0))+1))+"%";
 
 
 		
-		document.getElementById("child"+this.childNum+"glow").style.boxShadow = "0px -"+5*this.currentYear+"px "+20*this.currentYear+"px "+getComputedStyle(document.documentElement).getPropertyValue('--yoga'+this.currentYear);
+		document.getElementById("child"+this.childNum.valueOf()+"glow").style.boxShadow = "0px -"+5*this.currentYear.valueOf()+"px "+20*this.currentYear.valueOf()+"px "+getComputedStyle(document.documentElement).getPropertyValue('--yoga'+this.currentYear.valueOf());
 
-		document.getElementById("child"+this.childNum+"rep").style.transform = "rotate("+((document.getElementById("childrendisplay").offsetWidth/2)*(Math.sin(this.randSeed*Date.now()/500.0)))+"deg)";
+		document.getElementById("child"+this.childNum.valueOf()+"rep").style.transform = "rotate("+((document.getElementById("childrendisplay").offsetWidth/2)*(Math.sin(this.randSeed.multiply(Date.now()/500.0))))+"deg)";
 		
 		if(this.upgradingRepresentation)this.upgradeRepresentation();
 	}
 
 	this.upgradeRepresentation = function(){
 		var circ = document.getElementById("childupgradecircle");
-		var leftamount = document.getElementById("child"+this.childNum+"rep").style.left;
+		var leftamount = document.getElementById("child"+this.childNum.valueOf()+"rep").style.left;
 		if(!this.upgradingRepresentation){
 			this.upgradingRepresentation = true;
-			this.upgradeTime = Date.now();
+			this.upgradeTime = new Decimal(Date.now());
 		}
 		if(this.upgradingRepresentation){
 			circ.style.width = Math.pow((Date.now() - this.upgradeTime)/20,2);
@@ -142,11 +138,11 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 		this.howMuchLongerUntilExam()
 
-		this.progressBar = 0;
+		this.progressBar = new Decimal(0);
 		this.currentProd = upgradeChildProduction(this.startProd,this.upgradeCount,this.completedExams);
 		var examCostPredictor = this.completedExams;
-		if(this.timeToExam==1) examCostPredictor++;
-		this.currentCost = upgradeChildCost(this.startCost,this.upgradeCount,examCostPredictor);
+		if(this.timeToExam.equals(1)) examCostPredictor = examCostPredictor.add(1);
+		this.currentCost = upgradeChildCost(this.startCost,this.upgradeCount,examCostPredictor,this.currentYear);
 		this.nextProd = upgradeChildProduction(this.startProd,this.upgradeCount.add(1),examCostPredictor).subtract(this.currentProd);
 
 		this.displayExamOrTerm();
@@ -160,10 +156,10 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.howMuchLongerUntilExam = function(){
 		
-		this.timeToExam--;
-		if(this.timeToExam == 0){
-			this.timeToExam = 5;
-			this.completedExams++;
+		this.timeToExam = this.timeToExam.minus(1);
+		if(this.timeToExam.equals(0)){
+			this.timeToExam = new Decimal(5);
+			this.completedExams = this.completedExams.add(1);
 			this.upgradeRepresentation();
 		}
 
@@ -172,17 +168,16 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.displayExamOrTerm = function(){
 
-		var num = this.childNum;
+		var num = this.childNum.valueOf();
 		var upgrade = "child"+(num)+"up";
 
-		if(this.timeToExam==1){
+		if(this.timeToExam.equals(1)){
 
 			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>End of year exam <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</span></a>";
 
-		}else if(this.timeToExam==5){
+		}else if(this.timeToExam.equals(5)){
 
-			this.currentYear++;
-
+			this.currentYear = this.currentYear.add(1);
 			if(this.firstTimeRound){
 				this.firstTimeRound = false;
 				this.breadcrumbnewchild();
@@ -198,27 +193,27 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.visuallyUpdateChild = function(){
 
-		document.getElementById("child"+this.childNum+"IQ").innerHTML = this.currentProd.toPrecision(3)+" IQ";
-		document.getElementById("child"+this.childNum+"cost").innerHTML = this.currentCost.toPrecision(3);
+		document.getElementById("child"+this.childNum.valueOf()+"IQ").innerHTML = this.currentProd.toPrecision(3)+" IQ";
+		document.getElementById("child"+this.childNum.valueOf()+"cost").innerHTML = this.currentCost.toPrecision(3);
 		document.getElementById("iqps").innerHTML = iq.ps.toPrecision(3);
 		if(this.purchased){
 
-			document.getElementById("child"+this.childNum+"iqnext").innerHTML = this.nextProd.toPrecision(3);
+			document.getElementById("child"+this.childNum.valueOf()+"iqnext").innerHTML = this.nextProd.toPrecision(3);
 
-			var year = "child"+this.childNum+"year";
-			var pic = "child"+this.childNum+"rep";
-			document.getElementById(pic).src = "icons/svg/Year "+this.currentYear+".svg";
-			if(this.currentYear==1){
+			var year = "child"+this.childNum.valueOf()+"year";
+			var pic = "child"+this.childNum.valueOf()+"rep";
+			document.getElementById(pic).src = "icons/svg/Year "+this.currentYear.valueOf()+".svg";
+			if(this.currentYear.equals(1)){
 				document.getElementById(year).innerHTML = "1st Year";
-			}else if(this.currentYear==2){
+			}else if(this.currentYear.equals(2)){
 				document.getElementById(year).innerHTML = "2nd Year";
 
-			}else if(this.currentYear==3){
+			}else if(this.currentYear.equals(3)){
 				document.getElementById(year).innerHTML = "3rd Year";				
 			}else{
-				document.getElementById(year).innerHTML = this.currentYear+"th Year";
+				document.getElementById(year).innerHTML = this.currentYear.valueOf()+"th Year";
 			}
-			if(this.timeToExam == 1){
+			if(this.timeToExam.equals(1)){
 				document.getElementById(year).innerHTML += "<br /> Exam Time";
 			}else{
 				document.getElementById(year).innerHTML += "<br /> Term "+(6-this.timeToExam);
@@ -228,13 +223,35 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	}
 
+	this.newChildInIntro = function(){
+		this.nextProd = upgradeChildProduction(this.startProd,this.upgradeCount.add(1),this.completedExams).subtract(this.currentProd);
+			var num = this.childNum.valueOf();
+			var tr = "child"+num;
+			var name = "child"+num+"name";
+			var IQ = "child"+num+"IQ";
+			var upgrade = "child"+num+"up";
+			var year = "child"+num+"year";
+			document.getElementById(tr).style.opacity = 1;
+			document.getElementById(tr).style.zIndex = 1;
 
+			document.getElementById(name).innerHTML = "Random";
+			document.getElementById(IQ).innerHTML = "0 IQ";
+			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>Complete a term <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">10.0</span> Real Dollars</span></a>";
+			document.getElementById(year).innerHTML = "1st Year";
+
+			this.purchased = true;
+
+			if(++num<5&&!this.firstTimeRound){
+				this.breadcrumbnewchild();
+			}
+			this.visuallyUpdateChild();
+	}
 
 	this.newChild = function(){
 		if(parents.realDollars.gte(this.currentCost)){
 			parents.realDollars = parents.realDollars.subtract(this.currentCost);
 			this.nextProd = upgradeChildProduction(this.startProd,this.upgradeCount.add(1),this.completedExams).subtract(this.currentProd);
-			var num = this.childNum;
+			var num = this.childNum.valueOf();
 			var tr = "child"+num;
 			var name = "child"+num+"name";
 			var IQ = "child"+num+"IQ";
@@ -261,7 +278,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.breadcrumbnewchild = function(){
 
-		tr = "child"+(this.childNum+1);
+		tr = "child"+(this.childNum.add(1).valueOf());
 		document.getElementById(tr).style.opacity = 1;
 		document.getElementById(tr).style.zIndex = 1;
 		Object.keys(child).forEach(function(c){
@@ -281,22 +298,39 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 }
 
-var Child1 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(0.5),new Decimal(0),1,1,"one",true);
+var Child1 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(3),new Decimal(0),1,new Decimal(1),"one",true);
 
-var Child2 = new ChildUpgradeable(new Decimal(50),new Decimal(50),new Decimal(5),new Decimal(0),1,2,"two",false);
+var Child2 = new ChildUpgradeable(new Decimal(50),new Decimal(50),new Decimal(5),new Decimal(0),1,new Decimal(2),"two",true);
 
-var Child3 = new ChildUpgradeable(new Decimal(500),new Decimal(500),new Decimal(50),new Decimal(0),1,3,"three",false);
+var Child3 = new ChildUpgradeable(new Decimal(500),new Decimal(500),new Decimal(50),new Decimal(0),1,new Decimal(3),"three",true);
 
-var Child4 = new ChildUpgradeable(new Decimal(5000),new Decimal(5000),new Decimal(500),new Decimal(0),1,4,"four",false);
+var Child4 = new ChildUpgradeable(new Decimal(5000),new Decimal(5000),new Decimal(500),new Decimal(0),1,new Decimal(4),"four",false);
 
-function upgradeChildCost(startCost,upgradeCount,completedExams){
+function upgradeChildCost(startCost,upgradeCount,completedExams,currentYear){
 	
-	return startCost.multiply(upgradeCount.minus(1)).multiply(completedExams * 2).add(startCost.multiply(upgradeCount));
+	return startCost.pow(completedExams).add(startCost.pow(completedExams).multiply(getPerTermCost(upgradeCount-1)));
+
+	//return startCost.multiply(upgradeCount.minus(1)).multiply(completedExams.multiply(2)).multiply(new Decimal(4).pow(currentYear)).add(startCost.multiply(upgradeCount));
 
 }
+
+function getPerTermCost(upgradeCount){
+
+	var value = -0.25;
+
+	for(var i = 0; i < upgradeCount;i++){
+		
+		value += 0.25*Math.pow(2,Math.floor(i/5));
+
+	}
+	return value;
+}
+
 function upgradeChildProduction(startProd,upgradeCount,completedExams){
 	
-	return startProd.plus(1).multiply(upgradeCount.minus(1)).multiply(examLobbyingUpgradeable.current.multiply(completedExams * 2)).add(startProd.plus(1).multiply(upgradeCount.minus(1)));
+	return startProd.pow(completedExams).add(startProd.pow(completedExams).multiply(getPerTermCost(upgradeCount-1)));
+
+	//return startProd.plus(1).multiply(upgradeCount.minus(1)).multiply(examLobbyingUpgradeable.current.multiply(completedExams.multiply(2))).add(startProd.plus(1).multiply(upgradeCount.minus(1)));
 
 }
 
@@ -310,6 +344,35 @@ var child = new function(){
 	this.three = Child3;
 
 	this.four = Child4;
+
+
+
+}
+
+var childLoader = new function (){
+
+	this.load = function(childobject){
+
+		Object.keys(child).forEach(function(c){
+
+			Object.keys(childobject[c]).forEach(function(k){
+
+
+					child[c][k] = childobject[c][k];
+					if(!isNaN(new Decimal(child[c][k]))
+						&&typeof(child[c][k])!=='boolean')child[c][k] = new Decimal(child[c][k]);
+
+
+
+			});
+
+			if(child[c].purchased)child[c].newChildInIntro();
+
+			child[c].visuallyUpdateChild();
+
+		});
+		
+	}
 
 }
 
@@ -341,4 +404,16 @@ var iq = new function(){
 		if(this.ps.gte(this.highestiqps)) this.highestiqps = this.ps;
 
 	}
+}
+
+var iqLoader = new function(){
+
+	this.load = function(iqobject){
+		Object.keys(iqobject).forEach(function(c){
+			iq[c] = iqobject[c];
+			if(!isNaN(new Decimal(iq[c]))) iq[c] = new Decimal(iq[c]);
+		});
+		child.one.visuallyUpdateChild();
+	}
+
 }

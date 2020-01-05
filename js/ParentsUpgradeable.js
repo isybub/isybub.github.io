@@ -13,22 +13,28 @@ var ParentsUpgradeable = function(){
 
 	this.autobuyerUpgradeCost = new Decimal(25);
 
-	this.timeOfLastBuy = Date.now();
+	this.timeOfLastBuy = new Decimal(Date.now());
 
 	this.update = function(){
 
 
 
-		if(!this.autobuyingSpeed.equals(10001)&&Date.now() - this.timeOfLastBuy > this.autobuyingSpeed){
+		if(!this.autobuyingSpeed.equals(10001)&&(Date.now() - this.timeOfLastBuy) > this.autobuyingSpeed){
 
 			this.convert(Date.now() - this.timeOfLastBuy);
-			this.timeOfLastBuy = Date.now();
+			this.timeOfLastBuy = new Decimal(Date.now());
 		}
 		if(!this.autobuyingSpeed.equals(10001))this.updateParentsAutobuyerProgressBar(Date.now() - this.timeOfLastBuy);
 
 		if(this.realDollars.gt(this.highestRealDollars)) this.highestRealDollars = this.realDollars;
 
 		this.realDollarsLive = mathematica.mathematica.root(2);
+
+		if(parentsAutobuyerUpgradeable.upgradeCount<25){
+			document.getElementById("M2RDC").innerHTML = this.realDollarsLive.toPrecision(3);
+		}else{
+			document.getElementById("realdollarspersecond").innerHTML = mathematica.currentProd.divide(33).root(2).multiply(one1.divide(this.autobuyingSpeed.divide(1000))).toPrecision(3);
+		}
 
 	}
 
@@ -64,3 +70,12 @@ var ParentsUpgradeable = function(){
 }
 
 var parents = new ParentsUpgradeable();
+
+var parentsLoader = new function(){
+	this.load = function(parentsobject){
+		Object.keys(parentsobject).forEach(function(c){
+			parents[c] = parentsobject[c];
+			if(!isNaN(new Decimal(parents[c]))) parents[c] = new Decimal(parents[c]);
+		});
+	}
+}

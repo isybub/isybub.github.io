@@ -13,13 +13,13 @@ function updateBuyables(){
 		i.style.borderColor = buttonOff;
 	}
 	var i2 = document.getElementById("u1Alg");
-	if(iq.points.gte(mathematica.mpsMult.accCost)){
+	if(iq.points.gte(mpsMult.accCost)){
 		i2.style.borderColor = buttonOn;
 	}else{
 		i2.style.borderColor = buttonOff; 	
 	}
 	var i3 = document.getElementById("u2Alg");
-	if(iq.points.gte(mathematica.costDiv.accCost)){
+	if(iq.points.gte(costDiv.accCost)){
 		i3.style.borderColor = buttonOn;
 	}else{
 		i3.style.borderColor = buttonOff;
@@ -37,7 +37,7 @@ function updateBuyables(){
 	var bars = [bar1,bar2,bar3,bar4]
 	var bari = 0;
 	Object.keys(child).forEach(function (c){
-		if(parents.realDollars.gte(child[c].currentCost)&&!child[c].progressBar){
+		if(parents.realDollars.gte(child[c].currentCost)&&!child[c].progressBar.gt(0)){
 			bars[bari].style.borderColor = buttonOn;
 			bars[bari].style.boxShadow = neuomorphicButtonShadows;
 		}else{

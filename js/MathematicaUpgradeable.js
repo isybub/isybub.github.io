@@ -46,9 +46,6 @@ var MathematicaUpgradeable = function(costDiv, mpsMult, upgradeCount){
 
 	this.currentProd = new Decimal(0.5);
 
-	this.costDiv = costDiv;
-
-	this.mpsMult = mpsMult;
 
 	this.mathematica = new Decimal(0);
 
@@ -65,9 +62,9 @@ var MathematicaUpgradeable = function(costDiv, mpsMult, upgradeCount){
 
 			this.upgradeCount = this.upgradeCount.add(increaseXUpgradeable.current);
 			
-			this.currentProd = upgradeMathematicaProduction(this.startProd,this.upgradeCount,this.mpsMult.acc);
+			this.currentProd = upgradeMathematicaProduction(this.startProd,this.upgradeCount,mpsMult.acc);
 
-			this.currentCost = upgradeMathematicaCost(this.startCost,this.upgradeCount,this.costDiv.acc);
+			this.currentCost = upgradeMathematicaCost(this.startCost,this.upgradeCount,costDiv.acc);
 
 			this.visuallyUpdate();
 		}
@@ -79,13 +76,13 @@ var MathematicaUpgradeable = function(costDiv, mpsMult, upgradeCount){
 
 	this.upgradeCostDiv = function(){
 
-		if(this.iCanBuyThis(this.costDiv.accCost)){
+		if(this.iCanBuyThis(costDiv.accCost)){
 
-			iq.points = iq.points.subtract(this.costDiv.accCost);
+			iq.points = iq.points.subtract(costDiv.accCost);
 
-			this.costDiv.upgradeAll();
+			costDiv.upgradeAll();
 
-			this.currentCost = upgradeMathematicaCost(this.startCost,this.upgradeCount,this.costDiv.acc);
+			this.currentCost = upgradeMathematicaCost(this.startCost,this.upgradeCount,costDiv.acc);
 
 			this.visuallyUpdate();
 
@@ -96,13 +93,13 @@ var MathematicaUpgradeable = function(costDiv, mpsMult, upgradeCount){
 
 	this.upgradeMPSMult = function(){
 
-		if(this.iCanBuyThis(this.mpsMult.accCost)){
+		if(this.iCanBuyThis(mpsMult.accCost)){
 
-			iq.points = iq.points.subtract(this.mpsMult.accCost);
+			iq.points = iq.points.subtract(mpsMult.accCost);
 
-			this.mpsMult.upgradeAll();
+			mpsMult.upgradeAll();
 
-			this.currentProd = upgradeMathematicaProduction(this.startProd,this.upgradeCount,this.mpsMult.acc);
+			this.currentProd = upgradeMathematicaProduction(this.startProd,this.upgradeCount,mpsMult.acc);
 
 			this.visuallyUpdate();
 
@@ -139,16 +136,16 @@ var MathematicaUpgradeable = function(costDiv, mpsMult, upgradeCount){
 	this.visuallyUpdate = function(){
 
 
-		document.getElementById("mpsAlg").innerHTML = this.mpsMult.acc.toPrecision(3)+"x<sup>2</sup>";
+		document.getElementById("mpsAlg").innerHTML = mpsMult.acc.toPrecision(3)+"x<sup>2</sup>";
 
-		document.getElementById("u1Algc").innerHTML = this.mpsMult.accCost.toPrecision(3);
+		document.getElementById("u1Algc").innerHTML = mpsMult.accCost.toPrecision(3);
 
 
-		document.getElementById("costAlg").innerHTML = "2<sup>x</sup>/"+this.costDiv.acc.toPrecision(3);
+		document.getElementById("costAlg").innerHTML = "2<sup>x</sup>/"+costDiv.acc.toPrecision(3);
 
 		document.getElementById("u1xc").innerHTML = this.currentCost.toPrecision(3);
 
-		document.getElementById("u2Algc").innerHTML = this.costDiv.accCost.toPrecision(3);
+		document.getElementById("u2Algc").innerHTML = costDiv.accCost.toPrecision(3);
 
 
 		document.getElementById("u1xc").innerHTML = this.currentCost.toPrecision(3);
@@ -164,7 +161,35 @@ var mpsMult = new MathematicaAccessory(0.5,new Decimal(10),new Decimal(1.2),0,"M
 
 var mathematica = new MathematicaUpgradeable(costDiv,mpsMult,10);
 
+var mathematicaLoader = new function(){
 
+	this.loadmps = function(mps){
+		
+		Object.keys(mps).forEach(function(c){
+			mpsMult[c] = mps[c];
+			if(!isNaN(new Decimal(mpsMult[c]))) mpsMult[c] = new Decimal(mpsMult[c]);
+		});
+
+	}
+	this.loadmaths = function(math){
+		
+		Object.keys(math).forEach(function(c){
+			mathematica[c] = math[c];
+			if(!isNaN(new Decimal(mathematica[c]))) mathematica[c] = new Decimal(mathematica[c]);
+		});
+
+	}
+	this.loadcost = function(cost){
+		
+		Object.keys(cost).forEach(function(c){
+			costDiv[c] = cost[c];
+			if(!isNaN(new Decimal(costDiv[c]))) costDiv[c] = new Decimal(costDiv[c]);
+		});
+
+	}
+
+
+}
 
 function upgradeMathematicaProduction(startProd,upgradeCount,mpsMultAcc){
 

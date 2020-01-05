@@ -26,6 +26,7 @@ var dt = 0;
 var t = 0;
 var lt = 0;
 var tickTimer = 0;
+var saveTimer = 0;
 
 
 function devHack(){
@@ -34,34 +35,78 @@ function devHack(){
 	iq.points = iq.points.add(1000);
 	iq.ps = iq.ps.add(100);
 	lobbying.lobbyingDollars = lobbying.lobbyingDollars.add(1000000);
+	override = 8;
 	Object.keys(child).forEach(function(c){
-		child[c].termspeed = 1;
+		child[c].termspeed = new Decimal(1);
 	});
 }
 
 
-function initLocalStorage(){
+var Load = function(){
+	this.load = function() {
+		override = parseInt(localStorage.getItem("discoverProgress"));
+		childLoader.load(JSON.parse(localStorage.getItem("children")));
+		iqLoader.load(JSON.parse(localStorage.getItem("iq")));
+		
+		mathematicaLoader.loadmps(JSON.parse(localStorage.getItem("mpsMult")));
+		mathematicaLoader.loadcost(JSON.parse(localStorage.getItem("costDiv")));
+		mathematicaLoader.loadmaths(JSON.parse(localStorage.getItem("mathematica")));
+
+		parentsLoader.load(JSON.parse(localStorage.getItem("parents")));
+		lobbyingLoader.load(JSON.parse(localStorage.getItem("lobbying")));
+		lobbyingAccLoader.load(JSON.parse(localStorage.getItem("lobbyingacc")));
+
+	}
+	this.save = function(){
+		override = 0;
+		localStorage.setItem("exists","true");
+		localStorage.setItem("discoverProgress",discoverProgress);
+		localStorage.setItem("children",JSON.stringify(child));
+		localStorage.setItem("iq",JSON.stringify(iq));
+		localStorage.setItem("mathematica",JSON.stringify(mathematica));
+		localStorage.setItem("mpsMult",JSON.stringify(mpsMult));
+		localStorage.setItem("costDiv",JSON.stringify(costDiv));
+		localStorage.setItem("parents",JSON.stringify(parents));
+		localStorage.setItem("lobbying",JSON.stringify(lobbying));
+		localStorage.setItem("lobbyingacc",JSON.stringify(lobinc));
+		console.log("Game Saved.");
+	}
+	this.initLocalStorage = function(){
+
+		console.log("No Local Storage, new save being created.");
+
+		this.save();
+
+	}
 
 }
 
-function loadGame(){
-	override = true;
-	discoverProgress = parseInt(localStorage.getItem(discoverProgress));
-}
-
+var gameLoader = new Load();
 window.onload = function(){
-	if(localStorage.getItem(localStorage.exists)===null){
-		initLocalStorage();
+	if(localStorage.getItem("exists")===null){
+		gameLoader.initLocalStorage();
+	}else{
+		saveTimer = 0;
+		gameLoader.load();
+		console.log("Game Loaded.");
 	}
 }
 
+var saveTime = 30000;
 function step(timestamp) {
 	t = Date.now();
 	dt = t - lt;
 	tickTimer += dt;
+
+	if(dt < saveTime)saveTimer += dt;
+	
 	if(tickTimer >= tickSpeed){
 		tick(tickTimer);
 		tickTimer = 0;
+	}
+	if(saveTimer > saveTime){
+		gameLoader.save();
+		saveTimer = 0;
 	}
 	lt = t;
   window.requestAnimationFrame(step);
@@ -84,7 +129,6 @@ function updateVisual(tickTimer){
 	document.getElementById("mps").innerHTML = mathematica.currentProd.toPrecision(3);
 	document.getElementById("RealDollars").innerHTML = parents.realDollars.toPrecision(3);
 	document.getElementById("iqPoints").innerHTML = iq.points.toPrecision(3);
-	document.getElementById("M2RDC").innerHTML = parents.realDollarsLive.toPrecision(3);
 
 	updateBuyables();
 	updateBasedOnProgress();
@@ -124,14 +168,14 @@ function unlockFirstChild(){
 
 		document.getElementById("postchild1").style.opacity = "1";
 
-	},3000);
+	},3000*(override ? 0.001 : 1));
 	window.setTimeout(function(){
 
 		document.getElementById("postchild1").style.opacity = "0";
 		document.getElementById("postchild1").style.fontSize = "0";
 		document.getElementById("postchild2").style.opacity = "1";
 		
-	},6000);
+	},6000*(override ? 0.001 : 1));
 	window.setTimeout(function(){
 
 		document.getElementById("postchild2").style.opacity = "0";
@@ -139,12 +183,12 @@ function unlockFirstChild(){
 		document.getElementById("schoolingheading").style.opacity = "1";
 		document.getElementById("iqPoints").style.opacity = "1";
 		document.getElementById("child1").style.opacity = "1";
-		child.one.newChild();
+		child.one.newChildInIntro();
 		document.getElementById("tabletotals").style.opacity = 1;
 		document.getElementById("tabletotals").style.zIndex = 1;
 		document.getElementById("childstory").innerHTML = "";
 		
-	},9000);
+	},9000*(override ? 0.001 : 1));
 }
 
 
