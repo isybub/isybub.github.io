@@ -31,7 +31,7 @@ var lobbyingAcc = function(base,baseCost,baseMult,costMult){
 
 }
 
-var examLobbyingUpgradeable = new lobbyingAcc(new Decimal(1),new Decimal(1.3),new Decimal(2),new Decimal(3));
+var examLobbyingUpgradeable = new lobbyingAcc(new Decimal(2),new Decimal(1.3),new Decimal(2),new Decimal(3));
 
 var parentsAutobuyerUpgradeable = new lobbyingAcc(new Decimal(1), new Decimal(1.3), new Decimal(0.87), new Decimal(1.2));
 
@@ -128,6 +128,7 @@ var LobbyingUpgradeable = function(){
 			document.getElementById("lobc1d").innerHTML = "Encourage the Government to increase teachers pay.<br />Multiplies exam IQ Multiplier by 2 <br />(Currently "+examLobbyingUpgradeable.current.toPrecision(3)+")<br /><a href=\"javascript:lobbying.upgradeExamMult()\" id=lobc1><span id=lobc1c>1.30</span> Lobbying Dollars</a>";
 
 			document.getElementById("lobc1c").innerHTML = examLobbyingUpgradeable.currentCost.toPrecision(3);
+			
 
 
 		}

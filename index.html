@@ -33,10 +33,24 @@
 						<a href="javascript:mathematica.upgradeCostDiv()" id=u2Alg>? <br />Cost:<span id=u2Algc>100</span>IQ Points</a>
 					</div>
 				</div>
-				<div id="ParentsContainer">
-					Real Dollars: <h1>$<span id="RealDollars">0</span></h1>
-					<p id=story3> It seems, you have discovered how to convert Global Base Mathematica, into Real Dollars..</p>
-					<br/><a id=story4 href="javascript:parents.convert(parents.autobuyingSpeed)" > <h3>$<span id=M2RDC>0</span></h3> </a>
+				<div id=ParentsAndDisplayContainer>
+					<div id="ParentsContainer">
+						Real Dollars: <h1>$<span id="RealDollars">0</span></h1>
+						<p id=story3> It seems, you have discovered how to convert Global Base Mathematica, into Real Dollars..</p>
+						<br/><a id=story4 href="javascript:parents.convert(parents.autobuyingSpeed)" > <h3>$<span id=M2RDC>0</span></h3> </a>
+					</div>
+
+					<div id=childrendisplay>
+						<img id=child1rep src="icons/svg/Year 1.svg" height=100px width=100px></img>
+						<img id=child2rep src="icons/svg/Year 1.svg" height=100px width=100px></img>
+						<img id=child3rep src="icons/svg/Year 1.svg" height=100px width=100px></img>
+						<img id=child4rep src="icons/svg/Year 1.svg" height=100px width=100px></img>
+						<div id=child1glow></div>
+						<div id=child2glow></div>
+						<div id=child3glow></div>
+						<div id=child4glow></div>
+					</div>
+				<div id=childupgradecircle></div>
 				</div>
 				<div id="childrenContainer">
 
@@ -51,56 +65,47 @@
 						<p id=postchild2>Take it to school.</p>
 					</div>
 					<span id=schoolingheading>IQ Points:<h1><span id="iqPoints">0</span></h1></span>
-					<table>
-						<tbody>
-							<tr id=child1>
-								<td id=child1name>Child</td>
-								<td id=child1IQ></td>
-								<td id=child1up><a id=child1buy ><span id=centertext>Find a Child on the side of the road<span id="child1cost"></span></span></a></td>
-								<td id=child1year></td>
-							</tr>
-							<tr id=child2>
-								<td id=child2name>New Child...</td>
-								<td id=child2IQ></td>
-								<td id=child2up><a id=child2buy href="javascript:child.two.newChild()"><span id=centertext>Unlock new Child <br />$<span id="child2cost"></span> Real Dollars</span></a></td>
-								<td id=child2year></td>
-							</tr>
-							<tr id=child3>
-								<td id=child3name>New Child...</td>
-								<td id=child3IQ></td>
-								<td id=child3up><a id=child3buy href="javascript:child.three.newChild()"><span id=centertext>Unlock new Child <br />$<span id="child3cost"></span> Real Dollars</span></a></td>
-								<td id=child3year></td>
-							</tr>
-							<tr id=child4>
-								<td id=child4name>New Child...</td>
-								<td id=child4IQ></td>
-								<td id=child4up><a id=child4buy href="javascript:child.four.newChild()"><span id=centertext>Unlock new Child <br />$<span id="child4cost"></span> Real Dollars</span></a></td>
-								<td id=child4year></td>
-							</tr>
-							<tr id=tabletotals>
-								<td><h3>Total IQ Per second: </h3></td>
-								<td id=iqps>&nbsp;</td>
-							</tr>
-						</tbody>
-					</table>
+					<div id=childtable>
+						<div id=child1>
+							<!--<div id=child1name>Child</div>-->
+							<div id=child1IQ></div>
+							<div id=child1year></div>
+							<div id=child1up><a id=child1buy ><span id=centertext>Find a Child on the side of the road<span id="child1cost"></span></span></a></div>
+							
+						</div>
+						<div id=child2>
+							<!--<div id=child2name>New Child...</div>-->
+							<div id=child2IQ></div>
+							<div id=child2year></div>
+							<div id=child2up><a id=child2buy href="javascript:child.two.newChild()"><span id=centertext>Unlock new Child <br />$<span id="child2cost"></span> Real Dollars</span></a></div>
+							
+						</div>
+						<div id=child3>
+							<!--<div id=child3name>New Child...</div>-->
+							<div id=child3IQ></div>
+							<div id=child3year></div>
+							<div id=child3up><a id=child3buy href="javascript:child.three.newChild()"><span id=centertext>Unlock new Child <br />$<span id="child3cost"></span> Real Dollars</span></a></div>
+							
+						</div>
+						<div id=child4>
+							<!--<div id=child4name>New Child...</div>-->
+							<div id=child4IQ></div>
+							<div id=child4year></div>
+							<div id=child4up><a id=child4buy href="javascript:child.four.newChild()"><span id=centertext>Unlock new Child <br />$<span id="child4cost"></span> Real Dollars</span></a></div>
+							
+						</div>
+						<div id=tabletotals>
+							<div><h3>Total IQ Per second: </h3></div>
+							<div id=iqps>&nbsp;</div>
+						</div>
+					</div>
 					<a href="javascript:lobbying.sacrifice(lobbying)" id=sacrifice> <span id=lobbyinggain></span> ? Complete another term with child 2.</a>
 					<a href="javascript:lobbying.show()" id=lobbyreveal> Finish an exam to view. </a>
 				</div>
 				
-				<div id=childrendisplay>
-					<img id=child1rep src="icons/svg/Year 1.svg" height=100px width=100px></img>
-					<img id=child2rep src="icons/svg/Year 1.svg" height=100px width=100px></img>
-					<img id=child3rep src="icons/svg/Year 1.svg" height=100px width=100px></img>
-					<img id=child4rep src="icons/svg/Year 1.svg" height=100px width=100px></img>
-					<div id=child1glow></div>
-					<div id=child2glow></div>
-					<div id=child3glow></div>
-					<div id=child4glow></div>
-				</div>
-				<div id=childupgradecircle></div>
 			</div>
 
-				<a href="javascript:devHack()" style="margin-top:-50px;height: 100px;"></a>
+				<a href="javascript:devHack()" style="margin-top:-50px;height: 100px;position: fixed;top:100px;"></a>
 			<div id="bigLobbyingContainer">
 
 				Lobbying Dollars: <h1>$<span id="LobbyingDollars">0</span></h1>

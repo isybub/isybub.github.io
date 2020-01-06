@@ -16,6 +16,8 @@ function updateBasedOnProgress(){
 			if(mathematica.highestMathematica.gte(4)||override){
 				document.getElementById("story3").style.opacity = 1;
 				document.getElementById("story3").style.zIndex = 1;
+				if(document.body.offsetWidth<1592)document.body.scrollTop = 140;
+				if(document.body.offsetWidth<938)document.body.scrollTop = 600;
 				if(!override||override>discoverProgress){
 					discoverProgress++;
 				}else{

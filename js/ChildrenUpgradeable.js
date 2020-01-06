@@ -12,7 +12,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.nextProd = new Decimal(0);
 
-	this.randSeed = new Decimal(Math.random()*0.1+0.1);
+	this.randSeed = new Decimal(Math.random()*0.3+0.1);
 
 	this.currentProd = new Decimal(currentProd);
 
@@ -96,11 +96,11 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.updateRepresentation = function(){
 
-		document.getElementById("child"+this.childNum.valueOf()+"rep").style.left = ((50*(1-(125/document.body.offsetWidth)))*(Math.sin(this.randSeed.multiply(Date.now()/500.0))+1))+"%";
+		document.getElementById("child"+this.childNum.valueOf()+"rep").style.left = ((50*(1-(100/(document.getElementById("childrendisplay").offsetWidth))))*(Math.sin(this.randSeed.multiply(Date.now()/500.0))+1-((this.childNum-1)*(0.65))))+"%";
 		
-		document.getElementById("child"+this.childNum.valueOf()+"glow").style.left = ((50*(1-(125/document.body.offsetWidth)))*(Math.sin(this.randSeed.multiply(Date.now()/500.0))+1))+"%";
+		document.getElementById("child"+this.childNum.valueOf()+"glow").style.left = ((50*(1-(100/(document.getElementById("childrendisplay").offsetWidth))))*(Math.sin(this.randSeed.multiply(Date.now()/500.0))+1))+"%";
 
-
+		document.getElementById("child"+this.childNum.valueOf()+"glow").style.top = this.childNum.minus(1).multiply(-100).minus(5).valueOf()+"px";
 		
 		document.getElementById("child"+this.childNum.valueOf()+"glow").style.boxShadow = "0px -"+5*this.currentYear.valueOf()+"px "+20*this.currentYear.valueOf()+"px "+getComputedStyle(document.documentElement).getPropertyValue('--yoga'+this.currentYear.valueOf());
 
@@ -234,7 +234,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 			document.getElementById(tr).style.opacity = 1;
 			document.getElementById(tr).style.zIndex = 1;
 
-			document.getElementById(name).innerHTML = "Random";
+			//document.getElementById(name).innerHTML = "Random";
 			document.getElementById(IQ).innerHTML = "0 IQ";
 			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>Complete a term <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">10.0</span> Real Dollars</span></a>";
 			document.getElementById(year).innerHTML = "1st Year";
@@ -260,7 +260,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 			document.getElementById(tr).style.opacity = 1;
 			document.getElementById(tr).style.zIndex = 1;
 
-			document.getElementById(name).innerHTML = "Random";
+			//document.getElementById(name).innerHTML = "Random";
 			document.getElementById(IQ).innerHTML = "0 IQ";
 			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>Complete a term <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">10.0</span> Real Dollars</span></a>";
 			document.getElementById(year).innerHTML = "1st Year";
@@ -298,17 +298,19 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 }
 
-var Child1 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(3),new Decimal(0),1,new Decimal(1),"one",true);
+var Child1 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(5),new Decimal(0),0,new Decimal(1),"one",true);
 
-var Child2 = new ChildUpgradeable(new Decimal(50),new Decimal(50),new Decimal(5),new Decimal(0),1,new Decimal(2),"two",true);
+var Child2 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(5),new Decimal(0),0,new Decimal(2),"two",true);
 
-var Child3 = new ChildUpgradeable(new Decimal(500),new Decimal(500),new Decimal(50),new Decimal(0),1,new Decimal(3),"three",true);
+var Child3 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(5),new Decimal(0),0,new Decimal(3),"three",true);
 
-var Child4 = new ChildUpgradeable(new Decimal(5000),new Decimal(5000),new Decimal(500),new Decimal(0),1,new Decimal(4),"four",false);
+var Child4 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(5),new Decimal(0),0,new Decimal(4),"four",false);
 
 function upgradeChildCost(startCost,upgradeCount,completedExams,currentYear){
 	
-	return startCost.pow(completedExams).add(startCost.pow(completedExams).multiply(getPerTermCost(upgradeCount-1)));
+	return startCost.multiply(new Decimal(1.75).pow(upgradeCount.minus(completedExams))).multiply(new Decimal(2).pow(completedExams))
+
+	//return startCost.pow(completedExams).add(startCost.pow(completedExams).multiply(getPerTermCost(upgradeCount-1)));
 
 	//return startCost.multiply(upgradeCount.minus(1)).multiply(completedExams.multiply(2)).multiply(new Decimal(4).pow(currentYear)).add(startCost.multiply(upgradeCount));
 
@@ -327,8 +329,10 @@ function getPerTermCost(upgradeCount){
 }
 
 function upgradeChildProduction(startProd,upgradeCount,completedExams){
+
+	return startProd.multiply(new Decimal(1.5).pow(upgradeCount.minus(completedExams))).multiply(examLobbyingUpgradeable.current.pow(completedExams))
 	
-	return startProd.pow(completedExams).add(startProd.pow(completedExams).multiply(getPerTermCost(upgradeCount-1)));
+	//return startProd.pow(completedExams).add(startProd.pow(completedExams).multiply(getPerTermCost(upgradeCount-1)));
 
 	//return startProd.plus(1).multiply(upgradeCount.minus(1)).multiply(examLobbyingUpgradeable.current.multiply(completedExams.multiply(2))).add(startProd.plus(1).multiply(upgradeCount.minus(1)));
 

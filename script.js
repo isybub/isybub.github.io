@@ -55,6 +55,9 @@ var Load = function(){
 		parentsLoader.load(JSON.parse(localStorage.getItem("parents")));
 		lobbyingLoader.load(JSON.parse(localStorage.getItem("lobbying")));
 		lobbyingAccLoader.load(JSON.parse(localStorage.getItem("lobbyingacc")));
+		document.body.style.overflowY = "scroll";
+  		document.body.style.scrollBehavior = "auto";
+  		document.body.scrollTop = 0;
 
 	}
 	this.save = function(){
@@ -189,6 +192,9 @@ function unlockFirstChild(){
 		document.getElementById("childstory").innerHTML = "";
 		
 	},9000*(override ? 0.001 : 1));
+	document.body.style.overflowY = "scroll";
+	document.body.style.scrollBehavior = "auto";
+	document.body.scrollTop = 0;
 }
 
 
