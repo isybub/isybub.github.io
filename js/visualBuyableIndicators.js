@@ -1,7 +1,7 @@
 
 function updateBuyables(){
 	var buttonOn = getComputedStyle(document.documentElement).getPropertyValue('--light'); 
-	var buttonOff = "rgba(92,98,112,0.2)";
+	var buttonOff = "rgba(200,200,212,0.5)";
 	var buttonGood = getComputedStyle(document.documentElement).getPropertyValue('--good'); 
 	var neuomorphicButtonShadows = "inset 0 0 0px white,inset 0 0 0px rgba(23,24,28,0.5),-6px -6px 16px rgba(92,98,112,0.4),"+
 	 "6px 6px 16px rgba(23,24,28,0.7)";

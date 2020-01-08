@@ -261,6 +261,7 @@ table a{
 	margin: 0!important;
 	border-radius: 100px;
 	z-index: -1;
+	transition:all 5s ease-in-out;
 
 }
 #childupgradecircle{
@@ -295,6 +296,9 @@ table a{
 
 
 }
+#child1rep, #child2rep, #child3rep, #child4rep{
+	transition:all 5s ease-in-out;
+}
 #child1year,#child2year,#child3year,#child4year{
 	width:100px;
 }
@@ -315,6 +319,10 @@ table a{
 	border-width: 0px 0px 1px 0px;
 	border-color: rgba(255,255,255,0.2);
 	border-radius: 10px;
+}
+#child1buy,#child2buy,#child3buy,#child4buy{
+	box-shadow:inset 0px 0px 0px 0px var(--background)
+
 }
 span{
 }

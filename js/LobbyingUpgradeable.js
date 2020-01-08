@@ -138,7 +138,7 @@ var LobbyingUpgradeable = function(){
 
 	this.upgradeParentsAutobuyer = function(){
 
-		if(!upgradeParentsAutobuyer.purchased) upgradeParentsAutobuyer.purchased = true;
+		if(!parentsAutobuyerUpgradeable.purchased) parentsAutobuyerUpgradeable.purchased = true;
 		if(this.lobbyingDollars.gte(parentsAutobuyerUpgradeable.currentCost)){
 			if(parentsAutobuyerUpgradeable.upgradeCount<25){
 
@@ -197,7 +197,7 @@ var LobbyingUpgradeable = function(){
 
 				document.getElementById("u1Alg").style.opacity = 1;
 				document.getElementById("u1Alg").style.zIndex = 1;
-				document.getElementById("u1Alg").innerHTML= "MPS *<span id=u1Algp>"+mpsMult.accbasemult.toPrecision(3)+"</span> <br />Cost:<span id=u1Algc>10.0</span>IQ Points";
+				document.getElementById("u1Alg").innerHTML= "<h3>MPS *<span id=u1Algp>"+mpsMult.accbasemult.toPrecision(3)+"</span> <br /><span id=u1Algc>10.0</span> IQ Points</h3>";
 				document.getElementById("lobm1d").innerHTML = "Encourage the Government to increase carbon offset tax. <br /> Multiply MPS Multiplier by * 1.02 <br />(Currently <span id=mpsmultinfo>1.2</span>)<br /><a href=\"javascript:lobbying.unlockMPSMultiplier()\" id=lobm1><span id=lobm1c>1.30</span> Lobbying Dollars</a>";
 				
 				document.getElementById("lobm2d").style.marginTop = 0;
@@ -230,7 +230,7 @@ var LobbyingUpgradeable = function(){
 				
 				document.getElementById("u2Alg").style.opacity = 1;
 				document.getElementById("u2Alg").style.zIndex = 1;
-				document.getElementById("u2Alg").innerHTML= "Cost /<span id=u2Algp>"+costDiv.accbasemult.toPrecision(3)+"</span> <br />Cost:<span id=u2Algc>100.0</span>IQ Points";
+				document.getElementById("u2Alg").innerHTML= "<h3>Cost /<span id=u2Algp>"+costDiv.accbasemult.toPrecision(3)+"</span> <br /><span id=u2Algc>100.0</span> IQ Points</h3>";
 				document.getElementById("lobm2d").innerHTML = "Encourage the Government to hand out solar panel incentives. <br /> Multiply the Cost Divider by * 1.02 <br />(Currently <span id=costdivinfo>1.2</span>)<br /><a href=\"javascript:lobbying.unlockCostDivider()\" id=lobm2><span id=lobm2c>13.0</span> Lobbying Dollars</a>";
 				
 				unlockCostDivider.purchased = true;
@@ -317,6 +317,8 @@ var lobbyingAccLoader = new function (){
 
 			document.getElementById("u1Algp").innerHTML = mpsMult.accbasemult.toPrecision(3);
 
+			document.getElementById("u1Algc").innerHTML = mpsMult.accCost.toPrecision(3);
+
 			document.getElementById("mpsmultinfo").innerHTML = mpsMult.accbasemult.toPrecision(3);
 
 		}
@@ -332,6 +334,7 @@ var lobbyingAccLoader = new function (){
 			document.getElementById("u2Algp").innerHTML = costDiv.accbasemult.toPrecision(3);
 
 			document.getElementById("costdivinfo").innerHTML = costDiv.accbasemult.toPrecision(3);
+			document.getElementById("u2Algc").innerHTML = costDiv.accCost.toPrecision(3);
 		}
 		if(increaseXUpgradeable.purchased){
 

@@ -12,7 +12,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.nextProd = new Decimal(0);
 
-	this.randSeed = new Decimal(Math.random()*0.3+0.1);
+	this.randSeed = new Decimal(Math.random()+1);
 
 	this.currentProd = new Decimal(currentProd);
 
@@ -41,6 +41,9 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 	this.upgradingRepresentation = false;
 
 	this.firstTimeRound = firstTimeRound;
+
+	this.returnTimer = new Decimal(0);
+
 
 	this.upgrade = function (){
 
@@ -73,18 +76,26 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.update = function(){
 
+		if(this.progressBar.equals(0.01)){
+
+
+			var bar = document.getElementById("child"+this.childNum.valueOf()+"buy");
+			bar.style.transition = "box-shadow "+this.termspeed.valueOf()+"s ease-in-out";
+			bar.style.boxShadow = "inset 279px 0px 0px 0px var(--background)";
+
+
+
+
+		}
 		if(this.progressBar.gt(0)){
 
 			this.progressBar = new Decimal(0.01+(Date.now() - this.progressbarsStartTime)/(this.termspeed.multiply(1000)));
 
-			var bar = document.getElementById("child"+this.childNum.valueOf()+"buy");
-			bar.style.boxShadow = "inset "+225*this.progressBar.valueOf()+"px 0 0 0 var(--background)";
+		}
 
-			if(this.progressBar.gte(1)){
+		if(this.progressBar.gte(1)){
 
-				this.finalize();
-
-			}
+			this.finalize();
 
 		}
 
@@ -96,15 +107,18 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.updateRepresentation = function(){
 
-		document.getElementById("child"+this.childNum.valueOf()+"rep").style.left = ((50*(1-(100/(document.getElementById("childrendisplay").offsetWidth))))*(Math.sin(this.randSeed.multiply(Date.now()/500.0))+1-((this.childNum-1)*(0.65))))+"%";
-		
-		document.getElementById("child"+this.childNum.valueOf()+"glow").style.left = ((50*(1-(100/(document.getElementById("childrendisplay").offsetWidth))))*(Math.sin(this.randSeed.multiply(Date.now()/500.0))+1))+"%";
+		var rep = document.getElementById("child"+this.childNum.valueOf()+"rep");
+		var glow = document.getElementById("child"+this.childNum.valueOf()+"glow");
 
-		document.getElementById("child"+this.childNum.valueOf()+"glow").style.top = this.childNum.minus(1).multiply(-100).minus(5).valueOf()+"px";
-		
-		document.getElementById("child"+this.childNum.valueOf()+"glow").style.boxShadow = "0px -"+5*this.currentYear.valueOf()+"px "+20*this.currentYear.valueOf()+"px "+getComputedStyle(document.documentElement).getPropertyValue('--yoga'+this.currentYear.valueOf());
+		if(Date.now() - this.returnTimer > 3000*this.randSeed){
 
-		document.getElementById("child"+this.childNum.valueOf()+"rep").style.transform = "rotate("+((document.getElementById("childrendisplay").offsetWidth/2)*(Math.sin(this.randSeed.multiply(Date.now()/500.0))))+"deg)";
+			rep.style.left = rep.style.left <= "0%" ? ((100 - 10000/(document.getElementById("childrendisplay").offsetWidth))-childNum.subtract(1).multiply(10000)/(document.getElementById("childrendisplay").offsetWidth))+"%" : (0 - childNum.subtract(1).multiply(10000)/(document.getElementById("childrendisplay").offsetWidth))+"%";
+			glow.style.left = rep.style.left <= "0%" ?  "0%" : (100 - 10000/(document.getElementById("childrendisplay").offsetWidth))+"%";
+			rep.style.transform = rep.style.left <= "0%" ?  "rotate(0deg)" : "rotate("+((document.getElementById("childrendisplay").offsetWidth/2))*1.3+"deg)";
+			this.returnTimer = new Decimal(Date.now());
+
+		}
+		
 		
 		if(this.upgradingRepresentation)this.upgradeRepresentation();
 	}
@@ -115,6 +129,8 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		if(!this.upgradingRepresentation){
 			this.upgradingRepresentation = true;
 			this.upgradeTime = new Decimal(Date.now());
+			document.getElementById("child"+this.childNum.valueOf()+"glow").style.boxShadow = "0px -"+5*this.currentYear.valueOf()+"px "+20*this.currentYear.valueOf()+"px "+getComputedStyle(document.documentElement).getPropertyValue('--yoga'+this.currentYear.valueOf());
+
 		}
 		if(this.upgradingRepresentation){
 			circ.style.width = Math.pow((Date.now() - this.upgradeTime)/20,2);
@@ -139,6 +155,11 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		this.howMuchLongerUntilExam()
 
 		this.progressBar = new Decimal(0);
+
+		var bar = document.getElementById("child"+this.childNum.valueOf()+"buy");
+		bar.style.transition = "box-shadow 0.1s ease-in-out";
+		bar.style.boxShadow = "inset 0px 0px 0px 0px var(--background)";
+
 		this.currentProd = upgradeChildProduction(this.startProd,this.upgradeCount,this.completedExams);
 		var examCostPredictor = this.completedExams;
 		if(this.timeToExam.equals(1)) examCostPredictor = examCostPredictor.add(1);
@@ -240,6 +261,10 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 			document.getElementById(IQ).innerHTML = "0 IQ";
 			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><h3>+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">10.0</span> Real Dollars</h3></a>";
 			document.getElementById(year).innerHTML = "1st Year";
+			document.getElementById("child"+this.childNum.valueOf()+"glow").style.top = this.childNum.minus(1).multiply(-100).minus(5).valueOf()+"px";
+			document.getElementById("child"+this.childNum.valueOf()+"glow").style.boxShadow = "0px -"+5*this.currentYear.valueOf()+"px "+20*this.currentYear.valueOf()+"px "+getComputedStyle(document.documentElement).getPropertyValue('--yoga'+this.currentYear.valueOf());
+			document.getElementById("child"+this.childNum.valueOf()+"glow").style.transition = this.randSeed.multiply(3).valueOf()+"s ease-in-out";
+			document.getElementById("child"+this.childNum.valueOf()+"rep").style.transition = this.randSeed.multiply(3).valueOf()+"s ease-in-out";
 
 			this.purchased = true;
 
@@ -266,6 +291,10 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 			document.getElementById(IQ).innerHTML = "0 IQ";
 			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><h3>+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">10.0</span> Real Dollars</h3></a>";
 			document.getElementById(year).innerHTML = "1st Year";
+			document.getElementById("child"+this.childNum.valueOf()+"glow").style.top = this.childNum.minus(1).multiply(-100).minus(5).valueOf()+"px";
+			document.getElementById("child"+this.childNum.valueOf()+"glow").style.boxShadow = "0px -"+5*this.currentYear.valueOf()+"px "+20*this.currentYear.valueOf()+"px "+getComputedStyle(document.documentElement).getPropertyValue('--yoga'+this.currentYear.valueOf());
+			document.getElementById("child"+this.childNum.valueOf()+"glow").style.transition = this.randSeed.multiply(3).valueOf()+"s ease-in-out";
+			document.getElementById("child"+this.childNum.valueOf()+"rep").style.transition = this.randSeed.multiply(3).valueOf()+"s ease-in-out";
 
 			this.purchased = true;
 
