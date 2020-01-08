@@ -172,10 +172,12 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		var upgrade = "child"+(num)+"up";
 
 		if(this.timeToExam.equals(1)){
+			//exam
 
-			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>End of year exam <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</span></a>";
+			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><h3>+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</h3></a>";
 
 		}else if(this.timeToExam.equals(5)){
+			//term
 
 			this.currentYear = this.currentYear.add(1);
 			if(this.firstTimeRound){
@@ -183,7 +185,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 				this.breadcrumbnewchild();
 			}
 
-			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>Complete a term <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</span></a>";
+			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><h3>+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</h3></a>";
 
 
 		}
@@ -236,7 +238,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 			//document.getElementById(name).innerHTML = "Random";
 			document.getElementById(IQ).innerHTML = "0 IQ";
-			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>Complete a term <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">10.0</span> Real Dollars</span></a>";
+			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><h3>+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">10.0</span> Real Dollars</h3></a>";
 			document.getElementById(year).innerHTML = "1st Year";
 
 			this.purchased = true;
@@ -262,7 +264,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 			//document.getElementById(name).innerHTML = "Random";
 			document.getElementById(IQ).innerHTML = "0 IQ";
-			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><span id=centertext>Complete a term <br />+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">10.0</span> Real Dollars</span></a>";
+			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><h3>+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">10.0</span> Real Dollars</h3></a>";
 			document.getElementById(year).innerHTML = "1st Year";
 
 			this.purchased = true;

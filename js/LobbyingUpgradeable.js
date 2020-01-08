@@ -143,7 +143,7 @@ var LobbyingUpgradeable = function(){
 			if(parentsAutobuyerUpgradeable.upgradeCount<25){
 
 				if(parentsAutobuyerUpgradeable.currentCost.equals(1.30)) {
-					document.getElementById("lobp1d").innerHTML = "Encourage the Government to give you a tax break.<br />Your Company can convert Mathematica 1.15x faster <br /><a href=\"javascript:lobbying.upgradeParentsAutobuyer()\" id=lobp1><span id=lobp1c> 1.30 </span>Lobbying Dollars</a>";
+					document.getElementById("lobp1d").innerHTML = "Encourage the Government to give you a tax break.<br />Your Company can convert Mathematica 1.15x faster <br /><a href=\"javascript:lobbying.upgradeParentsAutobuyer()\" id=lobp1><span id=lobp1c>1.30</span> Lobbying Dollars</a>";
 				}
 
 				this.lobbyingDollars = this.lobbyingDollars.minus(parentsAutobuyerUpgradeable.currentCost);

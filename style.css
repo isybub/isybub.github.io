@@ -2,7 +2,7 @@
 :root {
 	--white: #E6EEEE;
 	--error: #A71D31;
-	--background: #2E3138;
+	--background: #000;
 	--light: #00A7E1;
 	--dark: #0C0F0A;
 	--good: #9BE564;
@@ -30,7 +30,7 @@ body{
 	overflow-x: hidden;
 	overflow-y: hidden;
 	max-width: 100%;
-	text-shadow: 2px 2px 4px rgba(23,24,28,0.5);
+	/*text-shadow: 2px 2px 4px rgba(23,24,28,0.5)*/;
 	padding-bottom: 200px;
 	
 	-webkit-transform: translateZ(0);
@@ -46,9 +46,9 @@ h1,h2,h3{
 }
 a{
 	text-decoration: none;
-	background-color:var(--background);
+	background-color:var(--light);
 	border-color: var(--error);
-	color: var(--white);
+	color: var(--background);
 	border-style: solid;
 	border-width: 3px;
 	border-radius: 12px;
@@ -61,20 +61,20 @@ a{
 	border-style: solid;
 	border-width:2px;
 	border-color: rgba(92,98,112,0.2);
-	text-shadow: 0 0 5px rgba(255,255,255,0.5);
+	/*text-shadow: 0 0 5px rgba(0,0,0,0.5);*/
 	transition:all 0.3s,box-shadow 0.05s;
 	vertical-align: middle;
 	flex:100%;
-	box-shadow: inset 0 0 0px white,inset 0 0 0px rgba(23,24,28,0.5),-6px -6px 16px rgba(92,98,112,0.4),
-	 6px 6px 16px rgba(23,24,28,0.7), inset 0px 0px 16px rgba(92,98,112,0.5);
+	/*box-shadow: inset 0 0 0px white,inset 0 0 0px rgba(23,24,28,0.5),-6px -6px 16px rgba(92,98,112,0.4),
+	 6px 6px 16px rgba(23,24,28,0.7), inset 0px 0px 16px rgba(92,98,112,0.5);*/
 
 }
 a:active{
 	background-color: rgba(180,180,180,1);
 
-	box-shadow: inset -6px -6px 16px rgba(255,255,255,1),
+	/*box-shadow: inset -6px -6px 16px rgba(255,255,255,1),
 	inset 6px 6px 16px rgba(23,24,28,0.5),0 0 0px rgba(92,98,112,0.4), 0 0 0px rgba(23,24,28,0.7),inset 0px 0px 16px rgba(92,98,112,0.5);
-
+*/
 }
 #story4{
 	border-color: var(--light);
@@ -94,7 +94,7 @@ a:hover{
 
 	transition: all 0.25s,opacity 1s;
 }
-#story4, #parentsAutobuyer{
+#parentsAutobuyer{
 	width:279px;
 }
 
@@ -137,9 +137,10 @@ a:hover{
 	border-radius: 16px;
 	border-style: solid;
 	border-width:2px;
-	border-color: rgba(92,98,112,0.2);
-	box-shadow: -6px -6px 16px rgba(92,98,112,0.35),
+	border-color: var(--white)/
+	/*box-shadow: -6px -6px 16px rgba(92,98,112,0.35),
 	 6px 6px 16px rgba(23,24,28,0.7);
+	 */
 }
 #mathLobbying a, #childrenLobbying a,#parentsLobbying a{
 
@@ -159,6 +160,7 @@ a:hover{
 
 #lobbyclose{
 	border-color: var(--good);
+	background-color: var(--good);
 }
 #childstory{
 	position: relative;
@@ -183,9 +185,10 @@ a:hover{
 	border-radius: 16px;
 	border-style: solid;
 	border-width:2px;
-	border-color: rgba(92,98,112,0.2);
-	box-shadow: -6px -6px 16px rgba(92,98,112,0.35),
+	border-color: var(--white)/*rgba(92,98,112,0.2)*/;
+	/*box-shadow: -6px -6px 16px rgba(92,98,112,0.35),
 	 6px 6px 16px rgba(23,24,28,0.7);
+	 */
 }
 #ParentsAndDisplayContainer{
 	display: flex;
@@ -207,8 +210,10 @@ a:hover{
 #story4{
 	position: relative;
 	border-radius: 100%;
-	height: 100px;
-	width:  100px;
+	padding: 50px 0px 50px 0px; 
+	width:100px;
+	text-align: center;
+	line-height: 0px;
 }
 
 #story3{
@@ -306,7 +311,7 @@ table a{
 	justify-content: space-around;
 	flex-wrap: wrap;
 
-	border-style: dashed;
+	border-style: solid;
 	border-width: 0px 0px 1px 0px;
 	border-color: rgba(255,255,255,0.2);
 	border-radius: 10px;

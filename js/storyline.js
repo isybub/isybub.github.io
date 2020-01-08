@@ -93,8 +93,9 @@ function updateBasedOnProgress(){
 				if(iq.highestiqps.gte(22.5)||override){
 					lobbying.openable = true;
 					var lob = document.getElementById("lobbyreveal");
-					lob.innerHTML = "Lobby the government.";
+					lob.innerHTML = "<h4>Lobby the government.</h4>";
 					lob.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--good');
+					lob.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--good');
 					if(!override||override>discoverProgress){
 						discoverProgress++;
 					}else{
@@ -129,7 +130,7 @@ function updateBasedOnProgress(){
 			break;
 		case 8:
 			if(iq.highestiqps.gte(28.5)||override){
-				document.getElementById("sacrifice").innerHTML = "Sacrifice the children. <br /> <span id=lobbyinggain>0</span> Lobbying Dollars Earned";
+				document.getElementById("sacrifice").innerHTML = "<h4>Sacrifice the children. <br /> <span id=lobbyinggain>0</span> Lobbying Dollars Earned</h4>";
 				lobbying.purchasable = true;
 				lobbying.updateTotals();
 				if(!override||override>discoverProgress){
