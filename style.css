@@ -107,7 +107,7 @@ a:hover{
 	flex-wrap: wrap;
 	width:100%;
 	margin-left:0px;
-	margin-right:0px;
+	margin-right:120%;
 	transition: all 1s;
 }
 #bigLobbyingContainer{

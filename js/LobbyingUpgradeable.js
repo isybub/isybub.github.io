@@ -69,7 +69,7 @@ var LobbyingUpgradeable = function(){
 
 		document.getElementById("bigLobbyingContainer").style.left = "120%";
 		document.getElementById("mainContainer").style.marginLeft = "0px";
-		document.getElementById("mainContainer").style.marginRight = "0px";
+		document.getElementById("mainContainer").style.marginRight = "120%";
 
 	}
 
