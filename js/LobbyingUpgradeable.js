@@ -125,7 +125,7 @@ var LobbyingUpgradeable = function(){
 
 			examLobbyingUpgradeable.upgrade();
 
-			document.getElementById("lobc1d").innerHTML = "Encourage the Government to increase teachers pay.<br />Multiplies exam IQ Multiplier by 2 <br />(Currently "+examLobbyingUpgradeable.current.toPrecision(3)+")<br /><a href=\"javascript:lobbying.upgradeExamMult()\" id=lobc1><span id=lobc1c>1.30</span> Lobbying Dollars</a>";
+			document.getElementById("lobc1d").innerHTML = "Encourage the Government to increase teachers pay.<br />Multiplies exam IQ Multiplier by 2 <br />(Currently "+examLobbyingUpgradeable.current.toPrecision(3)+")<br /><a href=\"javascript:lobbying.upgradeExamMult()\" id=lobc1><h3><span id=lobc1c>1.30</span> Lobbying Dollars</h3></a>";
 
 			document.getElementById("lobc1c").innerHTML = examLobbyingUpgradeable.currentCost.toPrecision(3);
 			
@@ -143,7 +143,7 @@ var LobbyingUpgradeable = function(){
 			if(parentsAutobuyerUpgradeable.upgradeCount<25){
 
 				if(parentsAutobuyerUpgradeable.currentCost.equals(1.30)) {
-					document.getElementById("lobp1d").innerHTML = "Encourage the Government to give you a tax break.<br />Your Company can convert Mathematica 1.15x faster <br /><a href=\"javascript:lobbying.upgradeParentsAutobuyer()\" id=lobp1><span id=lobp1c>1.30</span> Lobbying Dollars</a>";
+					document.getElementById("lobp1d").innerHTML = "Encourage the Government to give you a tax break.<br />Your Company can convert Mathematica 1.15x faster <br /><a href=\"javascript:lobbying.upgradeParentsAutobuyer()\" id=lobp1><h3><span id=lobp1c>1.30</span> Lobbying Dollars</h3></a>";
 				}
 
 				this.lobbyingDollars = this.lobbyingDollars.minus(parentsAutobuyerUpgradeable.currentCost);
@@ -198,7 +198,7 @@ var LobbyingUpgradeable = function(){
 				document.getElementById("u1Alg").style.opacity = 1;
 				document.getElementById("u1Alg").style.zIndex = 1;
 				document.getElementById("u1Alg").innerHTML= "<h3>MPS *<span id=u1Algp>"+mpsMult.accbasemult.toPrecision(3)+"</span> <br /><span id=u1Algc>10.0</span> IQ Points</h3>";
-				document.getElementById("lobm1d").innerHTML = "Encourage the Government to increase carbon offset tax. <br /> Multiply MPS Multiplier by * 1.02 <br />(Currently <span id=mpsmultinfo>1.2</span>)<br /><a href=\"javascript:lobbying.unlockMPSMultiplier()\" id=lobm1><span id=lobm1c>1.30</span> Lobbying Dollars</a>";
+				document.getElementById("lobm1d").innerHTML = "Encourage the Government to increase carbon offset tax. <br /> Multiply MPS Multiplier by * 1.02 <br />(Currently <span id=mpsmultinfo>1.2</span>)<br /><a href=\"javascript:lobbying.unlockMPSMultiplier()\" id=lobm1><h3><span id=lobm1c>1.30</span> Lobbying Dollars</h3></a>";
 				
 				document.getElementById("lobm2d").style.marginTop = 0;
 				document.getElementById("lobm2d").style.marginBottom = 0;
@@ -231,7 +231,7 @@ var LobbyingUpgradeable = function(){
 				document.getElementById("u2Alg").style.opacity = 1;
 				document.getElementById("u2Alg").style.zIndex = 1;
 				document.getElementById("u2Alg").innerHTML= "<h3>Cost /<span id=u2Algp>"+costDiv.accbasemult.toPrecision(3)+"</span> <br /><span id=u2Algc>100.0</span> IQ Points</h3>";
-				document.getElementById("lobm2d").innerHTML = "Encourage the Government to hand out solar panel incentives. <br /> Multiply the Cost Divider by * 1.02 <br />(Currently <span id=costdivinfo>1.2</span>)<br /><a href=\"javascript:lobbying.unlockCostDivider()\" id=lobm2><span id=lobm2c>13.0</span> Lobbying Dollars</a>";
+				document.getElementById("lobm2d").innerHTML = "Encourage the Government to hand out solar panel incentives. <br /> Multiply the Cost Divider by * 1.02 <br />(Currently <span id=costdivinfo>1.2</span>)<br /><a href=\"javascript:lobbying.unlockCostDivider()\" id=lobm2><h3><span id=lobm2c>13.0</span> Lobbying Dollars</h3></a>";
 				
 				unlockCostDivider.purchased = true;
 				return;
@@ -307,8 +307,8 @@ var lobbyingAccLoader = new function (){
 
 			document.getElementById("u1Alg").style.opacity = 1;
 			document.getElementById("u1Alg").style.zIndex = 1;
-			document.getElementById("u1Alg").innerHTML= "MPS *<span id=u1Algp>"+mpsMult.accbasemult.toPrecision(3)+"</span> <br />Cost:<span id=u1Algc>10.0</span>IQ Points";
-			document.getElementById("lobm1d").innerHTML = "Encourage the Government to increase carbon offset tax. <br /> Multiply MPS Multiplier by * 1.02 <br />(Currently <span id=mpsmultinfo>1.2</span>)<br /><a href=\"javascript:lobbying.unlockMPSMultiplier()\" id=lobm1><span id=lobm1c>1.30</span> Lobbying Dollars</a>";
+			document.getElementById("u1Alg").innerHTML= "<h3>MPS *<span id=u1Algp>"+mpsMult.accbasemult.toPrecision(3)+"</span> <br /><span id=u1Algc>10.0</span> IQ Points</h3>";
+			document.getElementById("lobm1d").innerHTML = "Encourage the Government to increase carbon offset tax. <br /> Multiply MPS Multiplier by * 1.02 <br />(Currently <span id=mpsmultinfo>1.2</span>)<br /><a href=\"javascript:lobbying.unlockMPSMultiplier()\" id=lobm1><h3><span id=lobm1c>1.30</span> Lobbying Dollars</h3></a>";
 			
 			document.getElementById("lobm2d").style.marginTop = 0;
 			document.getElementById("lobm2d").style.marginBottom = 0;
@@ -326,8 +326,8 @@ var lobbyingAccLoader = new function (){
 
 			document.getElementById("u2Alg").style.opacity = 1;
 			document.getElementById("u2Alg").style.zIndex = 1;
-			document.getElementById("u2Alg").innerHTML= "Cost /<span id=u2Algp>"+costDiv.accbasemult.toPrecision(3)+"</span> <br />Cost:<span id=u2Algc>100.0</span>IQ Points";
-			document.getElementById("lobm2d").innerHTML = "Encourage the Government to hand out solar panel incentives. <br /> Multiply the Cost Divider by * 1.02 <br />(Currently <span id=costdivinfo>1.2</span>)<br /><a href=\"javascript:lobbying.unlockCostDivider()\" id=lobm2><span id=lobm2c>13.0</span> Lobbying Dollars</a>";
+			document.getElementById("u2Alg").innerHTML= "<h3>Cost /<span id=u2Algp>"+costDiv.accbasemult.toPrecision(3)+"</span> <br /><span id=u2Algc>100.0</span> IQ Points</h3>";
+			document.getElementById("lobm2d").innerHTML = "Encourage the Government to hand out solar panel incentives. <br /> Multiply the Cost Divider by * 1.02 <br />(Currently <span id=costdivinfo>1.2</span>)<br /><a href=\"javascript:lobbying.unlockCostDivider()\" id=lobm2><h3><span id=lobm2c>13.0</span> Lobbying Dollars</h3></a>";
 			
 			document.getElementById("lobm2c").innerHTML = unlockCostDivider.currentCost.toPrecision(3);
 
@@ -346,7 +346,7 @@ var lobbyingAccLoader = new function (){
 		}
 		if(parentsAutobuyerUpgradeable.upgradeCount<25){
 
-				document.getElementById("lobp1d").innerHTML = "Encourage the Government to give you a tax break.<br />Your Company can convert Mathematica 1.15x faster <br /><a href=\"javascript:lobbying.upgradeParentsAutobuyer()\" id=lobp1><span id=lobp1c> 1.30 </span>Lobbying Dollars</a>";
+				document.getElementById("lobp1d").innerHTML = "Encourage the Government to give you a tax break.<br />Your Company can convert Mathematica 1.15x faster <br /><a href=\"javascript:lobbying.upgradeParentsAutobuyer()\" id=lobp1><h3><span id=lobp1c> 1.30 </span> Lobbying Dollars</h3></a>";
 
 
 				document.getElementById("lobp1c").innerHTML = parentsAutobuyerUpgradeable.currentCost.toPrecision(3);
@@ -365,7 +365,7 @@ var lobbyingAccLoader = new function (){
 		}
 		if(examLobbyingUpgradeable.purchased){			
 
-			document.getElementById("lobc1d").innerHTML = "Encourage the Government to increase teachers pay.<br />Multiplies exam IQ Multiplier by 2 <br />(Currently "+examLobbyingUpgradeable.current.toPrecision(3)+")<br /><a href=\"javascript:lobbying.upgradeExamMult()\" id=lobc1><span id=lobc1c>1.30</span> Lobbying Dollars</a>";
+			document.getElementById("lobc1d").innerHTML = "Encourage the Government to increase teachers pay.<br />Multiplies exam IQ Multiplier by 2 <br />(Currently "+examLobbyingUpgradeable.current.toPrecision(3)+")<br /><a href=\"javascript:lobbying.upgradeExamMult()\" id=lobc1><h3><span id=lobc1c>1.30</span> Lobbying Dollars</h3></a>";
 
 			document.getElementById("lobc1c").innerHTML = examLobbyingUpgradeable.currentCost.toPrecision(3);
 		}

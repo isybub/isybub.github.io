@@ -119,7 +119,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 		}
 		
-		
+
 		if(this.upgradingRepresentation)this.upgradeRepresentation();
 	}
 
@@ -130,15 +130,17 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 			this.upgradingRepresentation = true;
 			this.upgradeTime = new Decimal(Date.now());
 			document.getElementById("child"+this.childNum.valueOf()+"glow").style.boxShadow = "0px -"+5*this.currentYear.valueOf()+"px "+20*this.currentYear.valueOf()+"px "+getComputedStyle(document.documentElement).getPropertyValue('--yoga'+this.currentYear.valueOf());
+			circ.style.width = 5000;
+			circ.style.height = 5000;
+			circ.style.transition = "all 3s ease-in-out, border-color 0s, left 0s";
+			circ.style.left = "0";
+			circ.style.transition = "all 3s ease-in-out, border-color 0s"
+			circ.style.left = "-100%";
 
 		}
 		if(this.upgradingRepresentation){
-			circ.style.width = Math.pow((Date.now() - this.upgradeTime)/20,2);
-			circ.style.height = Math.pow((Date.now() - this.upgradeTime)/20,2);
-			circ.style.left = 0.8*document.body.offsetWidth*(parseFloat(leftamount)/100.0) + 0.1*document.body.offsetWidth- parseFloat(circ.style.height)/2+"px";
-			circ.style.top = window.innerHeight - 200 - parseFloat(circ.style.height)/2+"px";
 			circ.style.borderColor = "rgb("+(Math.sin(Date.now()/200+1.57)*127+126)+","+(Math.sin(Date.now()/200+3.141)*127+126)+","+(Math.sin(Date.now()/200+4.71)*127+126)+")";
-			if(parseFloat(circ.style.width)>2 * Math.sqrt(Math.pow(document.body.offsetWidth,2)+Math.pow(document.body.offsetHeight,2))){
+			if(this.upgradeTime - Date.now() > 3000){
 				circ.style.width = 1;
 				circ.style.height = 1;
 				circ.style.left = "-100%";
@@ -247,7 +249,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 	}
 
 	this.newChildInIntro = function(){
-		this.nextProd = upgradeChildProduction(this.startProd,this.upgradeCount.add(1),this.completedExams).subtract(this.currentProd);
+			//this.nextProd = upgradeChildProduction(this.startProd,this.upgradeCount.add(1),this.completedExams).subtract(this.currentProd);
 			var num = this.childNum.valueOf();
 			var tr = "child"+num;
 			var name = "child"+num+"name";
@@ -331,11 +333,11 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 var Child1 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(5),new Decimal(0),0,new Decimal(1),"one",true);
 
-var Child2 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(5),new Decimal(0),0,new Decimal(2),"two",true);
+var Child2 = new ChildUpgradeable(new Decimal(500),new Decimal(500),new Decimal(50),new Decimal(0),0,new Decimal(2),"two",true);
 
-var Child3 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(5),new Decimal(0),0,new Decimal(3),"three",true);
+var Child3 = new ChildUpgradeable(new Decimal(50000),new Decimal(50000),new Decimal(500),new Decimal(0),0,new Decimal(3),"three",true);
 
-var Child4 = new ChildUpgradeable(new Decimal(5),new Decimal(5),new Decimal(5),new Decimal(0),0,new Decimal(4),"four",false);
+var Child4 = new ChildUpgradeable(new Decimal(5000000),new Decimal(5000000),new Decimal(5000),new Decimal(0),0,new Decimal(4),"four",false);
 
 function upgradeChildCost(startCost,upgradeCount,completedExams,currentYear){
 	

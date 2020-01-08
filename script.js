@@ -190,6 +190,7 @@ function unlockFirstChild(){
 		document.getElementById("tabletotals").style.opacity = 1;
 		document.getElementById("tabletotals").style.zIndex = 1;
 		document.getElementById("childstory").innerHTML = "";
+		document.getElementById("childstory").style.marginBottom = "0px";
 		
 	},9000*(override ? 0.001 : 1));
 	document.body.style.overflowY = "scroll";

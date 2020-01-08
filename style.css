@@ -31,7 +31,7 @@ body{
 	overflow-y: hidden;
 	max-width: 100%;
 	/*text-shadow: 2px 2px 4px rgba(23,24,28,0.5)*/;
-	padding-bottom: 200px;
+
 	
 	-webkit-transform: translateZ(0);
 	-moz-transform: translateZ(0);
@@ -70,7 +70,7 @@ a{
 
 }
 a:active{
-	background-color: rgba(180,180,180,1);
+	/*background-color: rgba(180,180,180,1);
 
 	/*box-shadow: inset -6px -6px 16px rgba(255,255,255,1),
 	inset 6px 6px 16px rgba(23,24,28,0.5),0 0 0px rgba(92,98,112,0.4), 0 0 0px rgba(23,24,28,0.7),inset 0px 0px 16px rgba(92,98,112,0.5);
@@ -81,8 +81,8 @@ a:active{
 }
 
 a:hover{
-	background-color: rgba(180,180,180,1);
-	color: var(--dark);
+
+	color: var(--white);
 	text-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
@@ -169,6 +169,7 @@ a:hover{
 	align-content: center;
 	text-align: center;
 	width: 100%;
+	margin-bottom: -100%;
 	z-index: 2;
 }
 #childstory p, #childstory a{
@@ -276,6 +277,7 @@ table a{
 	border-style: solid;
 	border-color:var(--background);
 	z-index: -1!important;
+	transition: all 3s ease-in-out, border-color 0s;
 }
 
 #childtable{

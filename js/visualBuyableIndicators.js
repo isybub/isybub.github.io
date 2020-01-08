@@ -10,7 +10,7 @@ function updateBuyables(){
 	if(iq.points.gte(mathematica.currentCost)){
 		i.style.backgroundColor = buttonOn;
 	}else{	
-		i.style.borderColor = buttonOff;
+		i.style.backgroundColor = buttonOff;
 	}
 	var i2 = document.getElementById("u1Alg");
 	if(iq.points.gte(mpsMult.accCost)){

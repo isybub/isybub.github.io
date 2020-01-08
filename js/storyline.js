@@ -39,7 +39,7 @@ function updateBasedOnProgress(){
 			}
 			break;
 		case 1:
-			if(parents.highestRealDollars.gte(10)||override){
+			if(parents.highestRealDollars.gte(10)||override&&child.one.purchased){
 				if(!override||override>discoverProgress){
 					discoverProgress+=childschoolingstory()
 				}else{
@@ -79,6 +79,8 @@ function updateBasedOnProgress(){
 			if(iq.highestiqps.gte(6)||override){
 				document.getElementById("lobbyreveal").style.opacity = 1;
 				document.getElementById("lobbyreveal").style.zIndex = 1;
+					document.getElementById("sacrifice").style.opacity = 1;
+					document.getElementById("sacrifice").style.zIndex = 1;
 				if(!override||override>discoverProgress){
 					discoverProgress++;
 				}else{
@@ -90,12 +92,17 @@ function updateBasedOnProgress(){
 			/*if(iq.highestPoints.gte(60)){
 				document.getElementById("u2Alg").style.opacity = "1";
 				document.getElementById("u2Alg").style.zIndex = "1";*/
-				if(iq.highestiqps.gte(22.5)||override){
+				if(iq.highestiqps.gte(50.6)||override){
 					lobbying.openable = true;
 					var lob = document.getElementById("lobbyreveal");
 					lob.innerHTML = "<h4>Lobby the government.</h4>";
 					lob.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--good');
 					lob.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--good');
+					document.getElementById("story20").style.opacity = 1;
+					document.getElementById("story20").style.zIndex = 1;
+				document.getElementById("sacrifice").innerHTML = "<h4>Sacrifice the children. <br /> <span id=lobbyinggain>0</span> Lobbying Dollars Earned</h4>";
+				lobbying.purchasable = true;
+				lobbying.updateTotals();
 					if(!override||override>discoverProgress){
 						discoverProgress++;
 					}else{
@@ -105,34 +112,9 @@ function updateBasedOnProgress(){
 				}
 			//}
 			break;
+
 		case 6:
-			if(iq.highestPoints.gte(100)||override){
-				//document.getElementById("u2Alg").innerHTML = "IQ Point Cost / 1.2 <br />Cost:<span id=u2Algc>100</span>IQ Points";
-				document.getElementById("story20").style.opacity = 1;
-				document.getElementById("story20").style.zIndex = 1;
-				if(!override||override>discoverProgress){
-					discoverProgress++;
-				}else{
-					override = 0;
-				}
-			}
-			break;
-		case 7:
-			if(child.two.purchased||override){
-				document.getElementById("sacrifice").style.opacity = 1;
-				document.getElementById("sacrifice").style.zIndex = 1;
-				if(!override||override>discoverProgress){
-					discoverProgress++;
-				}else{
-					override = 0;
-				}
-			}
-			break;
-		case 8:
-			if(iq.highestiqps.gte(28.5)||override){
-				document.getElementById("sacrifice").innerHTML = "<h4>Sacrifice the children. <br /> <span id=lobbyinggain>0</span> Lobbying Dollars Earned</h4>";
-				lobbying.purchasable = true;
-				lobbying.updateTotals();
+			if(override){
 				if(!override||override>discoverProgress){
 					discoverProgress++;
 				}else{
