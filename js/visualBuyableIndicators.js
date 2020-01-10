@@ -25,7 +25,7 @@ function updateBuyables(){
 		i3.style.backgroundColor = buttonOff; 
 	}
 	/*var i4 = document.getElementById("auto1");
-	if(parents.realDollars.gte(parents.autobuyerUpgradeCost)){
+	if(lobUps.examMult.gte(parents.autobuyerUpgradeCost)){
 		i4.style.borderColor = buttonOn;
 	}else{
 		i4.style.borderColor = buttonOff;
@@ -54,7 +54,7 @@ function updateBuyables(){
 		pab.style.boxShadow = neuomorphicButtonShadows;
 	}*/
 	var lob = document.getElementById("sacrifice");
-	if(lobbying.lobbyingDollarsLive>2&&lobbying.purchasable){
+	if(lobbying.purchasable){
 
 		lob.style.backgroundColor = buttonOn;
 
@@ -64,7 +64,7 @@ function updateBuyables(){
 
 	}
 	var lobc1 = document.getElementById("lobc1");
-	if(lobbying.lobbyingDollars.gte(examLobbyingUpgradeable.currentCost)){
+	if(lobbying.lobbyingDollars.gte(lobUps.examMult.currentCost)){
 		lobc1.style.backgroundColor = buttonOn;
 
 	}else{
@@ -73,11 +73,11 @@ function updateBuyables(){
 
 	}
 	var lobp1 = document.getElementById("lobp1");
-	if(lobbying.lobbyingDollars.gte(parentsAutobuyerUpgradeable.currentCost)&&parentsAutobuyerUpgradeable.upgradeCount < 25){
+	if(lobbying.lobbyingDollars.gte(lobUps.parentsAutobuyer.currentCost)&&lobUps.parentsAutobuyer.upgradeCount < 25){
 
 		lobp1.style.backgroundColor = buttonOn;
 
-	}else if(parentsAutobuyerUpgradeable.upgradeCount < 25){
+	}else if(lobUps.parentsAutobuyer.upgradeCount < 25){
 
 		lobp1.style.backgroundColor = buttonOff; 
 
@@ -87,7 +87,7 @@ function updateBuyables(){
 
 	}
 	var lobm1 = document.getElementById("lobm1");
-	if(lobbying.lobbyingDollars.gte(unlockMPSMultiplier.currentCost)){
+	if(lobbying.lobbyingDollars.gte(lobUps.mpsMultMult.currentCost)){
 		lobm1.style.backgroundColor = buttonOn;
 
 	}else{
@@ -96,12 +96,21 @@ function updateBuyables(){
 
 	}
 	var lobm2 = document.getElementById("lobm2");
-	if(lobbying.lobbyingDollars.gte(unlockCostDivider.currentCost)){
+	if(lobbying.lobbyingDollars.gte(lobUps.costDivMult.currentCost)){
 		lobm2.style.backgroundColor = buttonOn;
 
 	}else{
 
 		lobm2.style.backgroundColor = buttonOff; 
+
+	}
+	var lobc2 = document.getElementById("lobc2");
+	if(lobbying.lobbyingDollars.gte(lobUps.ldIncrease.currentCost)){
+		lobc2.style.backgroundColor = buttonOn;
+
+	}else{
+
+		lobc2.style.backgroundColor = buttonOff; 
 
 	}
 	

@@ -31,7 +31,7 @@ var saveTimer = 0;
 
 function devHack(){
 	mathematica.mathematica = mathematica.mathematica.add(1000);
-	parents.realDollars = parents.realDollars.add(1000);
+	parents.realDollars = parents.realDollars.add(1e50);
 	iq.points = iq.points.add(1000);
 	iq.ps = iq.ps.add(100);
 	lobbying.lobbyingDollars = lobbying.lobbyingDollars.add(1000000);
@@ -71,7 +71,7 @@ var Load = function(){
 		localStorage.setItem("costDiv",JSON.stringify(costDiv));
 		localStorage.setItem("parents",JSON.stringify(parents));
 		localStorage.setItem("lobbying",JSON.stringify(lobbying));
-		localStorage.setItem("lobbyingacc",JSON.stringify(lobinc));
+		localStorage.setItem("lobbyingacc",JSON.stringify(lobUps));
 		console.log("Game Saved.");
 	}
 	this.initLocalStorage = function(){
@@ -205,3 +205,25 @@ var genericAutobuyer = function(){
 
 }
 
+
+
+var Battle = function(){
+
+
+	this.openable = true; // not forever thx
+
+
+	this.show = function() {
+		if(this.openable){
+			document.getElementById("mainContainer").style.marginTop = "-120%";
+			document.getElementById("mainContainer").style.marginBottom = "120%";
+		}
+	}
+
+	this.hide = function(){
+			document.getElementById("mainContainer").style.marginTop = "-0%";
+			document.getElementById("mainContainer").style.marginBottom = "0%";
+
+	}
+}
+var battle = new Battle();

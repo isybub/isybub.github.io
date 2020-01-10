@@ -60,7 +60,7 @@ var MathematicaUpgradeable = function(costDiv, mpsMult, upgradeCount){
 
 			iq.points = iq.points.subtract(this.currentCost);
 
-			this.upgradeCount = this.upgradeCount.add(increaseXUpgradeable.current);
+			this.upgradeCount = this.upgradeCount.add(lobUps.xIncrease.current);
 			
 			this.currentProd = upgradeMathematicaProduction(this.startProd,this.upgradeCount,mpsMult.acc);
 

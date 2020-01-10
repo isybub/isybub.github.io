@@ -16,7 +16,7 @@ var ParentsUpgradeable = function(){
 	this.timeOfLastBuy = new Decimal(Date.now());
 
 	this.update = function(){
-
+		
 
 
 		if(!this.autobuyingSpeed.equals(10001)&&(Date.now() - this.timeOfLastBuy) > this.autobuyingSpeed){
@@ -30,7 +30,7 @@ var ParentsUpgradeable = function(){
 
 		this.realDollarsLive = mathematica.mathematica.root(2);
 
-		if(parentsAutobuyerUpgradeable.upgradeCount<25){
+		if(lobUps.parentsAutobuyer.upgradeCount<25){
 			document.getElementById("M2RDC").innerHTML = this.realDollarsLive.toPrecision(3);
 		}else{
 			document.getElementById("realdollarspersecond").innerHTML = mathematica.currentProd.divide(33).root(2).multiply(one1.divide(this.autobuyingSpeed.divide(1000))).toPrecision(3);

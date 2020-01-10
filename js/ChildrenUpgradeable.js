@@ -63,7 +63,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 	this.reset = function(){
 		if(this.purchased){
-			this.upgradeCount = new Decimal(1);
+			this.upgradeCount = new Decimal(0);
 			this.currentCost = new Decimal(0);
 			this.completedExams = new Decimal(0);
 			this.progressBar = new Decimal(0);
@@ -120,7 +120,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		}
 		
 
-		if(this.upgradingRepresentation)this.upgradeRepresentation();
+		//if(this.upgradingRepresentation)this.upgradeRepresentation();
 	}
 
 	this.upgradeRepresentation = function(){
@@ -162,17 +162,25 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		bar.style.transition = "box-shadow 0.1s ease-in-out";
 		bar.style.boxShadow = "inset 0px 0px 0px 0px var(--background)";
 
-		this.currentProd = upgradeChildProduction(this.startProd,this.upgradeCount,this.completedExams);
+		this.currentProd = upgradeChildProduction(this.startProd,this.upgradeCount,this.completedExams,this.childNum);
 		var examCostPredictor = this.completedExams;
 		if(this.timeToExam.equals(1)) examCostPredictor = examCostPredictor.add(1);
 		this.currentCost = upgradeChildCost(this.startCost,this.upgradeCount,examCostPredictor,this.currentYear);
-		this.nextProd = upgradeChildProduction(this.startProd,this.upgradeCount.add(1),examCostPredictor).subtract(this.currentProd);
+		this.nextProd = upgradeChildProduction(this.startProd,this.upgradeCount.add(1),examCostPredictor,this.childNum).subtract(this.currentProd);
 
 		this.displayExamOrTerm();
 		iq.updateTotal();
 		this.visuallyUpdateChild();
 
-		lobbying.updateTotals(lobbying);
+		//Check Requirements for lobbying upgrades
+		if(this.childNum.equals(1)&&this.upgradeCount.equals(6)) {
+			lobbying.revealChildUpgrade2();
+		}
+
+
+		lobbying.updateTotals();
+
+
 
 	}
 
@@ -194,24 +202,19 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 		var num = this.childNum.valueOf();
 		var upgrade = "child"+(num)+"up";
 
-		if(this.timeToExam.equals(1)){
-			//exam
-
-			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><h3>+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</h3></a>";
-
-		}else if(this.timeToExam.equals(5)){
+		if(this.timeToExam.equals(5)){
 			//term
 
 			this.currentYear = this.currentYear.add(1);
+			lobbying.purchasable = true;
 			if(this.firstTimeRound){
 				this.firstTimeRound = false;
 				this.breadcrumbnewchild();
 			}
 
-			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><h3>+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</h3></a>";
-
 
 		}
+			document.getElementById(upgrade).innerHTML = "<a id=child"+num+"buy href=\"javascript:child."+childNumAsString+".upgrade()\"><h3>+<span id=\"child"+num+"iqnext\">1</span> IQ Points<br />$<span id=\"child"+num+"cost\">1</span> Real Dollars</h3></a>";
 
 	}
 
@@ -279,7 +282,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 	this.newChild = function(){
 		if(parents.realDollars.gte(this.currentCost)){
 			parents.realDollars = parents.realDollars.subtract(this.currentCost);
-			this.nextProd = upgradeChildProduction(this.startProd,this.upgradeCount.add(1),this.completedExams).subtract(this.currentProd);
+			this.nextProd = upgradeChildProduction(this.startProd,this.upgradeCount.add(1),this.completedExams,this.childNum).subtract(this.currentProd);
 			var num = this.childNum.valueOf();
 			var tr = "child"+num;
 			var name = "child"+num+"name";
@@ -361,13 +364,13 @@ function getPerTermCost(upgradeCount){
 	return value;
 }
 
-function upgradeChildProduction(startProd,upgradeCount,completedExams){
+function upgradeChildProduction(startProd,upgradeCount,completedExams,childNum){
 
-	return startProd.multiply(new Decimal(1.5).pow(upgradeCount.minus(completedExams))).multiply(examLobbyingUpgradeable.current.pow(completedExams))
+	return startProd.multiply(new Decimal(1.5).pow(upgradeCount.minus(completedExams))).multiply(lobUps.examMult.current.pow(completedExams))
 	
 	//return startProd.pow(completedExams).add(startProd.pow(completedExams).multiply(getPerTermCost(upgradeCount-1)));
 
-	//return startProd.plus(1).multiply(upgradeCount.minus(1)).multiply(examLobbyingUpgradeable.current.multiply(completedExams.multiply(2))).add(startProd.plus(1).multiply(upgradeCount.minus(1)));
+	//return startProd.plus(1).multiply(upgradeCount.minus(1)).multiply(lobUps.examMult.current.multiply(completedExams.multiply(2))).add(startProd.plus(1).multiply(upgradeCount.minus(1)));
 
 }
 

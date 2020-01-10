@@ -14,8 +14,10 @@ function updateBasedOnProgress(){
 			break;
 		case -1:
 			if(mathematica.highestMathematica.gte(4)||override){
-				document.getElementById("story3").style.opacity = 1;
-				document.getElementById("story3").style.zIndex = 1;
+				if(lobUps.parentsAutobuyer.upgradeCount!=25){
+					document.getElementById("story3").style.opacity = 1;
+					document.getElementById("story3").style.zIndex = 1;
+				}
 				if(document.body.offsetWidth<1592)document.body.scrollTop = 140;
 				if(document.body.offsetWidth<938)document.body.scrollTop = 600;
 				if(!override||override>discoverProgress){
@@ -27,10 +29,12 @@ function updateBasedOnProgress(){
 			break;
 		case 0:
 			if(mathematica.highestMathematica.gte(6)||override){
-				document.getElementById("story4").style.opacity = 1;
-				document.getElementById("story4").style.zIndex = 1;
-				document.getElementById("story3").style.opacity = 0;
-				document.getElementById("story3").style.zIndex = -1;
+				if(lobUps.parentsAutobuyer.upgradeCount!=25){
+					document.getElementById("story4").style.opacity = 1;
+					document.getElementById("story4").style.zIndex = 1;
+					document.getElementById("story3").style.opacity = 0;
+					document.getElementById("story3").style.zIndex = -1;
+				}
 				if(!override||override>discoverProgress){
 					discoverProgress++;
 				}else{
@@ -101,7 +105,7 @@ function updateBasedOnProgress(){
 					document.getElementById("story20").style.opacity = 1;
 					document.getElementById("story20").style.zIndex = 1;
 				document.getElementById("sacrifice").innerHTML = "<h4>Sacrifice the children. <br /> <span id=lobbyinggain>0</span> Lobbying Dollars Earned</h4>";
-				lobbying.purchasable = true;
+				
 				lobbying.updateTotals();
 					if(!override||override>discoverProgress){
 						discoverProgress++;
