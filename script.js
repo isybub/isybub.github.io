@@ -215,14 +215,18 @@ var Battle = function(){
 
 	this.show = function() {
 		if(this.openable){
-			document.getElementById("mainContainer").style.marginTop = "-120%";
-			document.getElementById("mainContainer").style.marginBottom = "120%";
+			document.getElementById("mainContainer").style.opacity = "0";
+			document.getElementById("mainContainer").style.zIndex = "-1";
+			document.getElementById("bigBattlingContainer").style.opacity = "1";
+			document.getElementById("bigBattlingContainer").style.zIndex = "1";
 		}
 	}
 
 	this.hide = function(){
-			document.getElementById("mainContainer").style.marginTop = "-0%";
-			document.getElementById("mainContainer").style.marginBottom = "0%";
+			document.getElementById("mainContainer").style.opacity = "1";
+			document.getElementById("mainContainer").style.zIndex = "1";
+			document.getElementById("bigBattlingContainer").style.opacity = "0";
+			document.getElementById("bigBattlingContainer").style.zIndex = "-1";
 
 	}
 }

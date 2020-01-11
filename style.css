@@ -111,7 +111,9 @@ a:hover{
 	transition: all 1s;
 }
 #bigmaincontainer{
+	position: relative;
 	transition: all 1s;
+	overflow:hidden;
 }
 #bigLobbyingContainer{
 	width:100%;
@@ -355,5 +357,8 @@ span{
 	width:300px;
 }
 #bigBattlingContainer{
-	margin-top: 120%
+	position: fixed;
+	opacity: 0;
+	z-index: -1;
+
 }
