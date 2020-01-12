@@ -417,7 +417,7 @@ var lobbyingAccLoader = new function (){
 
 				});
 
-			}catch{
+			}catch(err){
 
 			}
 			
