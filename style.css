@@ -358,7 +358,68 @@ span{
 }
 #bigBattlingContainer{
 	position: fixed;
+	display: flex;
+	flex-direction: vertical;
+	flex-wrap: wrap;
+	width: 100%;
+	height: 100vh;
+	top: 0;
 	opacity: 0;
 	z-index: -1;
 
+}
+#controlButtons{
+	height:50vh;
+	position: absolute;
+	display: flex;
+	bottom:0;
+	justify-content: space-around;
+	align-items: center;
+	flex-wrap: wrap;
+	flex-direction: column;
+	width: 100%;
+
+}
+#battleDisplay{
+	display: flex;
+	height: 50vh;
+	width: 100vw;
+	justify-content: space-around;
+	align-items: center;
+	flex-wrap: wrap;
+	flex-direction: row;
+
+
+}
+#classChoice{
+
+	width: 340px;
+	text-align: center;
+}
+
+#controlButtons a{
+
+	position: relative;
+
+}
+#buttonHolder{
+	width: 300px;
+	position:relative;
+}
+
+#attackButtons, #menuButtons{
+	width: 100vw;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+#atb{
+	width:80vw;
+	height:74px;
+	border-radius: 12px;
+	border: solid;
+	border-width: 3px;
+	border-color: var(--light);
+	box-shadow: inset 0vw 0px 0px var(--light);
 }

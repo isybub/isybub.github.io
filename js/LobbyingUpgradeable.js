@@ -63,6 +63,9 @@ var LobbyingUpgradeable = function(){
 			document.getElementById("bigLobbyingContainer").style.left = "0px";
 			document.getElementById("mainContainer").style.marginLeft = "-120%";
 			document.getElementById("mainContainer").style.marginRight = "120%";
+			
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 		}
 
 	}
@@ -72,6 +75,9 @@ var LobbyingUpgradeable = function(){
 		document.getElementById("bigLobbyingContainer").style.left = "120%";
 		document.getElementById("mainContainer").style.marginLeft = "0px";
 		document.getElementById("mainContainer").style.marginRight = "120%";
+		
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 
 	}
 

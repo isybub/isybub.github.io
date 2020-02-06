@@ -58,6 +58,7 @@ var Load = function(){
 		document.body.style.overflowY = "scroll";
   		document.body.style.scrollBehavior = "auto";
   		document.body.scrollTop = 0;
+  		document.documentElement.scrollTop = 0;
 
 	}
 	this.save = function(){
@@ -157,7 +158,14 @@ function updatemathematicas(tickRate){
 		child[c].update();
 	});
 		
+		flist.child1.updateStatus();
+		flist.child2.updateStatus();
 	
+
+	if(battle.happening){
+		battle.update();
+	}
+
 }
 
 
@@ -196,6 +204,7 @@ function unlockFirstChild(){
 	document.body.style.overflowY = "scroll";
 	document.body.style.scrollBehavior = "auto";
 	document.body.scrollTop = 0;
+	document.documentElement.scrollTop = 0;
 }
 
 
@@ -212,6 +221,9 @@ var Battle = function(){
 
 	this.openable = true; // not forever thx
 
+	this.enemyCount = 4;
+
+	this.happening = false;
 
 	this.show = function() {
 		if(this.openable){
@@ -219,6 +231,11 @@ var Battle = function(){
 			document.getElementById("mainContainer").style.zIndex = "-1";
 			document.getElementById("bigBattlingContainer").style.opacity = "1";
 			document.getElementById("bigBattlingContainer").style.zIndex = "1";
+			
+			document.body.scrollTop = 0; // For Safari
+			document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+			document.body.style.overflowY = "hidden";
 		}
 	}
 
@@ -227,7 +244,277 @@ var Battle = function(){
 			document.getElementById("mainContainer").style.zIndex = "1";
 			document.getElementById("bigBattlingContainer").style.opacity = "0";
 			document.getElementById("bigBattlingContainer").style.zIndex = "-1";
+			
+			document.body.scrollTop = 0; // For Safari
+			document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+			document.body.style.overflowY = "scroll";
 
 	}
+
+	this.showFirstScreen = function(){
+
+		var disp = document.getElementById("battleDisplay");
+
+		var finalString = "<div id=classChoice><p>Choose the class of your first child to go to battle.</p>"+
+							"<a href=\"javascript:battle.chooseFighter(1,\'one\',\'mage\')\">Mage</a>"+
+							"<a href=\"javascript:battle.chooseFighter(1,\'one\',\'rogue\')\">Rogue</a>"+
+							"<a href=\"javascript:battle.chooseFighter(1,\'one\',\'warrior\')\">Warrior</a>"+
+							"<a href=\"javascript:battle.chooseFighter(1,\'one\',\'summoner\')\">Summoner</a></p>";
+
+
+		disp.innerHTML = finalString;
+
+	}
+
+	this.showEnemySelectScreen = function() {
+		
+		var d = document.getElementById("controlButtons");
+
+		var finalString = "";
+
+		for(var i = 1; i <= this.enemyCount; i++){
+			finalString += "<div id=buttonHolder><a href=\"javascript:battle.selectEnemy("+i+")\">Enemy "+i+"</a></div>"
+		}
+
+		d.innerHTML = finalString;
+
+	}
+
+	this.selectEnemy = function(enemynum) {
+		
+
+
+		flist.selected = flist["enemy"+enemynum];
+		
+
+	}
+	this.chooseFighter = function(num,numstr,pclass){
+
+		ad[numstr] = cl[pclass];
+		cl[pclass].f = flist["child"+num]
+
+
+		var disp = document.getElementById("battleDisplay");
+
+		disp.innerHTML = "FIGHT";
+
+		this.happening = true;
+
+
+	}
+
+
+
+	this.update = function(){
+
+		var p = flist.isPlayer;
+
+
+		if(p.bar.equals(0)){
+			
+			var atb = document.getElementById("atb");
+
+			atb.style.boxShadow = "inset 0vw 0px 0px var(--light)";
+
+			atb.style.transition = p.getSpeed()+"s box-shadow";
+
+			atb.style.boxShadow = "inset -80vw 0px 0px var(--light)";
+
+			p.chargeStart = Date.now();
+
+			p.bar = p.bar.add(0.5);
+
+		}else if(p.bar.lt(1)){
+
+			if((Date.now() - p.chargeStart)/1000 > p.getSpeed()){
+
+				p.bar = new Decimal(1);
+
+			}
+
+		}
+
+		if(p.bar.equals(1)){
+
+			//this.displayCards();
+
+		}
+
+
+	}
+
+	this.displayCards = function(){
+
+	}
+
+
 }
+
+
 var battle = new Battle();
+var Fighter = function(baseAttack, baseDefence, baseSpeed, baseHP,attackMult,defenceMult,speedMult,HPMult){
+
+	this.baseAttack = new Decimal(baseAttack);
+	this.baseDefence = new Decimal(baseDefence);
+	this.baseSpeed = new Decimal(baseSpeed);
+	this.baseHP = new Decimal(baseHP);
+	this.attackMult = new Decimal(attackMult);
+	this.defenceMult = new Decimal(defenceMult);
+	this.speedMult = new Decimal(speedMult);
+	this.HPMult = new Decimal(HPMult);
+	this.currentHP = new Decimal(baseHP);
+	this.defenceWillResetAtStartOfTurn = true;
+	this.bar = new Decimal(0);
+	this.chargeStart = new Decimal(0);
+
+
+	this.attack = function(damage){
+		var a = flist.selected;
+
+		a.currentHP = a.currentHP.minus(damage.divide(a.baseDefence.multiply(a.defenceMult)));
+	}
+	this.defend = function(){
+		this.defenceMult = this.defenceMult.multiply(1.2);
+	}
+	this.startTurn = function() {
+		if(!this.defenceMult.equals(this.baseDefence)&&this.defenceWillResetAtStartOfTurn){
+			this.defenceMult = this.baseDefence;
+		}
+	}
+
+	this.updateStatus = function(){
+		if(this == flist.isPlayer){
+			
+
+			if(this.bar.gte(1)){
+				battle.showEnemySelectScreen();
+			}
+		}
+	}
+
+	this.getSpeed = function(){
+
+		return new Decimal(8).divide(this.baseSpeed.multiply(this.speedMult));
+
+	}
+
+}
+var fighterList = function(){
+	
+	this.child1 = new Fighter(2,2,2,20,1,1,1,1);
+	this.child2 = new Fighter(2,2,2,20,1,1,1,1);
+	this.child3 = new Fighter(2,2,2,20,1,1,1,1);
+	this.child4 = new Fighter(2,2,2,20,1,1,1,1);
+
+
+	this.enemy1 = new Fighter(2,2,2,20,1,1,1,1);
+	this.enemy2 = new Fighter(2,2,2,20,1,1,1,1);
+	this.enemy3 = new Fighter(2,2,2,20,1,1,1,1);
+	this.enemy4 = new Fighter(2,2,2,20,1,1,1,1);
+
+	this.selected = this.enemy1;
+
+	this.isPlayer = this.child1;
+
+}
+var flist = new fighterList();
+var MageAttacks = function(fighter){
+	this.f = fighter;
+
+	this.fire = 1;
+	this.thunder = 2;
+	this.ice = 3;
+	this.element = this.fire;
+
+	this.attack = function(attackNo){
+		this[attackNo]();
+	}
+
+
+	this.one = function(){
+		f.attack(f.baseAttack.multiply(f.attackMult));
+	}
+
+	this.two = function(){
+		f.defend();
+	}
+
+
+}
+
+var RogueAttacks = function(fighter){
+	this.fighter = fighter;
+	this.attack = function(attackNo){
+		this[attackNo]();
+	}
+
+
+	this.one = function(){
+		
+	}
+}
+
+var WarriorAttacks = function(fighter){
+	this.fighter = fighter;
+	this.attack = function(attackNo){
+		this[attackNo]();
+	}
+
+
+	this.one = function(){
+		
+	}
+}
+
+var SummonerAttacks = function(fighter){
+	this.fighter = fighter;
+	this.attack = function(attackNo){
+		this[attackNo]();
+	}
+
+
+	this.one = function(){
+		
+	}
+}
+
+var classList = function(){
+
+	this.mage = new MageAttacks(flist.child1);
+	this.rogue = new RogueAttacks(flist.child2);
+	this.warrior = new WarriorAttacks(flist.child3);
+	this.summoner = new SummonerAttacks(flist.child4);
+
+}
+var cl = new classList();
+var attackDeterminer = function(){
+
+	this.one = cl.mage;
+	this.two = cl.rogue;
+	this.three = cl.warrior;
+	this.four = cl.summoner;
+	
+	this.det = function(fighter,attackNo){
+		this[fighter].attack(attackNo);
+	}
+
+}
+var ad = new attackDeterminer();
+
+
+
+
+
+var playerTurn = function(){
+
+	this.attack = function(fighter,attackNo){
+		
+	}
+
+}
+
+var enemyTurn = function(){
+
+}
+
