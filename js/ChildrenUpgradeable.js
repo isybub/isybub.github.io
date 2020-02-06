@@ -55,7 +55,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 
 			this.progressbarsStartTime = new Decimal(Date.now());
 			this.progressBar = this.progressBar.add(0.01);
-			this.update();
+			this.update(); 
 
 		}
 
@@ -118,6 +118,7 @@ var ChildUpgradeable = function(startCost, currentCost, startProd, currentProd, 
 			this.returnTimer = new Decimal(Date.now());
 
 		}
+		
 		
 
 		//if(this.upgradingRepresentation)this.upgradeRepresentation();

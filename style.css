@@ -69,13 +69,7 @@ a{
 	 6px 6px 16px rgba(23,24,28,0.7), inset 0px 0px 16px rgba(92,98,112,0.5);*/
 
 }
-a:active{
-	/*background-color: rgba(180,180,180,1);
 
-	/*box-shadow: inset -6px -6px 16px rgba(255,255,255,1),
-	inset 6px 6px 16px rgba(23,24,28,0.5),0 0 0px rgba(92,98,112,0.4), 0 0 0px rgba(23,24,28,0.7),inset 0px 0px 16px rgba(92,98,112,0.5);
-*/
-}
 #story4{
 	border-color: var(--light);
 }
@@ -143,7 +137,7 @@ a:hover{
 	border-radius: 16px;
 	border-style: solid;
 	border-width:2px;
-	border-color: var(--white)/
+	border-color: var(--white);
 	/*box-shadow: -6px -6px 16px rgba(92,98,112,0.35),
 	 6px 6px 16px rgba(23,24,28,0.7);
 	 */
@@ -237,11 +231,7 @@ a:hover{
 #schoolingheading,#iqPoints{
 	opacity: 0;
 }
-#childrenContainer a{
 
-	
-
-}
 
 table a{
 	font-size: 1.25em;
@@ -305,13 +295,7 @@ table a{
 	flex-wrap: wrap;
 
 }
-#child1 div,#child2 div,#child3 div,#child4 div{
-}
 
-#childtable div a{
-
-
-}
 #child1rep, #child2rep, #child3rep, #child4rep{
 	transition:all 5s ease-in-out;
 }
@@ -340,8 +324,7 @@ table a{
 	box-shadow:inset 0px 0px 0px 0px var(--background)
 
 }
-span{
-}
+
 #parentsAutobuyer{
 	transition: all 0s;
 }
@@ -414,7 +397,17 @@ span{
 	flex-wrap: wrap;
 	justify-content: space-around;
 }
+#menuButtons{
+
+	align-self: flex-end;
+
+}
+
 #atb{
+	display:flex;
+	text-align: center;
+	justify-content: center;
+	align-items: center;
 	width:80vw;
 	height:74px;
 	border-radius: 12px;
@@ -422,4 +415,70 @@ span{
 	border-width: 3px;
 	border-color: var(--light);
 	box-shadow: inset 0vw 0px 0px var(--light);
+	transition-timing-function: ease-in;
+}
+#atb h1{
+	color: var(--light); 
+    mix-blend-mode: difference;
+}
+.healthbar{
+
+	display:flex;
+	width:300px;
+	height:35px;
+	text-align: center;
+	justify-content: center;
+	align-items: center;
+	border-radius: 12px;
+	border: solid;
+	border-width: 3px;
+	border-color: var(--good);
+	box-shadow: inset -300px 0px 0px var(--good);
+	transition: all 0.4s;
+	
+
+
+}
+.healthbar h2{
+	line-height: 0px;
+	color: var(--good); 
+    mix-blend-mode: difference;
+}
+
+.atbe{
+	margin-top: 5px;
+	height:7px;
+	width:300px;
+	border-radius: 12px;
+	border: solid;
+	border-width: 3px;
+	border-color: var(--light);
+	box-shadow: inset 0vw 0px 0px var(--light);
+	
+}
+
+
+.attackinslot{
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	height:75px;
+	width:150px;
+	border-radius: 12px;
+	border: solid;
+	border-width: 3px;
+	border-color: var(--light);
+
+	
+
+}
+
+.slotwidth1{
+	width:150px;
+}
+.slotwidth2{
+	width:300px;
+}
+.slotwidth3{
+	width:450px;
 }
