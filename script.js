@@ -284,6 +284,13 @@ var Battle = function(){
 
 	this.showEnemySelectScreen = function() {
 		
+
+		if(this.enemyCount == 1) {
+			battle.selectEnemy(1);
+			return;
+		}
+
+		
 		var d = document.getElementById("attackButtons");
 
 		var finalString = "";
@@ -361,14 +368,14 @@ var Battle = function(){
 
 	this.displayInfo = function(disp,f,name){
 		disp.innerHTML = "<h2 style=\'width:300px;\'> "+name+"</h2></p>"+
-						"<p><span> Attack: </span><span>"+ f.baseAttack+"</span></p>"+
-						" <p><span>Defence: </span><span>"+ f.baseDefence+"</span></p>"+
-						" <p><span>Speed: </span><span>"+ f.baseSpeed+"</span></p>"+
-						" <p><span>Health Points: </span><span>"+ f.baseHP+"</span></p>"+
-						" <p><span>Attack Multiplier: </span><span>"+ f.attackMult+"</span></p>"+
-						" <p><span>Defend Multiplier: </span><span>"+ f.defenceMult+"</span></p>"+
-						" <p><span>Speed Multiplier: </span><span>"+ f.speedMult+"</span></p>"+
-						" <p><span>Health Multiplier: </span><span>"+ f.HPMult+"</span></p>";
+						"<p><span> Attack: </span><span>"+ f.baseAttack.toPrecision(3)+"</span></p>"+
+						" <p><span>Defence: </span><span>"+ f.baseDefence.toPrecision(3)+"</span></p>"+
+						" <p><span>Speed: </span><span>"+ f.baseSpeed.toPrecision(3)+"</span></p>"+
+						" <p><span>Health Points: </span><span>"+ f.baseHP.toPrecision(3)+"</span></p>"+
+						" <p><span>Attack Multiplier: </span><span>"+ f.attackMult.toPrecision(3)+"</span></p>"+
+						" <p><span>Defend Multiplier: </span><span>"+ f.defenceMult.toPrecision(3)+"</span></p>"+
+						" <p><span>Speed Multiplier: </span><span>"+ f.speedMult.toPrecision(3)+"</span></p>"+
+						" <p><span>Health Multiplier: </span><span>"+ f.HPMult.toPrecision(3)+"</span></p>";
 		disp.style.opacity = 1;
 	}
 
@@ -548,12 +555,33 @@ var Battle = function(){
 		this.displayDeathScreen();
 	}
 
+	this.displayDeathScreen = function(){
+
+	}
+
+	this.resume = function(){
+		disp = document.getElementById("attackButtons");
+		disp.innerHTML = "<div id=atb><h1>ATB</h1></div>";
+		
+		var u = player.u;
+		player.fighter = new Fighter(u[0],u[1],u[2],u[3],u[4],u[5],u[6],u[7]);
+
+		this.clearBattleDisplay();
+		this.chooseFighter(1,"one",player.fighter.nameOfClass);
+	}
+
+	this.clearBattleDisplay = function(){
+		document.getElementById("playerDisplay").innerHTML = "<div class=infoBox id=PlayerInfo></div>";
+		document.getElementById("middleDisplay").innerHTML = "";
+		document.getElementById("enemyDisplay").innerHTML = "<div class=infoBox id=EnemyInfo></div>";
+	}
+
 	this.deadEnemy = function(){
 		var e = neg.gen(this.currentEnemy);
 		this.currentEnemy = this.currentEnemy.add(1);
 		flist.enemy1 = new Fighter(e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]);
 		flist.selected = flist.enemy1;
-		console.log("ran");
+		
 		bar = document.getElementById("e1health");
 		bar.innerHTML = "<h2>Enemy "+this.currentEnemy+"</h2>";
 		bar.style.boxShadow = "inset -"+flist.selected.currentHP.divide(flist.selected.getHP()).multiply(300)+"px 0px 0px var(--good)";
@@ -565,11 +593,11 @@ var Battle = function(){
 
 var newEnemyGenerator = function(){
 	this.gen = function(num){
-		var att = num.divide(10).add(1);
-		var def = num.divide(10).add(1);
-		var spd = num.divide(10).add(1);
-		var hp = num.add(20);
-		var attm = new Decimal(0.33);
+		var att = num.divide(10).add(1).pow(2);
+		var def = num.divide(10).add(1).pow(2);
+		var spd = num.divide(10).add(1).pow(2);
+		var hp = num.add(2).pow(2);
+		var attm = new Decimal(1);
 		var defm = new Decimal(1);
 		var spdm = new Decimal(1);
 		var hpm = new Decimal(1);
@@ -623,7 +651,7 @@ var Fighter = function(baseAttack, baseDefence, baseSpeed, baseHP,attackMult,def
 
 		}
 		
-		bar.innerHTML = "<h2>"+a.currentHP.toPrecision(3) + " / " + a.getHP()+"</h2>";
+		bar.innerHTML = "<h2>"+a.currentHP.toPrecision(3) + " / " + a.getHP().toPrecision(3)+"</h2>";
 		bar.style.boxShadow = "inset -"+a.currentHP.divide(a.getHP()).multiply(300)+"px 0px 0px var(--good)";
 		if(a.defenceMult.gt(1)) {
 			a.defenceMult = new Decimal(1);
@@ -700,15 +728,11 @@ var fighterList = function(){
 	this.child = new Fighter(1,1,2,20,1,1,1,1);
 	this.child.attackList = devAttackListPLSremove;
 
-
-	this.enemy1 = new Fighter(1,1,2,20,1,1,0.33,1);
-	this.enemy1.attackList = devAttackListPLSremove;
-	this.enemy2 = new Fighter(2,1,2,20,1,1,0.33,1);
-	this.enemy2.attackList = devAttackListPLSremove;
-	this.enemy3 = new Fighter(3,1,2,20,1,1,0.33,1);
-	this.enemy3.attackList = devAttackListPLSremove;
-	this.enemy4 = new Fighter(4,1,2,20,1,1,0.33,1);
-	this.enemy4.attackList = devAttackListPLSremove;
+	var e = neg.gen(new Decimal(0));
+	this.enemy1 = new Fighter(e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]);
+	this.enemy1.attackList = devAttackListPLSremove; 
+	
+	
 
 	this.selected = this.enemy1;
 
@@ -857,6 +881,8 @@ var PlayerController = function(){
 	this.handSize = 5;
 
 	this.selectedMoves = [];
+
+	this.u = [1,1,2,20,1,1,1,1];
 
 	this.doAttack = function(){
 

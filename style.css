@@ -375,6 +375,19 @@ table a{
 
 
 }
+#middleDisplay{
+	display:flex;
+	align-content: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	width:300px;
+	
+}
+
+@media (max-width:926px){#middleDisplay{width:926px;}}
+
+
+
 #classChoice{
 
 	width: 340px;
@@ -556,4 +569,9 @@ table a{
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: space-between;
+}
+#deathScreen{
+	position: absolute;
+	opacity:0;
+	z-index: -1;
 }
