@@ -333,6 +333,7 @@ table a{
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
+	width: 100vw;
 }
 
 #takemetobattle{
@@ -462,23 +463,71 @@ table a{
 	display:flex;
 	align-items: center;
 	justify-content: center;
+	
 	height:75px;
 	width:150px;
 	border-radius: 12px;
 	border: solid;
 	border-width: 3px;
 	border-color: var(--light);
-
-	
+	margin:6px;
+	transition: all 1s;
 
 }
 
 .slotwidth1{
-	width:150px;
+	min-width:150px;
+	
 }
 .slotwidth2{
-	width:300px;
+	min-width:350px;
 }
+
 .slotwidth3{
-	width:450px;
+	min-width:500px;
+}
+
+.slot{
+	
+
+	height:75px;
+	width:150px;
+	margin:6px;
+	border-radius: 12px;
+	border: solid;
+	border-width: 2px;
+	border-color: rgba(255,255,255,0.2);
+
+}
+
+#slotsdisplay{
+
+	width:100vw;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	flex-direction: row;
+
+}
+#slotsdisplay .attackinslot{
+	border-color: var(--good)!important;
+}
+#carddisplay{
+
+	width:100vw;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	flex-direction: row;
+
+}
+#hidebattlesbutton{
+	position: fixed!important;
+	width:50px;
+	height: 50px;
+	top:0;
+	right:0;
+	border-radius: 100%;
 }

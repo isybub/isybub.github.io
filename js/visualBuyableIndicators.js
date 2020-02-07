@@ -113,6 +113,15 @@ function updateBuyables(){
 		lobc2.style.backgroundColor = buttonOff; 
 
 	}
+	var lobc3 = document.getElementById("lobc3");
+	if(lobbying.lobbyingDollars.gte(lobUps.termSpeed.currentCost)){
+		lobc3.style.backgroundColor = buttonOn;
+
+	}else{
+
+		lobc3.style.backgroundColor = buttonOff; 
+
+	}
 	
 
 }

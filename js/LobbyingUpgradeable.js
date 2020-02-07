@@ -130,7 +130,7 @@ var LobbyingUpgradeable = function(){
 		if(!lobUps.examMult.purchased) {
 			lobUps.examMult.purchased = true;
 			document.getElementById("lobc2d").style.margin = "0%";
-			if(child.one.upgradeCount.gte(6)){
+			if(child.one.upgradeCount.gte(5)){
 				this.revealChildUpgrade2();
 			}
 		}
@@ -196,7 +196,7 @@ var LobbyingUpgradeable = function(){
 		}
 		if(this.lobbyingDollars.gte(lobUps.ldIncrease.currentCost)){
 
-			if(lobUps.ldIncrease.upgradeCount.gte(2)){
+			if(lobUps.ldIncrease.upgradeCount.gte(1)){
 				this.revealChildUpgrade3();
 			}
 

@@ -234,6 +234,10 @@ var Battle = function(){
 
 	this.happening = false;
 
+	this.currentSlotHolder = 0;
+
+	this.readyToAttack = false;
+
 	this.show = function() {
 		if(this.openable){
 			document.getElementById("mainContainer").style.opacity = "0";
@@ -244,7 +248,7 @@ var Battle = function(){
 			document.body.scrollTop = 0; // For Safari
 			document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 
-			document.body.style.overflowY = "hidden";
+			//document.body.style.overflowY = "hidden";
 		}
 	}
 
@@ -257,7 +261,7 @@ var Battle = function(){
 			document.body.scrollTop = 0; // For Safari
 			document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 
-			document.body.style.overflowY = "scroll";
+			//document.body.style.overflowY = "scroll";
 
 	}
 
@@ -316,7 +320,8 @@ var Battle = function(){
 
 		disp.innerHTML = "FIGHT";
 
-		pdisp.innerHTML = "<div class=healthbar id=p1health><h2> "+flist["child"].nameOfClass+" </h2></div>";
+		pdisp.innerHTML = "<div class=healthbar id=p1health><h2> "+flist["child"].getHP()+" / "+flist["child"].getHP()+" </h2></div>";
+		document.getElementById("p1health").style.boxShadow = "inset -"+player.fighter.currentHP.divide(player.fighter.getHP()).multiply(300)+"px 0px 0px var(--good)";
 
 		edisp.innerHTML = "<div class=healthbar id=e1health><h2> first enemy </h2></div>";
 		edisp.innerHTML += "<div class=atbe id=atbe1></<div>"
@@ -420,13 +425,13 @@ var Battle = function(){
 
 		var cardList = [];
 
-		while(slotsSpare > 0){
+		
+		for(i = 0; i < player.handSize; i++){
+
 			var chance = Math.random()*player.fighter.attackList.length;
 			var att = player.fighter.attackList[Math.floor(chance)];
-			if(slotsSpare - ad.detSize(att) >= 0){
-				slotsSpare -= ad.detSize(att);
-				cardList.push(att);
-			}
+			cardList.push(att);
+
 		}
 
 		player.currentCards = cardList;
@@ -440,16 +445,71 @@ var Battle = function(){
 
 		var disp = 	document.getElementById("attackButtons");
 
-		disp.innerHTML = "";
+		var additivestring = "";
 
-		
+		for(i = 0; i < player.slots; i++){
+			additivestring += "<div class=slot></div>"
+		}
+
+
+		disp.innerHTML += "<div id=slotsdisplay>"+additivestring+"</div>";
+
+		additivestring = "";
 
 		for(i = 0; i < player.currentCards.length; i++){
 
-			disp.innerHTML += "<div class=\"attackinslot slotwidth"+ad.detSize(player.currentCards[i])+"\"><h3>"+ad.detScript(player.currentCards[i])+"</h3></div>";
+			additivestring += "<div class=\"attackinslot slotwidth"+ad.detSize(player.currentCards[i])+"\""
+			+" onClick=\"javascript:battle.selectMove(this,\'"+player.currentCards[i]+"\')\"><h3>"+ad.detScript(player.currentCards[i])+"</h3></div>";
 
 		}
+
+		disp.innerHTML += "<div id=carddisplay>"+additivestring;
+
+		disp.innerHTML +="</div>"
+
+		this.currentSlotHolder = 0;
 	}
+
+	this.selectMove = function(elem,attackName){
+		//the first move that gets selected doesn't get removed from the selection list
+		if(document.getElementsByClassName("slot").length - ad.detSize(attackName) >=0 && elem.parentNode.id!="slotsdisplay"){
+
+			player.selectedMoves.push(attackName);
+
+			while(document.getElementsByClassName("slot").length){
+				
+				var slotholder = document.getElementsByClassName("slot")[0];
+				document.getElementById("slotsdisplay").removeChild(slotholder);
+
+			}
+			
+
+			document.getElementById("slotsdisplay").appendChild(elem);
+			var sizeOfAttack = 0;
+			for(i = 0; i < player.selectedMoves.length; i++){
+				sizeOfAttack += ad.detSize(player.selectedMoves[i]);
+			}
+			for(i = 0; i < player.slots - sizeOfAttack; i++){
+
+				document.getElementById("slotsdisplay").innerHTML += "<div class=slot></div>";
+
+			}
+			
+			this.currentSlotHolder = 0;
+
+		}
+		
+		if(!this.readyToAttack){
+			var disp = document.getElementById("attackButtons")
+			var str = disp.innerHTML;
+			disp.innerHTML ="<a href=\'javascript:player.doAttack()\' id=attackbutton>ATTACK</a>" + str;
+			this.readyToAttack = true;
+		}
+
+		
+	}
+
+	
 
 }
 
@@ -473,21 +533,47 @@ var Fighter = function(baseAttack, baseDefence, baseSpeed, baseHP,attackMult,def
 	this.nameOfClass = "Mage";
 
 
-	this.attack = function(damage){
+	this.dealDamage = function(damage){
 
 		var a = flist.selected;
 
 		a.currentHP = a.currentHP.minus(damage.divide(a.baseDefence.multiply(a.defenceMult)));
+		var bar;
+		if(a == player.fighter){
+
+			bar = document.getElementById("p1health");
+
+		}else{
+
+			bar = document.getElementById("e1health");
+
+		}
+		
+		bar.innerHTML = "<h2>"+a.currentHP.toPrecision(3) + " / " + a.getHP()+"</h2>";
+		bar.style.boxShadow = "inset -"+a.currentHP.divide(a.getHP()).multiply(300)+"px 0px 0px var(--good)";
+		if(a.defenceMult.gt(1)) {
+			a.defenceMult = new Decimal(1);
+			bar.style.borderColor = "var(--good)";
+		}
 
 	}
 	this.defend = function(){
 		this.defenceMult = this.defenceMult.multiply(1.2);
-	}
-	this.startTurn = function() {
-		if(!this.defenceMult.equals(this.baseDefence)&&this.defenceWillResetAtStartOfTurn){
-			this.defenceMult = this.baseDefence;
+		var bar;
+		if(this == player.fighter){
+
+			bar = document.getElementById("p1health");
+
+		}else{
+
+			bar = document.getElementById("e1health");
+
 		}
+		var str = bar.style.boxShadow;
+		bar.style.boxShadow = str+",0px 0px 20px var(--light)";
+		bar.style.borderColor = "var(--light)";
 	}
+	
 
 	this.updateStatus = function(){
 
@@ -508,7 +594,10 @@ var Fighter = function(baseAttack, baseDefence, baseSpeed, baseHP,attackMult,def
 
 			flist.selected = player.fighter;
 
-			//ad.det(attack number);
+			
+			this.dealDamage(new Decimal(this.baseAttack.multiply(this.attackMult)));
+
+			
 
 			flist.selected = prevsel;
 
@@ -525,22 +614,26 @@ var Fighter = function(baseAttack, baseDefence, baseSpeed, baseHP,attackMult,def
 
 	}
 
+	this.getHP = function(){
+		return this.baseHP.multiply(this.HPMult);
+	}
+
 }
 var fighterList = function(){
 	
 	var devAttackListPLSremove = ["one","one","one","two","two","two"];
 
-	this.child = new Fighter(1,2,2,20,1,1,1,1);
+	this.child = new Fighter(1,1,2,20,1,1,1,1);
 	this.child.attackList = devAttackListPLSremove;
 
 
-	this.enemy1 = new Fighter(1,2,2,20,1,1,0.33,1);
+	this.enemy1 = new Fighter(1,1,2,20,1,1,0.33,1);
 	this.enemy1.attackList = devAttackListPLSremove;
-	this.enemy2 = new Fighter(2,2,2,20,1,1,0.33,1);
+	this.enemy2 = new Fighter(2,1,2,20,1,1,0.33,1);
 	this.enemy2.attackList = devAttackListPLSremove;
-	this.enemy3 = new Fighter(3,2,2,20,1,1,0.33,1);
+	this.enemy3 = new Fighter(3,1,2,20,1,1,0.33,1);
 	this.enemy3.attackList = devAttackListPLSremove;
-	this.enemy4 = new Fighter(4,2,2,20,1,1,0.33,1);
+	this.enemy4 = new Fighter(4,1,2,20,1,1,0.33,1);
 	this.enemy4.attackList = devAttackListPLSremove;
 
 	this.selected = this.enemy1;
@@ -558,8 +651,8 @@ var MageAttacks = function(fighter){
 	this.thunder = 2;
 	this.ice = 3;
 	this.element = this.fire;
-	this.attackSizes = {"one":1,"two":2};
-	this.scripts = {"one":"Placeholder","two":"Placeholder2 (attack names should be the title of them. dummy)"};
+	this.attackSizes = {"one":1,"two":1};
+	this.scripts = {"one":"Weak Attack","two":"Defend"};
 
 	this.attack = function(attackNo){
 		this[attackNo]();
@@ -574,11 +667,11 @@ var MageAttacks = function(fighter){
 
 
 	this.one = function(){
-		f.attack(f.baseAttack.multiply(f.attackMult));
+		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult));
 	}
 
 	this.two = function(){
-		f.defend();
+		this.f.defend();
 	}
 
 
@@ -586,8 +679,8 @@ var MageAttacks = function(fighter){
 
 var RogueAttacks = function(fighter){
 	this.fighter = fighter;
-	this.attackSizes = {"one":1,"two":2};
-	this.scripts = {"one":"Placeholder","two":"Placeholder2 (attack names should be the title of them. dummy)"};
+	this.attackSizes = {"one":1,"two":1};
+	this.scripts = {"one":"Weak Attack","two":"Defend"};
 	this.attack = function(attackNo){
 		this[attackNo]();
 	}
@@ -606,8 +699,8 @@ var RogueAttacks = function(fighter){
 
 var WarriorAttacks = function(fighter){
 	this.fighter = fighter;
-	this.attackSizes = {"one":1,"two":2};
-	this.scripts = {"one":"Placeholder","two":"Placeholder2 (attack names should be the title of them. dummy)"};
+	this.attackSizes = {"one":1,"two":1};
+	this.scripts = {"one":"Weak Attack","two":"Defend"};
 	this.attack = function(attackNo){
 		this[attackNo]();
 	}
@@ -626,8 +719,8 @@ var WarriorAttacks = function(fighter){
 
 var SummonerAttacks = function(fighter){
 	this.fighter = fighter;
-	this.attackSizes = {"one":1,"two":2};
-	this.scripts = {"one":"Placeholder","two":"Placeholder2 (attack names should be the title of them. dummy)"};
+	this.attackSizes = {"one":1,"two":1};
+	this.scripts = {"one":"Weak Attack","two":"Defend"};
 	this.attack = function(attackNo){
 		this[attackNo]();
 	}
@@ -655,6 +748,7 @@ var classList = function(){
 	this.rogue = new RogueAttacks(flist.child);
 	this.warrior = new WarriorAttacks(flist.child);
 	this.summoner = new SummonerAttacks(flist.child);
+	
 
 }
 var cl = new classList();
@@ -685,6 +779,25 @@ var PlayerController = function(){
 	this.fighter = flist.child;
 
 	this.currentCards = [];
+
+	this.handSize = 5;
+
+	this.selectedMoves = [];
+
+	this.doAttack = function(){
+
+		battle.readyToAttack = false;
+
+		for(move in this.selectedMoves){
+			ad.det(this.selectedMoves[move]);
+		}
+		
+		this.selectedMoves = [];
+
+		document.getElementById("attackButtons").innerHTML = "<div id=atb><h1>ATB</h1></div>";
+		this.fighter.bar = new Decimal(0);
+
+	}
 
 }
 
