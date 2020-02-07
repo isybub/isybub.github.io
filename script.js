@@ -238,6 +238,8 @@ var Battle = function(){
 
 	this.readyToAttack = false;
 
+	this.currentEnemy = new Decimal(1);
+
 	this.show = function() {
 		if(this.openable){
 			document.getElementById("mainContainer").style.opacity = "0";
@@ -320,10 +322,10 @@ var Battle = function(){
 
 		disp.innerHTML = "FIGHT";
 
-		pdisp.innerHTML = "<div class=healthbar id=p1health><h2> "+flist["child"].getHP()+" / "+flist["child"].getHP()+" </h2></div>";
+		pdisp.innerHTML += "<div class=healthbar id=p1health onmouseover=\'javascript:battle.displayPlayerInfo()\' onmouseout=\'javascript:battle.hideInfo()\'><h2> "+flist["child"].getHP()+" / "+flist["child"].getHP()+" </h2></div>";
 		document.getElementById("p1health").style.boxShadow = "inset -"+player.fighter.currentHP.divide(player.fighter.getHP()).multiply(300)+"px 0px 0px var(--good)";
 
-		edisp.innerHTML = "<div class=healthbar id=e1health><h2> first enemy </h2></div>";
+		edisp.innerHTML += "<div class=healthbar id=e1health onmouseover=\'javascript:battle.displayEnemyInfo()\' onmouseout=\'javascript:battle.hideInfo()\'><h2> first enemy </h2></div>";
 		edisp.innerHTML += "<div class=atbe id=atbe1></<div>"
 
 		this.happening = true;
@@ -335,7 +337,40 @@ var Battle = function(){
 
 	}
 
+	this.hideInfo = function(){
+		
+		for(i =0; i < document.getElementsByClassName("infoBox").length; i++){
+			document.getElementsByClassName("infoBox")[i].style.opacity = 0;
+		}
+	}
 
+	this.displayEnemyInfo = function(){
+
+		var disp = document.getElementById("EnemyInfo");
+		
+		this.displayInfo(disp,flist.enemy1,"Enemy "+battle.currentEnemy);
+
+	}
+
+	this.displayPlayerInfo = function(){
+		var disp = document.getElementById("PlayerInfo");
+		
+		this.displayInfo(disp,player.fighter,"Player");
+		
+	}
+
+	this.displayInfo = function(disp,f,name){
+		disp.innerHTML = "<h2 style=\'width:300px;\'> "+name+"</h2></p>"+
+						"<p><span> Attack: </span><span>"+ f.baseAttack+"</span></p>"+
+						" <p><span>Defence: </span><span>"+ f.baseDefence+"</span></p>"+
+						" <p><span>Speed: </span><span>"+ f.baseSpeed+"</span></p>"+
+						" <p><span>Health Points: </span><span>"+ f.baseHP+"</span></p>"+
+						" <p><span>Attack Multiplier: </span><span>"+ f.attackMult+"</span></p>"+
+						" <p><span>Defend Multiplier: </span><span>"+ f.defenceMult+"</span></p>"+
+						" <p><span>Speed Multiplier: </span><span>"+ f.speedMult+"</span></p>"+
+						" <p><span>Health Multiplier: </span><span>"+ f.HPMult+"</span></p>";
+		disp.style.opacity = 1;
+	}
 
 	this.update = function(){
 
@@ -509,9 +544,40 @@ var Battle = function(){
 		
 	}
 
+	this.deadPlayer = function(){
+		this.displayDeathScreen();
+	}
+
+	this.deadEnemy = function(){
+		var e = neg.gen(this.currentEnemy);
+		this.currentEnemy = this.currentEnemy.add(1);
+		flist.enemy1 = new Fighter(e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]);
+		flist.selected = flist.enemy1;
+		console.log("ran");
+		bar = document.getElementById("e1health");
+		bar.innerHTML = "<h2>Enemy "+this.currentEnemy+"</h2>";
+		bar.style.boxShadow = "inset -"+flist.selected.currentHP.divide(flist.selected.getHP()).multiply(300)+"px 0px 0px var(--good)";
+	}
+
 	
 
 }
+
+var newEnemyGenerator = function(){
+	this.gen = function(num){
+		var att = num.divide(10).add(1);
+		var def = num.divide(10).add(1);
+		var spd = num.divide(10).add(1);
+		var hp = num.add(20);
+		var attm = new Decimal(0.33);
+		var defm = new Decimal(1);
+		var spdm = new Decimal(1);
+		var hpm = new Decimal(1);
+		return [att,def,spd,hp,attm,defm,spdm,hpm];
+
+	}
+}
+var neg = new newEnemyGenerator();
 
 
 var battle = new Battle();
@@ -542,10 +608,18 @@ var Fighter = function(baseAttack, baseDefence, baseSpeed, baseHP,attackMult,def
 		if(a == player.fighter){
 
 			bar = document.getElementById("p1health");
+			if(a.currentHP.lte(0)){
+				battle.deadPlayer();
+				return;
+			}
 
 		}else{
 
 			bar = document.getElementById("e1health");
+			if(a.currentHP.lte(0.01)){
+				battle.deadEnemy();
+				return;
+			}
 
 		}
 		
