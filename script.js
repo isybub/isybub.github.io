@@ -863,7 +863,8 @@ var attackDeterminer = function(){
 		return cl[player.fighter.nameOfClass].getScript(attackName);
 	}
 
-}
+} 
+var a;
 var ad = new attackDeterminer();
 
 var PlayerController = function(){
