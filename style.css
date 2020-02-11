@@ -15,6 +15,9 @@
 	--yoga5:#80e87e;
 	--yoga6:#79caf7;
 	--yoga7:#ef7bef;
+	--defend:var(--light);
+	--attack:var(--error);
+	--special:var(--good);
 
 }
 
@@ -26,7 +29,6 @@ body{
 	color: var(--white);
 	font-family: 'Open Sans', sans-serif;
 	font-size:1.25em;
-
 	overflow-x: hidden;
 	overflow-y: hidden;
 	max-width: 100%;
@@ -571,7 +573,89 @@ table a{
 	justify-content: space-between;
 }
 #deathScreen{
+	display:flex;
+	align-items: center;
+	justify-content: space-around;
+	flex-wrap: wrap;
+
 	position: absolute;
-	opacity:0;
-	z-index: -1;
+	margin-left:120%;
+	width:100vw;
+	height:100vh;
+	top:0;
+	
+}
+#deathannouncement{
+	width:100%;
+	margin:50px;
+}
+#store{
+	width:500px;
+	height:100%;
+}
+#perktree{
+	width:500px;
+	height:100%;
+}
+#newclass{
+	width:500px;
+	height:100%;
+}
+
+.perk{
+	
+	height:50px;
+	width:50px;
+	margin-left: 34px!important;
+	margin-right:34px!important;
+	border-radius: 100%;
+	border: solid;
+	border-width: 3px;
+	border-color: var(--light);
+	margin:6px;
+	transition: all 0.3s;
+
+
+
+}
+.perkH{
+	
+	display:flex;
+	align-items: center;
+	justify-content: center;
+
+}
+#perkinfo{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	width:500px;
+	
+
+}
+
+#perkinfo h2{
+	width: 100%;;
+}
+.perkAttack{
+	border-color: var(--attack);
+	color:var(--attack);
+}
+.unlockedperk.perkAttack{
+	background-color: var(--attack);
+}
+.perkDefend{
+	border-color: var(--defend);
+	color:var(--defend);
+}
+.unlockedperk.perkDefend{
+	background-color: var(--defend);
+}
+.perkSpecial{
+	border-color: var(--special);
+	color:var(--special);
+}
+.unlockedperk.perkSpecial{
+	background-color: var(--special);
 }

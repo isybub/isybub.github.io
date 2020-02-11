@@ -240,6 +240,8 @@ var Battle = function(){
 
 	this.currentEnemy = new Decimal(1);
 
+	this.previouslySelectedPerk = 0;
+
 	this.show = function() {
 		if(this.openable){
 			document.getElementById("mainContainer").style.opacity = "0";
@@ -500,8 +502,8 @@ var Battle = function(){
 
 		for(i = 0; i < player.currentCards.length; i++){
 
-			additivestring += "<div class=\"attackinslot slotwidth"+ad.detSize(player.currentCards[i])+"\""
-			+" onClick=\"javascript:battle.selectMove(this,\'"+player.currentCards[i]+"\')\"><h3>"+ad.detScript(player.currentCards[i])+"</h3></div>";
+			additivestring += "<div class=\'attackinslot slotwidth"+ad.detSize(player.currentCards[i])+" perk"+ad.detType(player.currentCards[i])+"\'"
+			+" onClick=\"javascript:battle.selectMove(this,\'"+player.currentCards[i]+"\')\"><h3>"+ad.detName(player.currentCards[i])+"</h3></div>";
 
 		}
 
@@ -552,11 +554,94 @@ var Battle = function(){
 	}
 
 	this.deadPlayer = function(){
+		this.happening = false;
+		
 		this.displayDeathScreen();
 	}
 
 	this.displayDeathScreen = function(){
 
+
+
+		/*
+
+		I want the perk tree to look like this
+
+
+					    ◯      ◯
+					◯      ◯      ◯
+				◯      ◯      ◯      ◯
+					◯      ◯      ◯
+						◯      ◯
+						    ◯
+
+
+							middle line being new moves
+							left side being offensive upgrades
+							right side being defensive upgrades
+		*/
+		
+		var perktree = document.getElementById("perktree");
+		var store = document.getElementById("store");
+		var unlocked = cl[player.fighter.nameOfClass].unlocked;
+		perktree.innerHTML = "<h1> Perks </h1>"+
+							"<h2> You have: "+player.perkPoints+" perk points. </h2>";
+		var str = "";
+		for(i=0;i<7;i++){
+			str +="<div class=perkH>";
+			var perk = cl[player.fighter.nameOfClass].perkStructure
+			for(j=0;j<perk[i].length;j++){
+				var unlockedString = "class=\'perk";
+				if(unlocked.includes(perk[i][j])) unlockedString += " unlockedperk";
+				unlockedString += " perk"+ ad.detType(perk[i][j]) + "\'";
+				str += "<div "+unlockedString+" onclick=\'javascript:battle.showperkinfo(this,"+i+","+j+")\'></div>";
+			}
+			str += "</div>";
+		}
+		str += "<div id=perkinfo><h2>Click a perk to view info</h2></div>"
+		perktree.innerHTML += str;
+
+
+		store.innerHTML = "<h1> Store </h1>"+
+						"<h2>You have: $"+player.lootingDollars.toPrecision(3)+" Looting Dollars.";
+
+		
+				
+		document.getElementById("deathScreen").style.marginLeft = "0px";
+		document.getElementById("bigBattlingContainer").style.marginLeft = "-120%";
+		document.getElementById("bigBattlingContainer").style.marginRight = "120%";
+				
+		document.body.scrollTop = 0; // For Safari
+		document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+							
+					
+					
+
+	}
+	this.closeDeathScreen = function(){
+					
+		document.getElementById("deathScreen").style.marginLeft = "120%";
+		document.getElementById("bigBattlingContainer").style.marginLeft = "0px";
+		document.getElementById("bigBattlingContainer").style.marginRight = "120%";
+		
+		document.body.scrollTop = 0; // For Safari
+		document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+	}
+
+	this.showperkinfo = function(el,i,j){
+		var disp = document.getElementById("perkinfo");
+		var cla = cl[player.fighter.nameOfClass]; //class is a protected namespace :(
+		var perk = cla.perkStructure[i][j];
+		disp.innerHTML = "<h2 class=perk"+ad.detType(perk)+">"+ad.detName(perk)+"</h2>"+
+						"<p>"+ad.detScript(perk)+"</p>";
+		
+		el.style.boxShadow = "0px 0px 20px var(--white)"
+		if(this.previouslySelectedPerk!=0){
+			this.previouslySelectedPerk.style.boxShadow = "0px 0px 0px #000";
+		}
+		this.previouslySelectedPerk = el;
+						
 	}
 
 	this.resume = function(){
@@ -577,8 +662,9 @@ var Battle = function(){
 	}
 
 	this.deadEnemy = function(){
-		var e = neg.gen(this.currentEnemy);
+		player.finalizeKill(this.currentEnemy);
 		this.currentEnemy = this.currentEnemy.add(1);
+		var e = neg.gen(this.currentEnemy);
 		flist.enemy1 = new Fighter(e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]);
 		flist.selected = flist.enemy1;
 		
@@ -723,7 +809,7 @@ var Fighter = function(baseAttack, baseDefence, baseSpeed, baseHP,attackMult,def
 }
 var fighterList = function(){
 	
-	var devAttackListPLSremove = ["one","one","one","two","two","two"];
+	var devAttackListPLSremove = ["Attack","Attack","Attack","Defend","Defend","Defend"];
 
 	this.child = new Fighter(1,1,2,20,1,1,1,1);
 	this.child.attackList = devAttackListPLSremove;
@@ -749,26 +835,43 @@ var MageAttacks = function(fighter){
 	this.thunder = 2;
 	this.ice = 3;
 	this.element = this.fire;
-	this.attackSizes = {"one":1,"two":1};
-	this.scripts = {"one":"Weak Attack","two":"Defend"};
+	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
+					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
+					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup2":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup3":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup4":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup5":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"dfup":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup2":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup3":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup4":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup5":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"Special1":{"Name":"Snowstorm","Desc":"Freeze the enemies feet -50% enemy speed","Cost":50,"Size":2,"Type":"Special"},
+					"Special2":{"Name":"Shift","Desc":"Change base element to lightning -50% damage but all attacks hit all enemies. Each lightning strike applies (10% base damage) per turn til death (max 3 stack)","Cost":1000,"Size":2,"Type":"Special"},
+					"Special3":{"Name":"Freezer","Desc":"Enemy frozen. Attacking with fire deals 2.5x damage. And de-frosts the enemy. Otherwise defrosts in 2 turns","Cost":5000,"Size":3,"Type":"Special"},
+					"Special4":{"Name":"Inferno","Desc":"Deals 3x fire damage, takes 2 turns to wind up (7.5x damage if frozen)","Cost":10000,"Size":3,"Type":"Special"}}
+					
 
-	this.attack = function(attackNo){
-		this[attackNo]();
-	}
+	this.perkStructure = [["Attack","Defend"],
+					["atkup","Special1","dfup"],
+					["atkup2","atkup3","dfup2","dfup3"],
+					["atkup4","Special2","dfup4"],
+					["atkup5","dfup5"],
+					["Special3"],
+					["Special4"]];
 
-	this.getAttackSize = function(attackNo){
-		return this.attackSizes[attackNo];
-	}
-	this.getScript = function(attackNo){
-		return this.scripts[attackNo];
-	}
+	this.unlocked = ["Attack","Defend"];
 
+	
 
-	this.one = function(){
+	
+
+	this.Attack = function(){
 		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult));
 	}
 
-	this.two = function(){
+	this.Defend = function(){
 		this.f.defend();
 	}
 
@@ -777,66 +880,126 @@ var MageAttacks = function(fighter){
 
 var RogueAttacks = function(fighter){
 	this.fighter = fighter;
-	this.attackSizes = {"one":1,"two":1};
-	this.scripts = {"one":"Weak Attack","two":"Defend"};
-	this.attack = function(attackNo){
-		this[attackNo]();
+	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
+					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
+					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup2":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup3":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup4":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup5":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"dfup":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup2":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup3":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup4":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup5":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"Special1":{"Name":"Snowstorm","Desc":"Freeze the enemies feet -50% enemy speed","Cost":50,"Size":2,"Type":"Special"},
+					"Special2":{"Name":"Shift","Desc":"Change base element to lightning -50% damage but all attacks hit all enemies. Each lightning strike applies (10% base damage) per turn til death (max 3 stack)","Cost":1000,"Size":2,"Type":"Special"},
+					"Special3":{"Name":"Freezer","Desc":"Enemy frozen. Attacking with fire deals 2.5x damage. And de-frosts the enemy. Otherwise defrosts in 2 turns","Cost":5000,"Size":3,"Type":"Special"},
+					"Special4":{"Name":"Inferno","Desc":"Deals 3x fire damage, takes 2 turns to wind up (7.5x damage if frozen)","Cost":10000,"Size":3,"Type":"Special"}}
+					
+
+	this.perkStructure = [["Attack","Defend"],
+					["atkup","Special1","dfup"],
+					["atkup2","atkup3","dfup2","dfup3"],
+					["atkup4","Special2","dfup4"],
+					["atkup5","dfup5"],
+					["Special3"],
+					["Special4"]];
+
+	this.unlocked = ["Attack","Defend"];
+	
+
+	this.Attack = function(){
+		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult));
 	}
 
-	this.getAttackSize = function(attackNo){
-		return this.attackSizes[attackNo];
-	}
-	this.getScript = function(attackNo){
-		return this.scripts[attackNo];
-	}
-
-	this.one = function(){
-		
+	this.Defend = function(){
+		this.f.defend();
 	}
 }
 
 var WarriorAttacks = function(fighter){
 	this.fighter = fighter;
-	this.attackSizes = {"one":1,"two":1};
-	this.scripts = {"one":"Weak Attack","two":"Defend"};
-	this.attack = function(attackNo){
-		this[attackNo]();
+	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
+					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
+					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup2":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup3":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup4":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup5":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"dfup":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup2":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup3":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup4":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup5":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"Special1":{"Name":"Snowstorm","Desc":"Freeze the enemies feet -50% enemy speed","Cost":50,"Size":2},
+					"Special2":{"Name":"Shift","Desc":"Change base element to lightning -50% damage but all attacks hit all enemies. Each lightning strike applies (10% base damage) per turn til death (max 3 stack)","Cost":1000,"Size":2,"Type":"Special"},
+					"Special3":{"Name":"Freezer","Desc":"Enemy frozen. Attacking with fire deals 2.5x damage. And de-frosts the enemy. Otherwise defrosts in 2 turns","Cost":5000,"Size":3,"Type":"Special"},
+					"Special4":{"Name":"Inferno","Desc":"Deals 3x fire damage, takes 2 turns to wind up (7.5x damage if frozen)","Cost":10000,"Size":3,"Type":"Special"}}
+					
+
+	this.perkStructure = [["Attack","Defend"],
+					["atkup","Special1","dfup"],
+					["atkup2","atkup3","dfup2","dfup3"],
+					["atkup4","Special2","dfup4"],
+					["atkup5","dfup5"],
+					["Special3"],
+					["Special4"]];
+
+	this.unlocked = ["Attack","Defend"];
+	
+
+	
+	this.Attack = function(){
+		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult));
 	}
 
-	this.getAttackSize = function(attackNo){
-		return this.attackSizes[attackNo];
-	}
-
-	this.getScript = function(attackNo){
-		return this.scripts[attackNo];
-	}
-	this.one = function(){
-		
+	this.Defend = function(){
+		this.f.defend();
 	}
 }
 
 var SummonerAttacks = function(fighter){
 	this.fighter = fighter;
-	this.attackSizes = {"one":1,"two":1};
-	this.scripts = {"one":"Weak Attack","two":"Defend"};
+	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
+					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
+					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup2":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup3":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup4":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup5":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"dfup":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup2":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup3":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup4":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup5":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"Special1":{"Name":"Snowstorm","Desc":"Freeze the enemies feet -50% enemy speed","Cost":50,"Size":2},
+					"Special2":{"Name":"Shift","Desc":"Change base element to lightning -50% damage but all attacks hit all enemies. Each lightning strike applies (10% base damage) per turn til death (max 3 stack)","Cost":1000,"Size":2,"Type":"Special"},
+					"Special3":{"Name":"Freezer","Desc":"Enemy frozen. Attacking with fire deals 2.5x damage. And de-frosts the enemy. Otherwise defrosts in 2 turns","Cost":5000,"Size":3,"Type":"Special"},
+					"Special4":{"Name":"Inferno","Desc":"Deals 3x fire damage, takes 2 turns to wind up (7.5x damage if frozen)","Cost":10000,"Size":3,"Type":"Special"}}
+					
+
+	this.perkStructure = [["Attack","Defend"],
+					["atkup","Special1","dfup"],
+					["atkup2","atkup3","dfup2","dfup3"],
+					["atkup4","Special2","dfup4"],
+					["atkup5","dfup5"],
+					["Special3"],
+					["Special4"]];
+
+	this.unlocked = ["Attack","Defend"];
 	this.attack = function(attackNo){
 		this[attackNo]();
 	}
 
-	this.getAttackSize = function(attackNo){
-		return this.attackSizes[attackNo];
+	
+
+	this.Attack = function(){
+		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult));
 	}
 
-	this.getScript = function(attackNo){
-		return this.scripts[attackNo];
-	}
-
-	this.one = function(){
-		
-	}
-
-	this.two = function(){
-
+	this.Defend = function(){
+		this.f.defend();
 	}
 }
 
@@ -853,14 +1016,21 @@ var cl = new classList();
 var attackDeterminer = function(){
 
 	
-	this.det = function(attackNo){
-		cl[player.fighter.nameOfClass].attack(attackNo);
+	this.det = function(attackName){
+		console.log(attackName);
+		cl[player.fighter.nameOfClass][attackName]();
 	}
 	this.detSize = function(attackName){
-		return cl[player.fighter.nameOfClass].getAttackSize(attackName);
+		return cl[player.fighter.nameOfClass].details[attackName]["Size"];
 	}
 	this.detScript = function(attackName){
-		return cl[player.fighter.nameOfClass].getScript(attackName);
+		return cl[player.fighter.nameOfClass].details[attackName]["Desc"];
+	}
+	this.detName = function(attackName){
+		return cl[player.fighter.nameOfClass].details[attackName]["Name"];
+	}
+	this.detType = function(attackName){
+		return cl[player.fighter.nameOfClass].details[attackName]["Type"];
 	}
 
 } 
@@ -872,6 +1042,8 @@ var PlayerController = function(){
 	this.slots = 3;
 
 	this.experience = new Decimal(0);
+
+	this.level = new Decimal(1);
 
 	this.lootingDollars = new Decimal(0);
 
@@ -885,6 +1057,8 @@ var PlayerController = function(){
 
 	this.u = [1,1,2,20,1,1,1,1];
 
+	this.perkPoints = new Decimal(0);
+
 	this.doAttack = function(){
 
 		battle.readyToAttack = false;
@@ -897,6 +1071,26 @@ var PlayerController = function(){
 
 		document.getElementById("attackButtons").innerHTML = "<div id=atb><h1>ATB</h1></div>";
 		this.fighter.bar = new Decimal(0);
+
+	}
+
+	this.levelUp = function(){
+		
+		this.level = this.level.add(1);
+
+		this.perkPoints = this.perkPoints.add(1);
+
+	}
+
+	this.finalizeKill = function(enemylevel){
+		this.experience = this.experience.add(enemylevel.pow(2));
+		this.lootingDollars = this.lootingDollars.add(enemylevel.pow(0.5));
+		this.checkForLevelUp();
+	}
+
+	this.checkForLevelUp = function(){
+
+		if(this.experience.gte(this.level.pow(3))) this.levelUp();
 
 	}
 
