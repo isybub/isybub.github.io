@@ -109,7 +109,7 @@ a:hover{
 #bigmaincontainer{
 	position: relative;
 	transition: all 1s;
-	overflow:hidden;
+	
 }
 #bigLobbyingContainer{
 	width:100%;
@@ -573,12 +573,14 @@ table a{
 	justify-content: space-between;
 }
 #deathScreen{
+
 	display:flex;
 	align-items: center;
 	justify-content: space-around;
 	flex-wrap: wrap;
 
 	position: absolute;
+	
 	margin-left:120%;
 	width:100vw;
 	height:100vh;
@@ -586,22 +588,54 @@ table a{
 	
 }
 #deathannouncement{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	text-align: center;
 	width:100%;
 	margin:50px;
 }
+#deathannouncement p{
+	width:450px;
+}
+#deathannouncement h1{
+	width: 100%;
+}
 #store{
 	width:500px;
-	height:100%;
+	height:50%;
 }
 #perktree{
 	width:500px;
-	height:100%;
+	height:50%;
 }
 #newclass{
+	display: flex;
+	flex-wrap: wrap;
+	
+	justify-content: center;
+	align-content: flex-start;
+	align-items: center;
+
 	width:500px;
-	height:100%;
+	height:50%;
+}
+#mage, #warrior, #summoner, #rogue{
+	border-radius: 12px;
+	border: solid;
+	border-width: 3px;
+	border-color: var(--light);
 }
 
+#goButton{
+	align-self: flex-end;
+}
+#goButton a{
+	
+	background-color: var(--background);
+	border-color: var(--good);
+	color: var(--good);
+}
 .perk{
 	
 	height:50px;
@@ -626,11 +660,12 @@ table a{
 
 }
 #perkinfo{
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: space-between;
+	
+	text-align: center;
+	align-items: center;
+	align-content: center;
 	width:500px;
+	height:150px;
 	
 
 }
@@ -658,4 +693,34 @@ table a{
 }
 .unlockedperk.perkSpecial{
 	background-color: var(--special);
+}
+#howmanyenemiesdefeated{
+	height:10px;
+	display:flex;
+	flex-wrap: column;
+}
+#howmanyenemiesdefeated div{
+	height:9px;
+	width:30px;
+	border-radius: 10px;
+	border:solid;
+	border-color: var(--good);
+	margin:3px;
+
+}
+.undefeated{
+	background-color: var(--background);
+}
+.defeated{
+	background-color: var(--good);
+}
+#storeContents div{
+	margin-top: 40px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+	align-content: center;
+	text-align: center;
 }

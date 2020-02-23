@@ -442,7 +442,12 @@ var iq = new function(){
 		this.points = this.points.add(this.ps.div(tickSpeed).multiply(tickRate));
 
 		if(this.points.gte(this.highestPoints)) this.highestPoints = this.points;
-		if(this.ps.gte(this.highestiqps)) this.highestiqps = this.ps;
+		if(this.ps.gte(this.highestiqps)) {
+			this.highestiqps = this.ps;
+			player.updatePlayerDefaultValues();
+			player.updateCurrentPlayerValues();
+			
+		}
 
 	}
 }

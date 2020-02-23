@@ -217,9 +217,8 @@ function unlockFirstChild(){
 
 
 
-var genericAutobuyer = function(){
 
-}
+
 
 
 
@@ -240,6 +239,8 @@ var Battle = function(){
 
 	this.currentEnemy = new Decimal(1);
 
+	this.fallbackEnemyCount = this.currentEnemy;
+
 	this.previouslySelectedPerk = 0;
 
 	this.show = function() {
@@ -248,7 +249,7 @@ var Battle = function(){
 			document.getElementById("mainContainer").style.zIndex = "-1";
 			document.getElementById("bigBattlingContainer").style.opacity = "1";
 			document.getElementById("bigBattlingContainer").style.zIndex = "1";
-			
+			if(!this.happening) this.displayDeathScreen();
 			document.body.scrollTop = 0; // For Safari
 			document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 
@@ -261,7 +262,7 @@ var Battle = function(){
 			document.getElementById("mainContainer").style.zIndex = "1";
 			document.getElementById("bigBattlingContainer").style.opacity = "0";
 			document.getElementById("bigBattlingContainer").style.zIndex = "-1";
-			
+			this.closeDeathScreen();
 			document.body.scrollTop = 0; // For Safari
 			document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 
@@ -270,18 +271,23 @@ var Battle = function(){
 	}
 
 	this.showFirstScreen = function(){
+		
+		this.show();
 
-		var disp = document.getElementById("middleDisplay");
+		
+	
 
-		var finalString = "<div id=classChoice><p>Choose the class of your first child to go to battle.</p>"+
-							"<a href=\"javascript:battle.chooseFighter(1,\'one\',\'mage\')\">Mage</a>"+
-							"<a href=\"javascript:battle.chooseFighter(1,\'one\',\'rogue\')\">Rogue</a>"+
-							"<a href=\"javascript:battle.chooseFighter(1,\'one\',\'warrior\')\">Warrior</a>"+
-							"<a href=\"javascript:battle.chooseFighter(1,\'one\',\'summoner\')\">Summoner</a></p>";
+		this.displayDeathScreen();
 
+		var disp = document.getElementById("deathannouncement");
+		disp.innerHTML = "<h1> Time for battle. </h1>"+
+						"<p> The government has enlisted your first child to go to battle. "+
+						"You have been given 2 perk points to spend on skills."+
+						" You will fight an oncoming single file line of enemies, one at a time. "+
+						"If *cough*when*cough you die, you will be returned to this screen to improve your child's skill.";
 
-		disp.innerHTML = finalString;
-
+		document.getElementById("battlestuff").innerHTML = 
+		"<a id=takemetobattle href=\"javascript:battle.show()\"> Battle </a>"
 	}
 
 	this.showEnemySelectScreen = function() {
@@ -317,31 +323,46 @@ var Battle = function(){
 
 	}
 
-	this.chooseFighter = function(num,numstr,pclass){
+	this.chooseFighter = function(pclass){
 
 		
-		flist["child"].nameOfClass = pclass;
+		player.fighter.nameOfClass = pclass;
+		
 
 
 		var disp = document.getElementById("middleDisplay");
-
+		
 		var pdisp = document.getElementById("playerDisplay");
 
 		var edisp = document.getElementById("enemyDisplay");
-
+		this.clearBattleDisplay();
+		this.displayEnemyInfo();
+		this.displayPlayerInfo();
 		disp.innerHTML = "FIGHT";
+		
+		disp.innerHTML +="<div id=howmanyenemiesdefeated></div>";
 
-		pdisp.innerHTML += "<div class=healthbar id=p1health onmouseover=\'javascript:battle.displayPlayerInfo()\' onmouseout=\'javascript:battle.hideInfo()\'><h2> "+flist["child"].getHP()+" / "+flist["child"].getHP()+" </h2></div>";
+		var indisp = document.getElementById("howmanyenemiesdefeated");
+
+		for(var i = 0; i < 10; i++){
+			indisp.innerHTML += "<div class=undefeated></div>";
+		}
+
+		pdisp.innerHTML += "<div class=healthbar id=p1health onmouseover=\'javascript:battle.displayPlayerInfo()\' onmouseout=\'javascript:battle.hideInfo()\'><h2> "+player.fighter.getHP()+" / "+player.fighter.getHP()+" </h2></div>";
 		document.getElementById("p1health").style.boxShadow = "inset -"+player.fighter.currentHP.divide(player.fighter.getHP()).multiply(300)+"px 0px 0px var(--good)";
 
 		edisp.innerHTML += "<div class=healthbar id=e1health onmouseover=\'javascript:battle.displayEnemyInfo()\' onmouseout=\'javascript:battle.hideInfo()\'><h2> first enemy </h2></div>";
 		edisp.innerHTML += "<div class=atbe id=atbe1></<div>"
+		player.fighter.bar = new Decimal(0);
 
 		this.happening = true;
 
 		this.playerCount = 1;
 
 		this.enemyCount = 1;
+
+
+		this.closeDeathScreen();
 
 
 	}
@@ -472,8 +493,8 @@ var Battle = function(){
 		
 		for(i = 0; i < player.handSize; i++){
 
-			var chance = Math.random()*player.fighter.attackList.length;
-			var att = player.fighter.attackList[Math.floor(chance)];
+			var chance = Math.random()*cl[player.fighter.nameOfClass].unlocked.length;
+			var att = cl[player.fighter.nameOfClass].unlocked[Math.floor(chance)];
 			cardList.push(att);
 
 		}
@@ -555,7 +576,7 @@ var Battle = function(){
 
 	this.deadPlayer = function(){
 		this.happening = false;
-		
+		document.getElementById("deathannouncement").innerHTML = "<h1> You have died.</h1>";
 		this.displayDeathScreen();
 	}
 
@@ -581,8 +602,64 @@ var Battle = function(){
 							right side being defensive upgrades
 		*/
 		
-		var perktree = document.getElementById("perktree");
+		
 		var store = document.getElementById("store");
+		var newclass = document.getElementById("newclass");
+		this.populatePerkSection();
+		newclass.innerHTML = "<div id=classChoice><p>Choose the class of your first child to go to battle.</p>"+
+		"<a id=mage href=\"javascript:battle.readyUp(\'mage\')\">Mage</a>"+
+		"<a id=rogue href=\"javascript:battle.readyUp(\'rogue\')\">Rogue</a>"+
+		"<a id=warrior href=\"javascript:battle.readyUp(\'warrior\')\">Warrior</a>"+
+		"<a id=summoner href=\"javascript:battle.readyUp(\'summoner\')\">Summoner</a></p><div id=goButton></div>";
+		var currbut = document.getElementById(player.fighter.nameOfClass);
+		
+		
+		currbut.style.backgroundColor = "var(--background)";
+		
+		currbut.style.color = "var(--white)";
+		
+
+
+		store.innerHTML = "<div id=titleofStore><h1> Store </h1>"+
+						"<h2>You have: $"+player.lootingDollars.toPrecision(3)+" Looting Dollars.</div>";
+		store.innerHTML += "<div id=storeContents></div>";
+		var instore = document.getElementById("storeContents");
+
+		instore.innerHTML += "<div id=increaseIQAllocationToAttack>"+
+		
+							"<p>Increase the value of &xscr; for the \'Knowledge\' perk by 1.2x<br />"+
+							"Attack multiplier: <br /> <span id=morespecificattackmultiplierafterhighestiqps></span>"+
+							"</span> = <span id=mediumspecificattackmultiplierafterhighestiqps></span>"+
+							" = </p><h2><span id=attackmultiplierafterhighestiqps> </span>"+
+							"</h2><a href=\'javascript:player.increaseIQAllocationToAttack()\'>$1.00</a>";
+		player.updateattackIQAllocVisuals();
+
+		instore.innerHTML += "<div id=increaseLootingDollarsGain>"+
+							"<p> Multiplies strength of perk 6 by x2 each purchase.<br /> "+
+							"Currently: <span id=lootingDollarsIncrease>1</span>x</p>"+
+							"<a href=\'javascript:player.increaseLootingDollars()\'>$1.00</a>";
+
+		instore.innerHTML += "<div id=increaseHP>"+
+							"<p> Multiplies strength of perk 9 by x2 each purchase.<br /> "+
+							"Currently: <span id=HPIncrease>1</span>x</p>"+
+							"<a href=\'javascript:player.increaseHP()\'>$1.00</a>";
+
+		
+				
+		document.getElementById("deathScreen").style.marginLeft = "0px";
+		document.getElementById("bigBattlingContainer").style.marginLeft = "-120%";
+		document.getElementById("bigBattlingContainer").style.marginRight = "120%";
+				
+		document.body.scrollTop = 0; // For Safari
+		document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+		this.readyUp('mage');
+							
+					
+					
+
+	}
+	this.populatePerkSection = function(){
+		var perktree = document.getElementById("perktree");
 		var unlocked = cl[player.fighter.nameOfClass].unlocked;
 		perktree.innerHTML = "<h1> Perks </h1>"+
 							"<h2> You have: "+player.perkPoints+" perk points. </h2>";
@@ -600,22 +677,24 @@ var Battle = function(){
 		}
 		str += "<div id=perkinfo><h2>Click a perk to view info</h2></div>"
 		perktree.innerHTML += str;
+	}
 
-
-		store.innerHTML = "<h1> Store </h1>"+
-						"<h2>You have: $"+player.lootingDollars.toPrecision(3)+" Looting Dollars.";
+	this.readyUp = function(pclass){
+		var prevbut = document.getElementById(player.fighter.nameOfClass);
+		player.fighter.nameOfClass = pclass;
+		var currbut = document.getElementById(pclass);
+		prevbut.style.backgroundColor = "var(--light)";
+		currbut.style.backgroundColor = "var(--background)";
+		prevbut.style.color = "var(--background)";
+		currbut.style.color = "var(--white)";
+		var but = document.getElementById("goButton");
+		if(cl[player.fighter.nameOfClass].unlocked.includes("Attack","Defend")){
+			but.innerHTML = "<a href=\"javascript:battle.resume()\">Go!</a>"
+		}else{
+			but.innerHTML = "You must unlock the first two perks for this class in order to fight!";
+		}
 
 		
-				
-		document.getElementById("deathScreen").style.marginLeft = "0px";
-		document.getElementById("bigBattlingContainer").style.marginLeft = "-120%";
-		document.getElementById("bigBattlingContainer").style.marginRight = "120%";
-				
-		document.body.scrollTop = 0; // For Safari
-		document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-							
-					
-					
 
 	}
 	this.closeDeathScreen = function(){
@@ -634,7 +713,9 @@ var Battle = function(){
 		var cla = cl[player.fighter.nameOfClass]; //class is a protected namespace :(
 		var perk = cla.perkStructure[i][j];
 		disp.innerHTML = "<h2 class=perk"+ad.detType(perk)+">"+ad.detName(perk)+"</h2>"+
-						"<p>"+ad.detScript(perk)+"</p>";
+						"<h3>"+ad.detCost(perk)+" perk points</h3>"+
+						"<p>"+ad.detScript(perk)+"</p>"+
+						"<a href=javascript:battle.buyperk(\'"+perk+"\')>Buy</a>";
 		
 		el.style.boxShadow = "0px 0px 20px var(--white)"
 		if(this.previouslySelectedPerk!=0){
@@ -643,16 +724,37 @@ var Battle = function(){
 		this.previouslySelectedPerk = el;
 						
 	}
+	this.buyperk = function(perk){
+		if(player.perkPoints.gte(ad.detCost(perk))){
 
+			player.perkPoints = player.perkPoints.minus(ad.detCost(perk));
+			cl[player.fighter.nameOfClass].unlocked.push(perk);
+			player.fighter.attackList.push(perk);
+			this.populatePerkSection();
+			var but = document.getElementById("goButton");
+			if(cl[player.fighter.nameOfClass].unlocked.includes("Attack","Defend")){
+				but.innerHTML = "<a href=\"javascript:battle.resume()\">Go!</a>"
+			}else{
+				but.innerHTML = "You must unlock the first two perks for this class in order to fight!";
+			}
+
+		}
+	}
 	this.resume = function(){
 		disp = document.getElementById("attackButtons");
 		disp.innerHTML = "<div id=atb><h1>ATB</h1></div>";
 		
 		var u = player.u;
+		var pclass = player.fighter.nameOfClass;
 		player.fighter = new Fighter(u[0],u[1],u[2],u[3],u[4],u[5],u[6],u[7]);
+		player.fighter.nameOfClass = pclass;
+		
+		var e = neg.gen(this.fallbackEnemyCount);
+		flist.enemy1 = new Fighter(e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]);
+		flist.selected = flist.enemy1;
 
 		this.clearBattleDisplay();
-		this.chooseFighter(1,"one",player.fighter.nameOfClass);
+		this.chooseFighter(player.fighter.nameOfClass);
 	}
 
 	this.clearBattleDisplay = function(){
@@ -668,6 +770,14 @@ var Battle = function(){
 		flist.enemy1 = new Fighter(e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]);
 		flist.selected = flist.enemy1;
 		
+		document.getElementsByClassName("undefeated")[0].className = "defeated";
+		if(document.getElementsByClassName("undefeated").length==0){
+			while(document.getElementsByClassName("defeated").length > 0){
+				document.getElementsByClassName("defeated")[0].className = "undefeated";
+				this.fallbackEnemyCount = this.currentEnemy;
+			}
+		}
+		
 		bar = document.getElementById("e1health");
 		bar.innerHTML = "<h2>Enemy "+this.currentEnemy+"</h2>";
 		bar.style.boxShadow = "inset -"+flist.selected.currentHP.divide(flist.selected.getHP()).multiply(300)+"px 0px 0px var(--good)";
@@ -677,21 +787,6 @@ var Battle = function(){
 
 }
 
-var newEnemyGenerator = function(){
-	this.gen = function(num){
-		var att = num.divide(10).add(1).pow(2);
-		var def = num.divide(10).add(1).pow(2);
-		var spd = num.divide(10).add(1).pow(2);
-		var hp = num.add(2).pow(2);
-		var attm = new Decimal(1);
-		var defm = new Decimal(1);
-		var spdm = new Decimal(1);
-		var hpm = new Decimal(1);
-		return [att,def,spd,hp,attm,defm,spdm,hpm];
-
-	}
-}
-var neg = new newEnemyGenerator();
 
 
 var battle = new Battle();
@@ -705,17 +800,17 @@ var Fighter = function(baseAttack, baseDefence, baseSpeed, baseHP,attackMult,def
 	this.defenceMult = new Decimal(defenceMult);
 	this.speedMult = new Decimal(speedMult);
 	this.HPMult = new Decimal(HPMult);
-	this.currentHP = new Decimal(baseHP);
+	this.currentHP = new Decimal(baseHP).multiply(HPMult);
 	this.defenceWillResetAtStartOfTurn = true;
 	this.bar = new Decimal(0);
 	this.chargeStart = new Decimal(0);
 	this.attackList = [];
-	this.nameOfClass = "Mage";
+	this.nameOfClass = "mage";
 
 
-	this.dealDamage = function(damage){
+	this.dealDamage = function(damage, a){
 
-		var a = flist.selected;
+		
 
 		a.currentHP = a.currentHP.minus(damage.divide(a.baseDefence.multiply(a.defenceMult)));
 		var bar;
@@ -739,20 +834,24 @@ var Fighter = function(baseAttack, baseDefence, baseSpeed, baseHP,attackMult,def
 		
 		bar.innerHTML = "<h2>"+a.currentHP.toPrecision(3) + " / " + a.getHP().toPrecision(3)+"</h2>";
 		bar.style.boxShadow = "inset -"+a.currentHP.divide(a.getHP()).multiply(300)+"px 0px 0px var(--good)";
+		
 		if(a.defenceMult.gt(1)) {
+			
 			a.defenceMult = new Decimal(1);
 			bar.style.borderColor = "var(--good)";
 		}
 
 	}
-	this.defend = function(){
-		this.defenceMult = this.defenceMult.multiply(1.2);
+	this.defend = function(playertru){
 		var bar;
-		if(this == player.fighter){
-
+		
+		if(playertru){
+			player.fighter.defenceMult = player.fighter.defenceMult.multiply(1.2);
 			bar = document.getElementById("p1health");
 
 		}else{
+
+			this.defenceMult = this.defenceMult.multiply(1.2);
 
 			bar = document.getElementById("e1health");
 
@@ -777,17 +876,11 @@ var Fighter = function(baseAttack, baseDefence, baseSpeed, baseHP,attackMult,def
 		}
 
 		if(this.bar.equals(1)){
-
-			var prevsel = flist.selected;
-
-			flist.selected = player.fighter;
+			
+			
+			this.dealDamage(new Decimal(this.baseAttack.multiply(this.attackMult)),player.fighter);
 
 			
-			this.dealDamage(new Decimal(this.baseAttack.multiply(this.attackMult)));
-
-			
-
-			flist.selected = prevsel;
 
 			this.bar = new Decimal(0);
 		}
@@ -811,11 +904,9 @@ var fighterList = function(){
 	
 	var devAttackListPLSremove = ["Attack","Attack","Attack","Defend","Defend","Defend"];
 
-	this.child = new Fighter(1,1,2,20,1,1,1,1);
-	this.child.attackList = devAttackListPLSremove;
 
-	var e = neg.gen(new Decimal(0));
-	this.enemy1 = new Fighter(e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7]);
+	//var e = neg.gen(new Decimal(0));
+	this.enemy1 = new Fighter(1,1,1,4,1,1,1,1);
 	this.enemy1.attackList = devAttackListPLSremove; 
 	
 	
@@ -837,7 +928,7 @@ var MageAttacks = function(fighter){
 	this.element = this.fire;
 	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
 					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
-					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by &#119910;<sup>(1 - 1/&xscr;)</sup><br /> &xscr;: Increase in the store. <br />&#119910;: Highest IQ points per second.","Cost":10,"Type":"Attack"},
 					"atkup2":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
 					"atkup3":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
 					"atkup4":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
@@ -861,25 +952,25 @@ var MageAttacks = function(fighter){
 					["Special3"],
 					["Special4"]];
 
-	this.unlocked = ["Attack","Defend"];
+	this.unlocked = [];
 
 	
 
 	
 
 	this.Attack = function(){
-		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult));
+		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult),flist.selected);
 	}
 
 	this.Defend = function(){
-		this.f.defend();
+		this.f.defend(true);
 	}
 
 
 }
 
 var RogueAttacks = function(fighter){
-	this.fighter = fighter;
+	this.f = fighter;
 	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
 					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
 					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
@@ -906,20 +997,20 @@ var RogueAttacks = function(fighter){
 					["Special3"],
 					["Special4"]];
 
-	this.unlocked = ["Attack","Defend"];
+	this.unlocked = [];
 	
 
 	this.Attack = function(){
-		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult));
+		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult),flist.selected);
 	}
 
 	this.Defend = function(){
-		this.f.defend();
+		this.f.defend(true);
 	}
 }
 
 var WarriorAttacks = function(fighter){
-	this.fighter = fighter;
+	this.f = fighter;
 	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
 					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
 					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
@@ -932,7 +1023,7 @@ var WarriorAttacks = function(fighter){
 					"dfup3":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
 					"dfup4":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
 					"dfup5":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
-					"Special1":{"Name":"Snowstorm","Desc":"Freeze the enemies feet -50% enemy speed","Cost":50,"Size":2},
+					"Special1":{"Name":"Snowstorm","Desc":"Freeze the enemies feet -50% enemy speed","Cost":50,"Size":2,"Type":"Special"},
 					"Special2":{"Name":"Shift","Desc":"Change base element to lightning -50% damage but all attacks hit all enemies. Each lightning strike applies (10% base damage) per turn til death (max 3 stack)","Cost":1000,"Size":2,"Type":"Special"},
 					"Special3":{"Name":"Freezer","Desc":"Enemy frozen. Attacking with fire deals 2.5x damage. And de-frosts the enemy. Otherwise defrosts in 2 turns","Cost":5000,"Size":3,"Type":"Special"},
 					"Special4":{"Name":"Inferno","Desc":"Deals 3x fire damage, takes 2 turns to wind up (7.5x damage if frozen)","Cost":10000,"Size":3,"Type":"Special"}}
@@ -946,21 +1037,21 @@ var WarriorAttacks = function(fighter){
 					["Special3"],
 					["Special4"]];
 
-	this.unlocked = ["Attack","Defend"];
+	this.unlocked = [];
 	
 
 	
 	this.Attack = function(){
-		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult));
+		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult),flist.selected);
 	}
 
 	this.Defend = function(){
-		this.f.defend();
+		this.f.defend(true);
 	}
 }
 
 var SummonerAttacks = function(fighter){
-	this.fighter = fighter;
+	this.f = fighter;
 	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
 					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
 					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
@@ -973,7 +1064,7 @@ var SummonerAttacks = function(fighter){
 					"dfup3":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
 					"dfup4":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
 					"dfup5":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
-					"Special1":{"Name":"Snowstorm","Desc":"Freeze the enemies feet -50% enemy speed","Cost":50,"Size":2},
+					"Special1":{"Name":"Snowstorm","Desc":"Freeze the enemies feet -50% enemy speed","Cost":50,"Size":2,"Type":"Special"},
 					"Special2":{"Name":"Shift","Desc":"Change base element to lightning -50% damage but all attacks hit all enemies. Each lightning strike applies (10% base damage) per turn til death (max 3 stack)","Cost":1000,"Size":2,"Type":"Special"},
 					"Special3":{"Name":"Freezer","Desc":"Enemy frozen. Attacking with fire deals 2.5x damage. And de-frosts the enemy. Otherwise defrosts in 2 turns","Cost":5000,"Size":3,"Type":"Special"},
 					"Special4":{"Name":"Inferno","Desc":"Deals 3x fire damage, takes 2 turns to wind up (7.5x damage if frozen)","Cost":10000,"Size":3,"Type":"Special"}}
@@ -987,7 +1078,7 @@ var SummonerAttacks = function(fighter){
 					["Special3"],
 					["Special4"]];
 
-	this.unlocked = ["Attack","Defend"];
+	this.unlocked = [];
 	this.attack = function(attackNo){
 		this[attackNo]();
 	}
@@ -995,24 +1086,14 @@ var SummonerAttacks = function(fighter){
 	
 
 	this.Attack = function(){
-		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult));
+		this.f.dealDamage(this.f.baseAttack.multiply(this.f.attackMult),flist.selected);
 	}
 
 	this.Defend = function(){
-		this.f.defend();
+		this.f.defend(true);
 	}
 }
 
-var classList = function(){
-
-	this.mage = new MageAttacks(flist.child);
-	this.rogue = new RogueAttacks(flist.child);
-	this.warrior = new WarriorAttacks(flist.child);
-	this.summoner = new SummonerAttacks(flist.child);
-	
-
-}
-var cl = new classList();
 var attackDeterminer = function(){
 
 	
@@ -1032,12 +1113,16 @@ var attackDeterminer = function(){
 	this.detType = function(attackName){
 		return cl[player.fighter.nameOfClass].details[attackName]["Type"];
 	}
+	this.detCost = function(attackName){
+		return cl[player.fighter.nameOfClass].details[attackName]["Cost"];
+
+	}
 
 } 
 var a;
 var ad = new attackDeterminer();
 
-var PlayerController = function(){
+var player = new function(){
 
 	this.slots = 3;
 
@@ -1047,17 +1132,32 @@ var PlayerController = function(){
 
 	this.lootingDollars = new Decimal(0);
 
-	this.fighter = flist.child;
-
+	this.fighter = new Fighter(1,1,2,20,1,1,1,1);
+	
 	this.currentCards = [];
 
 	this.handSize = 5;
 
 	this.selectedMoves = [];
 
-	this.u = [1,1,2,20,1,1,1,1];
+	
+	var baseatk = new Decimal(1);
+	var basedf = new Decimal(1);
+	var basespd = new Decimal(2);
+	var basehp = new Decimal(20);
+	var atkmult = new Decimal(1);
+	var dfmult = new Decimal(1);
+	var spdmult = new Decimal(1);
+	var hpmult = new Decimal(1);
 
-	this.perkPoints = new Decimal(0);
+	this.u = [baseatk,basedf,basespd,basehp,atkmult,dfmult,spdmult,hpmult];
+
+	this.highestIQPowToAttack = new Decimal(0);
+	this.knowledgePerkValueForx = new Decimal(1);
+
+	this.enemySpeedReduction = new Decimal(1);
+
+	this.perkPoints = new Decimal(2);
 
 	this.doAttack = function(){
 
@@ -1094,14 +1194,79 @@ var PlayerController = function(){
 
 	}
 
+	this.increaseIQAllocationToAttack = function(){
+
+		this.knowledgePerkValueForx = this.knowledgePerkValueForx.multiply(1.2);
+		this.highestIQPowToAttack = new Decimal(1).minus(new Decimal(1).divide(this.knowledgePerkValueForx));
+		this.updatePlayerDefaultValues();
+		this.updateCurrentPlayerValues();
+		this.updateattackIQAllocVisuals();
+
+		
+	}
+	this.updateattackIQAllocVisuals = function(){
+
+		if(this.knowledgePerkValueForx.gte(1500)){
+
+			document.getElementById("increaseIQAllocationToAttack").innerHTML = "Sold Out! <br /> Attack Multiplier: <br /> <h2><span id=attackmultiplierafterhighestiqps>"+this.fighter.baseAttack.toPrecision(3)+"</span>";
+		
+		}else{
+
+			document.getElementById("morespecificattackmultiplierafterhighestiqps").innerHTML = iq.highestiqps+"<sup>(1 - 1/"+this.knowledgePerkValueForx.toPrecision(3)+")</sup>";
+			document.getElementById("mediumspecificattackmultiplierafterhighestiqps").innerHTML = iq.highestiqps+"<sup>"+this.highestIQPowToAttack.toPrecision(3)+"</sup></span>";
+			document.getElementById("attackmultiplierafterhighestiqps").innerHTML = this.fighter.baseAttack.toPrecision(3);
+
+		}
+	}
+	this.updatePlayerDefaultValues = function(){
+		this.u[0] = new Decimal(1).multiply(iq.highestiqps.pow(this.highestIQPowToAttack));
+	}
+
+	this.updateCurrentPlayerValues = function(){
+		var i = 0;
+		var inneru = this.u;
+		Object.keys(player.fighter).forEach(function(c){
+
+			if(i<8) {
+				player.fighter[c] = inneru[i++];
+
+			}
+		});
+	}
+	
 }
 
-var player = new PlayerController();
+
+
+var newEnemyGenerator = function(){
+	this.gen = function(num){
+		var att = num.divide(10).add(1).pow(2);
+		var def = num.divide(10).add(1).pow(2);
+		var spd = num.divide(10).add(1).pow(2).multiply(player.enemySpeedReduction);
+		var hp = num.add(2).pow(2);
+		var attm = new Decimal(1);
+		var defm = new Decimal(1);
+		var spdm = new Decimal(1);
+		var hpm = new Decimal(1);
+		return [att,def,spd,hp,attm,defm,spdm,hpm];
+
+	}
+}
+var neg = new newEnemyGenerator();
 
 
 
 
+var classList = function(){
 
+	this.mage = new MageAttacks(player.fighter);
+	this.rogue = new RogueAttacks(player.fighter);
+	this.warrior = new WarriorAttacks(player.fighter);
+	this.summoner = new SummonerAttacks(player.fighter);
+	
+
+}
+var cl = new classList();
 
 var playerTurn = function(){
 
