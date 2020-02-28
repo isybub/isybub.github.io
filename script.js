@@ -243,6 +243,8 @@ var Battle = function(){
 
 	this.previouslySelectedPerk = 0;
 
+	this.currentperkStruct = [0,0];
+
 	this.show = function() {
 		if(this.openable){
 			document.getElementById("mainContainer").style.opacity = "0";
@@ -338,7 +340,8 @@ var Battle = function(){
 		this.clearBattleDisplay();
 		this.displayEnemyInfo();
 		this.displayPlayerInfo();
-		disp.innerHTML = "FIGHT";
+		this.hideInfoCards();
+		disp.innerHTML = "<h2>FIGHT</h2>";
 		
 		disp.innerHTML +="<div id=howmanyenemiesdefeated></div>";
 
@@ -361,6 +364,7 @@ var Battle = function(){
 
 		this.enemyCount = 1;
 
+		this.isAPerkSelected = false;
 
 		this.closeDeathScreen();
 
@@ -400,6 +404,10 @@ var Battle = function(){
 						" <p><span>Speed Multiplier: </span><span>"+ f.speedMult.toPrecision(3)+"</span></p>"+
 						" <p><span>Health Multiplier: </span><span>"+ f.HPMult.toPrecision(3)+"</span></p>";
 		disp.style.opacity = 1;
+	}
+	this.hideInfoCards = function(){
+		document.getElementsByClassName("infoBox")[0].style.opacity = 0;
+		document.getElementsByClassName("infoBox")[1].style.opacity = 0;
 	}
 
 	this.update = function(){
@@ -576,6 +584,8 @@ var Battle = function(){
 
 	this.deadPlayer = function(){
 		this.happening = false;
+		this.currentEnemy = this.fallbackEnemyCount;
+		player.selectedMoves = [];
 		document.getElementById("deathannouncement").innerHTML = "<h1> You have died.</h1>";
 		this.displayDeathScreen();
 	}
@@ -621,7 +631,7 @@ var Battle = function(){
 
 
 		store.innerHTML = "<div id=titleofStore><h1> Store </h1>"+
-						"<h2>You have: $"+player.lootingDollars.toPrecision(3)+" Looting Dollars.</div>";
+						"<h2>You have: $<span id=lootingDollarsAmount>"+player.lootingDollars.toPrecision(3)+"</span> Looting Dollars.</div>";
 		store.innerHTML += "<div id=storeContents></div>";
 		var instore = document.getElementById("storeContents");
 
@@ -631,14 +641,17 @@ var Battle = function(){
 							"Attack multiplier: <br /> <span id=morespecificattackmultiplierafterhighestiqps></span>"+
 							"</span> = <span id=mediumspecificattackmultiplierafterhighestiqps></span>"+
 							" = </p><h2><span id=attackmultiplierafterhighestiqps> </span>"+
-							"</h2><a href=\'javascript:player.increaseIQAllocationToAttack()\'>$1.00</a>";
+							"</h2><a id=buybuttonforattackIQ href=\'javascript:player.increaseIQAllocationToAttack()\'>$1.00</a>";
 		player.updateattackIQAllocVisuals();
 
-		instore.innerHTML += "<div id=increaseLootingDollarsGain>"+
-							"<p> Multiplies strength of perk 6 by x2 each purchase.<br /> "+
-							"Currently: <span id=lootingDollarsIncrease>1</span>x</p>"+
-							"<a href=\'javascript:player.increaseLootingDollars()\'>$1.00</a>";
-
+		instore.innerHTML += "<div id=increaseIQAllocationToDefence>"+
+		
+							"<p>Increase the value of &xscr; for the \'Tactics\' perk by 1.2x<br />"+
+							"Defence multiplier: <br /> <span id=morespecificdefencemultiplierafterhighestiqps></span>"+
+							"</span> = <span id=mediumspecificdefencemultiplierafterhighestiqps></span>"+
+							" = </p><h2><span id=defencemultiplierafterhighestiqps> </span>"+
+							"</h2><a id=buybuttonfordefenceIQ href=\'javascript:player.increaseIQAllocationToDefence()\'>$1.00</a>";
+		player.updatedefenceIQAllocVisuals();
 		instore.innerHTML += "<div id=increaseHP>"+
 							"<p> Multiplies strength of perk 9 by x2 each purchase.<br /> "+
 							"Currently: <span id=HPIncrease>1</span>x</p>"+
@@ -688,10 +701,16 @@ var Battle = function(){
 		prevbut.style.color = "var(--background)";
 		currbut.style.color = "var(--white)";
 		var but = document.getElementById("goButton");
-		if(cl[player.fighter.nameOfClass].unlocked.includes("Attack","Defend")){
+		if(cl[player.fighter.nameOfClass].unlocked.includes("Attack")
+									&&
+		cl[player.fighter.nameOfClass].unlocked.includes("Defend")){
 			but.innerHTML = "<a href=\"javascript:battle.resume()\">Go!</a>"
 		}else{
 			but.innerHTML = "You must unlock the first two perks for this class in order to fight!";
+		}
+		this.populatePerkSection();
+		if(this.isAPerkSelected) {
+			this.showperkinfo(this.previouslySelectedPerk,this.currentperkStruct[0],this.currentperkStruct[1]);
 		}
 
 		
@@ -714,14 +733,20 @@ var Battle = function(){
 		var perk = cla.perkStructure[i][j];
 		disp.innerHTML = "<h2 class=perk"+ad.detType(perk)+">"+ad.detName(perk)+"</h2>"+
 						"<h3>"+ad.detCost(perk)+" perk points</h3>"+
-						"<p>"+ad.detScript(perk)+"</p>"+
-						"<a href=javascript:battle.buyperk(\'"+perk+"\')>Buy</a>";
+						"<p>"+ad.detScript(perk)+"</p>";
+						if(!cla.unlocked.includes(perk)){
+
+							disp.innerHTML+= "<a href=javascript:battle.buyperk(\'"+perk+"\')>Buy</a>";
+
+						}
 		
 		el.style.boxShadow = "0px 0px 20px var(--white)"
+		this.currentperkStruct = [i,j];
 		if(this.previouslySelectedPerk!=0){
 			this.previouslySelectedPerk.style.boxShadow = "0px 0px 0px #000";
 		}
 		this.previouslySelectedPerk = el;
+		this.isAPerkSelected = true;
 						
 	}
 	this.buyperk = function(perk){
@@ -774,6 +799,7 @@ var Battle = function(){
 		if(document.getElementsByClassName("undefeated").length==0){
 			while(document.getElementsByClassName("defeated").length > 0){
 				document.getElementsByClassName("defeated")[0].className = "undefeated";
+				console.log("ho");
 				this.fallbackEnemyCount = this.currentEnemy;
 			}
 		}
@@ -811,8 +837,9 @@ var Fighter = function(baseAttack, baseDefence, baseSpeed, baseHP,attackMult,def
 	this.dealDamage = function(damage, a){
 
 		
-
+		console.log(a.currentHP);
 		a.currentHP = a.currentHP.minus(damage.divide(a.baseDefence.multiply(a.defenceMult)));
+		console.log(a.currentHP);
 		var bar;
 		if(a == player.fighter){
 
@@ -928,12 +955,12 @@ var MageAttacks = function(fighter){
 	this.element = this.fire;
 	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
 					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
-					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by &#119910;<sup>(1 - 1/&xscr;)</sup><br /> &xscr;: Increase in the store. <br />&#119910;: Highest IQ points per second.","Cost":10,"Type":"Attack"},
+					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your <span class=perkAttack>attack</span> by &#119910;<sup>(1 - 1/&xscr;)</sup><br /> &xscr;: Increase in the store. <br />&#119910;: Highest IQ points per second.","Cost":10,"Type":"Attack"},
 					"atkup2":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
 					"atkup3":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
 					"atkup4":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
 					"atkup5":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
-					"dfup":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
+					"dfup":{"Name":"Tactics","Desc":"You spend some time studying battle. Increases your <span class=perkDefend>defensive effectiveness</span> by &#119910;<sup>(1 - 1/&xscr;)</sup><br /> &xscr;: Increase in the store. <br />&#119910;: Highest IQ points per second.","Cost":10,"Type":"Defend"},
 					"dfup2":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
 					"dfup3":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
 					"dfup4":{"Name":"Tactics","Desc":"After spending some time in battle, you begin to further understand how to position yourself, to reduce in coming damage by x","Cost":10,"Type":"Defend"},
@@ -973,7 +1000,7 @@ var RogueAttacks = function(fighter){
 	this.f = fighter;
 	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
 					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
-					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by &#119910;<sup>(1 - 1/&xscr;)</sup><br /> &xscr;: Increase in the store. <br />&#119910;: Highest IQ points per second.","Cost":10,"Type":"Attack"},
 					"atkup2":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
 					"atkup3":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
 					"atkup4":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
@@ -1013,7 +1040,7 @@ var WarriorAttacks = function(fighter){
 	this.f = fighter;
 	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
 					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
-					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by &#119910;<sup>(1 - 1/&xscr;)</sup><br /> &xscr;: Increase in the store. <br />&#119910;: Highest IQ points per second.","Cost":10,"Type":"Attack"},
 					"atkup2":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
 					"atkup3":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
 					"atkup4":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
@@ -1054,7 +1081,7 @@ var SummonerAttacks = function(fighter){
 	this.f = fighter;
 	this.details = {"Attack":{"Name":"Fireball","Desc":"A small but pure concentration of energy, taking the form of fire. Deals base damage.","Cost":1,"Size":1,"Type":"Attack"},
 					"Defend":{"Name":"Barrier","Desc":"Concentrated energy disrupting any incoming attacks, reducing damage taken by 1.2x per barrier.","Cost":1,"Size":1,"Type":"Defend"},
-					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
+					"atkup":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by &#119910;<sup>(1 - 1/&xscr;)</sup><br /> &xscr;: Increase in the store. <br />&#119910;: Highest IQ points per second.","Cost":10,"Type":"Attack"},
 					"atkup2":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
 					"atkup3":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
 					"atkup4":{"Name":"Knowledge","Desc":"You spend some time studying energy. Increases your attack by x","Cost":10,"Type":"Attack"},
@@ -1122,6 +1149,57 @@ var attackDeterminer = function(){
 var a;
 var ad = new attackDeterminer();
 
+var storePurchasable = function(baseCost,baseMult,costIncrease,multIncrease, level){
+
+	this.baseCost = new Decimal(baseCost);
+	this.currentCost = new Decimal(baseCost);
+	this.baseMult = new Decimal(baseMult);
+	this.currentMult = new Decimal(baseMult);
+	this.costIncrease = new Decimal(costIncrease);
+	this.multIncrease = new Decimal(multIncrease);
+	this.currentLevel = new Decimal(level);
+	this.multipliedByHighestIQ = new Decimal(1);
+	
+
+	this.purchase = function(){
+		
+
+		this.currentLevel = this.currentLevel.add(1);
+
+		this.setMult(this.currentLevel);
+		
+		player.lootingDollars = player.lootingDollars.minus(this.getCost());
+
+		this.setCost(this.currentLevel);
+
+		this.multipliedByHighestIQ = new Decimal(1).multiply(iq.highestiqps.pow(this.getCurrentMultiplier));
+		
+
+
+	}
+	this.getCurrentMultiplier = function(){
+		return new Decimal(1).minus(new Decimal(1).divide(this.currentMult));
+	}
+	
+	this.setMult = function(givenLevel){
+		this.currentMult = this.baseMult.multiply(this.multIncrease.pow(givenLevel));
+	}
+	this.setCost = function(givenLevel){
+		this.currentCost = this.baseCost.multiply(new Decimal(20).multiply((givenLevel.add(1).log10())));
+	}
+	this.get = function(){
+		return this.multipliedByHighestIQ;
+	}
+	this.getCost = function(){
+		return this.currentCost;
+	}
+
+}
+var attackIQMultiplier =  new storePurchasable(1,1,1.5,1.2,0);
+var defenceIQMultiplier = new storePurchasable(1,1,1.5,1.2,0);
+var speedIQMultiplier =   new storePurchasable(1,1,1.5,1.2,0);
+
+
 var player = new function(){
 
 	this.slots = 3;
@@ -1152,8 +1230,7 @@ var player = new function(){
 
 	this.u = [baseatk,basedf,basespd,basehp,atkmult,dfmult,spdmult,hpmult];
 
-	this.highestIQPowToAttack = new Decimal(0);
-	this.knowledgePerkValueForx = new Decimal(1);
+	
 
 	this.enemySpeedReduction = new Decimal(1);
 
@@ -1196,30 +1273,64 @@ var player = new function(){
 
 	this.increaseIQAllocationToAttack = function(){
 
-		this.knowledgePerkValueForx = this.knowledgePerkValueForx.multiply(1.2);
-		this.highestIQPowToAttack = new Decimal(1).minus(new Decimal(1).divide(this.knowledgePerkValueForx));
-		this.updatePlayerDefaultValues();
-		this.updateCurrentPlayerValues();
-		this.updateattackIQAllocVisuals();
+		if(this.lootingDollars.gte(attackIQMultiplier.getCost())){
+			
+			attackIQMultiplier.purchase();
+			
+			this.updatePlayerDefaultValues();
+			this.updateCurrentPlayerValues();
+			this.updateattackIQAllocVisuals();
+
+		}
 
 		
 	}
 	this.updateattackIQAllocVisuals = function(){
-
-		if(this.knowledgePerkValueForx.gte(1500)){
+		var MaxDecimalPrecisionNecessary = 1500;
+		if(attackIQMultiplier.currentMult.gte(MaxDecimalPrecisionNecessary)){
 
 			document.getElementById("increaseIQAllocationToAttack").innerHTML = "Sold Out! <br /> Attack Multiplier: <br /> <h2><span id=attackmultiplierafterhighestiqps>"+this.fighter.baseAttack.toPrecision(3)+"</span>";
 		
 		}else{
 
-			document.getElementById("morespecificattackmultiplierafterhighestiqps").innerHTML = iq.highestiqps+"<sup>(1 - 1/"+this.knowledgePerkValueForx.toPrecision(3)+")</sup>";
-			document.getElementById("mediumspecificattackmultiplierafterhighestiqps").innerHTML = iq.highestiqps+"<sup>"+this.highestIQPowToAttack.toPrecision(3)+"</sup></span>";
+			document.getElementById("morespecificattackmultiplierafterhighestiqps").innerHTML = iq.highestiqps.toPrecision(3)+"<sup>(1 - 1/"+attackIQMultiplier.currentMult.toPrecision(3)+")</sup>";
+			document.getElementById("mediumspecificattackmultiplierafterhighestiqps").innerHTML = iq.highestiqps.toPrecision(3)+"<sup>"+attackIQMultiplier.getCurrentMultiplier().toPrecision(3)+"</sup></span>";
 			document.getElementById("attackmultiplierafterhighestiqps").innerHTML = this.fighter.baseAttack.toPrecision(3);
+			document.getElementById("buybuttonforattackIQ").innerHTML = "$"+attackIQMultiplier.getCost().toPrecision(3);
+			document.getElementById("lootingDollarsAmount").innerHTML = player.lootingDollars.toPrecision(3);
+		}
+	}
+	this.increaseIQAllocationToDefence = function(){
 
+		if(this.lootingDollars.gte(defenceIQMultiplier.getCost())){
+			
+			defenceIQMultiplier.purchase();
+			
+			this.updatePlayerDefaultValues();
+			this.updateCurrentPlayerValues();
+			this.updatedefenceIQAllocVisuals();
+
+		}
+
+		
+	}
+	this.updatedefenceIQAllocVisuals = function(){
+		var MaxDecimalPrecisionNecessary = 1500;
+		if(defenceIQMultiplier.currentMult.gte(MaxDecimalPrecisionNecessary)){
+
+			document.getElementById("increaseIQAllocationToDefence").innerHTML = "Sold Out! <br /> Attack Multiplier: <br /> <h2><span id=defencemultiplierafterhighestiqps>"+this.fighter.baseDefence.toPrecision(3)+"</span>";
+		
+		}else{
+
+			document.getElementById("morespecificdefencemultiplierafterhighestiqps").innerHTML = iq.highestiqps.toPrecision(3)+"<sup>(1 - 1/"+defenceIQMultiplier.currentMult.toPrecision(3)+")</sup>";
+			document.getElementById("mediumspecificdefencemultiplierafterhighestiqps").innerHTML = iq.highestiqps.toPrecision(3)+"<sup>"+defenceIQMultiplier.getCurrentMultiplier().toPrecision(3)+"</sup></span>";
+			document.getElementById("defencemultiplierafterhighestiqps").innerHTML = this.fighter.baseDefence.toPrecision(3);
+			document.getElementById("buybuttonfordefenceIQ").innerHTML = "$"+defenceIQMultiplier.getCost().toPrecision(3);
+			document.getElementById("lootingDollarsAmount").innerHTML = player.lootingDollars.toPrecision(3);
 		}
 	}
 	this.updatePlayerDefaultValues = function(){
-		this.u[0] = new Decimal(1).multiply(iq.highestiqps.pow(this.highestIQPowToAttack));
+		this.u[0] = new Decimal(1).multiply(iq.highestiqps.pow(attackIQMultiplier.getCurrentMultiplier()));
 	}
 
 	this.updateCurrentPlayerValues = function(){

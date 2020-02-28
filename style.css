@@ -382,11 +382,11 @@ table a{
 	align-content: center;
 	justify-content: center;
 	flex-wrap: wrap;
-	width:300px;
+	width:410px;
 	
 }
 
-@media (max-width:926px){#middleDisplay{width:926px;}}
+@media (max-width:1037px){#middleDisplay{width:1036px;}}
 
 
 
@@ -562,6 +562,7 @@ table a{
 	transition: 0.5s;
 
 }
+
 .infoBox h2{
 	color:var(--good);
 }
@@ -590,35 +591,53 @@ table a{
 #deathannouncement{
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: center;
+	justify-content: space-around;
 	text-align: center;
 	width:100%;
 	margin:50px;
 }
 #deathannouncement p{
-	width:450px;
+	width:400px;
 }
 #deathannouncement h1{
 	width: 100%;
 }
 #store{
-	width:500px;
-	height:50%;
+	border-radius: 16px;
+	border-style: solid;
+	border-width:2px;
+	border-color: var(--white);
+	min-width:400px;
+	max-width:500px;
+	margin:50px;
 }
 #perktree{
-	width:500px;
-	height:50%;
+	border-radius: 16px;
+	border-style: solid;
+	border-width:2px;
+	border-color: var(--white);
+	
+	margin:20px;
+	min-width:400px;
+	max-width: 500px;
+	
 }
 #newclass{
+
+	border-radius: 16px;
+	border-style: solid;
+	border-width:2px;
+	border-color: var(--white);
 	display: flex;
 	flex-wrap: wrap;
 	
 	justify-content: center;
 	align-content: flex-start;
 	align-items: center;
-
-	width:500px;
-	height:50%;
+	padding-top:20px;
+	padding-bottom: 20px;
+	min-width:400px;
+	
 }
 #mage, #warrior, #summoner, #rogue{
 	border-radius: 12px;
@@ -638,10 +657,10 @@ table a{
 }
 .perk{
 	
-	height:50px;
-	width:50px;
-	margin-left: 34px!important;
-	margin-right:34px!important;
+	min-height:35px;
+	min-width:35px;
+	margin-left: 30px!important;
+	margin-right:30px!important;
 	border-radius: 100%;
 	border: solid;
 	border-width: 3px;
@@ -664,18 +683,21 @@ table a{
 	text-align: center;
 	align-items: center;
 	align-content: center;
-	width:500px;
+	width:400px;
+	
 	height:150px;
+	margin-bottom:100px;
 	
 
 }
 
 #perkinfo h2{
-	width: 100%;;
+	width: 100%;
 }
 .perkAttack{
 	border-color: var(--attack);
 	color:var(--attack);
+	
 }
 .unlockedperk.perkAttack{
 	background-color: var(--attack);
@@ -683,6 +705,7 @@ table a{
 .perkDefend{
 	border-color: var(--defend);
 	color:var(--defend);
+	
 }
 .unlockedperk.perkDefend{
 	background-color: var(--defend);
@@ -690,6 +713,7 @@ table a{
 .perkSpecial{
 	border-color: var(--special);
 	color:var(--special);
+	
 }
 .unlockedperk.perkSpecial{
 	background-color: var(--special);
@@ -714,8 +738,10 @@ table a{
 .defeated{
 	background-color: var(--good);
 }
-#storeContents div{
-	margin-top: 40px;
+#storeContents{
+	align-items: center;
+	align-content: center;
+	text-align: center;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -723,4 +749,12 @@ table a{
 	align-items: center;
 	align-content: center;
 	text-align: center;
+	min-width:400px;
+	
+
 }
+#storeContents div{
+	margin-top: 40px;
+	width:400px;
+}
+
